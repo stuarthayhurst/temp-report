@@ -13,12 +13,12 @@ sensor = W1ThermSensor()
 
 #Message contents
 msg = ""
-#Time in seconds between each temperature reading, reccommended values:  300 - 900
+#Time in seconds between each temperature reading, reccommended values:  30 - 150
 delay = 6
 #Minimum time in seconds between each email, reccommended values:  3600 - 7200
 gap = 10
 #Default temperature in degrees celcius if the probe fails
-temp = 0
+temp = 10
 #Report temperature in degrees celcius
 threshold_max = 30
 threshold_min = -1
@@ -130,7 +130,7 @@ def updateMessage():
   msg['Subject'] = 'Temperature Alert'
   msg['From'] = 'Pi Temperature Alerts'
   msg['To'] = 'Whomever it may concern'
-  html_wrap = '<html><body><p>The temperature is no longer between ' + str(threshold_max) + '-' + str(threshold_min) + '°C, the temperature is currently ' + str(temp) + '°C at ' + str(currTime) + '</p></body></html>'
+  html_wrap = '<html><body><p>The temperature is no longer between ' + str(threshold_max) + '°C and ' + str(threshold_min) + '°C. </p><br><p>The temperature is currently ' + str(temp) + '°C at ' + str(currTime.strftime("%H:%M:%S")) + '</p></body></html>'
   wrap = MIMEText(html_wrap, 'html')
 
   msg.attach(wrap)
