@@ -124,11 +124,13 @@ def changeSender(mode):
 def updateMessage():
   #Updates the message to be sent
   global msg
+  currTime = datetime.datetime.now()
+  print(currTime)
   msg = MIMEMultipart('alternative')
   msg['Subject'] = 'Temperature Alert'
   msg['From'] = 'Pi Temperature Alerts'
   msg['To'] = 'Whomever it may concern'
-  html_wrap = '<html><body><p>The temperature has exceeded ' + str(threshold) + '°C, the temperature is currently ' + str(temp) + '°C </p></body></html>'
+  html_wrap = '<html><body><p>The temperature has exceeded ' + str(threshold) + '°C, the temperature is currently ' + str(temp) + '°C at ' + str(currTime)'</p></body></html>'
   wrap = MIMEText(html_wrap, 'html')
 
   msg.attach(wrap)
