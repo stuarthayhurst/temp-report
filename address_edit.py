@@ -1,4 +1,4 @@
-import csv, sys, time
+import time, csv, sys, os
 
 counter = 0
 delay = 0.5
@@ -91,19 +91,26 @@ def editEntry():
 
 def newDatabase():
   changes = [
-    ['address'],                                      
+    ['address'],
     ]
-  checkDelete = str(input('Are you sure you want to erase the existing list and make a fresh one? Y/N: '))
+  checkDelete = str(input('Are you sure you want to erase the existing list and make a fresh one? (You may be seeing this message as the database never existed) Y/N: '))
   if checkDelete == 'Y':
     print("Deleting addresses and making new file")
-    f = open("addresses.csv","w+")
+    f = open('addresses.csv','w+')
     f.close()
     with open('addresses.csv', 'a') as f:                                    
       writer = csv.writer(f)
       writer.writerows(changes)
-    print("Completed")
+    print('Completed')
   else:
-    print("Deletion aborted")
+    print('Deletion aborted')
+  print()
+  print("--------------------------------")
+  print()
+
+def checkFile():
+  if str(os.path.isfile('./addresses.csv')) == 'False':
+    newDatabase()
 
 while counter == 0:
   print('Enter 1 to read the saved addresses')
@@ -115,14 +122,18 @@ while counter == 0:
   choice = str(input('Please make a choice: '))
   print()
   if choice == '1':
+    checkFile()
     print('Reading file:')
     readFile()
     cont = input('Press any key to continue: ')
   elif choice == '2':
+    checkFile()
     addEntry()
   elif choice == '3':
+    checkFile()
     removeEntry()
   elif choice == '4':
+    checkFile()
     editEntry()
   elif choice == '5':
     newDatabase()

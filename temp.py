@@ -1,4 +1,4 @@
-import smtplib, time, datetime, csv, sys
+import smtplib, datetime, time, csv, sys, os
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
@@ -15,7 +15,7 @@ msg = ""
 delay = 6
 #Minimum time in seconds between each email, reccommended values:  3600 - 7200
 gap = 10
-#Default temperature in degrees celcius
+#Default temperature in degrees celcius if the probe fails
 temp = 0
 #Report temperature in degrees celcius
 threshold = 30
@@ -74,8 +74,49 @@ def updateSender():
     print(f'Using CSV for credentials, processed {line_count - 1} credentials, {line_count} lines')
     print()
 
-def changeSender():
-  print('WIP')
+def changeSender(mode):
+  if str(os.path.isfile('./sender.csv')) == 'False':
+    print("We didn't find a sender credentials file, creating on for you:")
+    changes = [
+      ['details'],
+      ['address'],
+      ['password'],  
+      ]
+    f = open('sender.csv','w+')
+    f.close()
+    with open('sender.csv', 'a') as f:                                    
+      writer = csv.writer(f)
+      writer.writerows(changes)
+    print('Done')
+  else:
+    print('Sender credentials file found')
+  if mode == 's':
+    credential = input(str('Please enter the new email address: '))
+    removeLineNumber = 1
+  elif mode == 'p':
+    credential = input(str('Please enter the new password: '))
+    removeLineNumber = 2
+
+  with open('sender.csv', 'r') as csv_file:
+    r = csv.reader(csv_file)
+    for i in range(removeLineNumber):
+        next(r)
+    row = next(r)
+    removeLine = str(row)
+    removeLine = removeLine.replace("[", '')
+    removeLine = removeLine.replace("]", '')
+    removeLine = removeLine.replace("'", '')
+
+  f = open('sender.csv','r')
+  lines = f.readlines()
+  f.close()
+  f = open('sender.csv','w')
+  for line in lines:
+    if line == removeLine + '\n':
+      f.write(credential + '\n')
+    else:
+      f.write(line)
+  f.close()
 
 def updateMessage():
   #Updates the message to be sent
