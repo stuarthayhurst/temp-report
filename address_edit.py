@@ -42,7 +42,7 @@ def addEntry():
     [newAddress],                                      
     ]
   with open('addresses.csv', 'a') as f:                                    
-    writer = csv.writer(f)                                                       
+    writer = csv.writer(f)
     writer.writerows(changes)
 
 def selectLine():
@@ -89,18 +89,35 @@ def editEntry():
   f.close()
   readFile()
 
+def newDatabase():
+  changes = [
+    ['address'],                                      
+    ]
+  checkDelete = str(input('Are you sure you want to erase the existing list and make a fresh one? Y/N: '))
+  if checkDelete == 'Y':
+    print("Deleting addresses and making new file")
+    f = open("addresses.csv","w+")
+    f.close()
+    with open('addresses.csv', 'a') as f:                                    
+      writer = csv.writer(f)
+      writer.writerows(changes)
+    print("Completed")
+  else:
+    print("Deletion aborted")
+
 while counter == 0:
   print('Enter 1 to read the saved addresses')
   print('Enter 2 to add an entry')
   print('Enter 3 to delete an entry')
   print('Enter 4 to edit an entry')
-  print('Enter 5 to exit')
+  print('Enter 5 to generate a new address list')
+  print('Enter 6 to exit')
   choice = str(input('Please make a choice: '))
   print()
   if choice == '1':
     print('Reading file:')
     readFile()
-    cont = input('Press any key to continue:')
+    cont = input('Press any key to continue: ')
   elif choice == '2':
     addEntry()
   elif choice == '3':
@@ -108,4 +125,6 @@ while counter == 0:
   elif choice == '4':
     editEntry()
   elif choice == '5':
+    newDatabase()
+  elif choice == '6':
     exit()
