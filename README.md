@@ -5,10 +5,15 @@ A small project to report the temperature of a room to anyone on the mailing lis
 
 * Python 3.6+
 * Tmux
+* w1thermsensor
 
-## Commands and notes
+## Installation:
 
-- Install with `git clone https://github.com/Dragon8oy/temp-report.git` and `sudo pip3 install w1thermsensor`
+- `git clone https://github.com/Dragon8oy/temp-report.git`
+- `sudo pip3.6 install w1thermsensor`
+- `sudo apt install tmux`
+
+## Commands and notes:
 - Make sure OneWire is enabled
 - Add `tmux new-session -d -s temp_report 'python3.6 /path/to/install/temp.py; exec bash -i'` to `crontab -e` to have the program start on boot
 - Use `tmux att -t temp_report` to view the program
@@ -16,4 +21,4 @@ A small project to report the temperature of a room to anyone on the mailing lis
 
 ## Wiring diagram:
 
-
+![alt text](https://farm5.staticflickr.com/4215/35139160190_cea3435a09_b_d.jpg)

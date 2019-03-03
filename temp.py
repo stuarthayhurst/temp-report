@@ -20,7 +20,8 @@ gap = 10
 #Default temperature in degrees celcius if the probe fails
 temp = 0
 #Report temperature in degrees celcius
-threshold = 30
+threshold_max = 30
+threshold_min = -1
 #Toggle for using the CSV file to load addresses
 use_csv_recipent = 1
 #Toggle for using the CSV file to load sender information
@@ -184,7 +185,7 @@ while counter == 0:
   measureTemp()
   print('The temperature is ' + str(temp) + '°C')
   print()
-  if temp >= threshold:
+  if temp >= threshold_max or temp <= threshold_min:
     if use_csv_recipent == 1:
       updateRecipents()
     if use_csv_sender == 1:
