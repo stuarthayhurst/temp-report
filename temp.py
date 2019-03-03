@@ -1,13 +1,15 @@
 import smtplib, datetime, time, csv, sys, os
+from w1thermsensor import W1ThermSensor
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
-#Variables for email
+#Variables for email and the sensor
 email_recipents = ['example@gmail.com', 'example@gmail.com'] #Set recipent emails here if use_csv_recipent = 0
 email_sender = 'example@gmail.com' #Set sender email here if use_csv_sender = 0
 password = 'password' #Set sender email password here if use_csv_sender = 0
 last_email_time = datetime.datetime(1970, 1, 1, 0, 0)
 email_time_diff = 0
+sensor = W1ThermSensor()
 
 #Message contents
 msg = ""
@@ -154,7 +156,7 @@ def sendMessage():
 def measureTemp():
   #Measures the temperature
   global temp
-  temp = 30
+  temp = sensor.get_temperature()
 
 sys.argv.append(0)
 if sys.argv[1] == '-h' or sys.argv[1] == '--help':
