@@ -161,6 +161,28 @@ def measureTemp():
   global temp
   temp = sensor.get_temperature()
 
+def logTemp():
+  if str(os.path.isfile('./temps.log')) == 'False':
+    print("No log found, creating one:")
+    changes = [
+      ['Temp-report logfile:'],
+      ]
+    f = open('temps.log','w+')
+    f.close()
+    with open('temps.log', 'a') as f:                                    
+      writer = csv.writer(f)
+      writer.writerows(changes)
+    print('Log created')
+
+  currTime = datetime.datetime.now()
+  logLine = 'Temperature: ' + str(temp) + '°C at ' + str(currTime.strftime("%c"))
+  changes = [
+    [logLine],                                      
+    ]
+  with open('temps.log', 'a') as f:                                    
+    writer = csv.writer(f)
+    writer.writerows(changes)
+
 sys.argv.append(0)
 if sys.argv[1] == '-h' or sys.argv[1] == '--help':
   print('Options:')
@@ -185,6 +207,7 @@ while counter == 0:
 
   print('Reading temperature:')
   measureTemp()
+  logTemp()
   print('The temperature is ' + str(temp) + '°C')
   print()
   if temp >= threshold_max or temp <= threshold_min:
