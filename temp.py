@@ -130,7 +130,7 @@ def updateMessage():
   msg['Subject'] = 'Temperature Alert'
   msg['From'] = 'Pi Temperature Alerts'
   msg['To'] = 'Whomever it may concern'
-  html_wrap = '<html><body><p>The temperature has exceeded ' + str(threshold) + '°C, the temperature is currently ' + str(temp) + '°C at ' + str(currTime) + '</p></body></html>'
+  html_wrap = '<html><body><p>The temperature is no longer between ' + str(threshold_max) + '-' + str(threshold_min) + '°C, the temperature is currently ' + str(temp) + '°C at ' + str(currTime) + '</p></body></html>'
   wrap = MIMEText(html_wrap, 'html')
 
   msg.attach(wrap)
