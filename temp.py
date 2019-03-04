@@ -13,8 +13,8 @@ sensor = W1ThermSensor()
 
 #Message contents
 msg = ""
-#Time in seconds between each temperature reading, reccommended values:  30 - 150
-delay = 120
+#Time in seconds between each temperature reading, reccommended values:  30 - 150 - 300
+delay = 300
 #Minimum time in seconds between each email, reccommended values:  3600 - 7200
 gap = 3600
 #Default temperature in degrees celcius if the probe fails
