@@ -11,21 +11,75 @@ last_email_time = datetime.datetime(1970, 1, 1, 0, 0)
 email_time_diff = 0
 sensor = W1ThermSensor()
 
-#Message contents
-msg = ""
-#Time in seconds between each temperature reading, reccommended values:  30 - 150 - 300
-delay = 300
-#Minimum time in seconds between each email, reccommended values:  3600 - 7200
-gap = 3600
-#Default temperature in degrees celcius if the probe fails
-temp = 10
-#Report temperature in degrees celcius
-threshold_max = 30
-threshold_min = -1
-#Toggle for using the CSV file to load addresses
-use_csv_recipent = 1
-#Toggle for using the CSV file to load sender information
-use_csv_sender = 1
+#See config.csv for a config file. Use python3 temp.py -c to generate a new one
+
+def updateConfig(force):
+  changes = [
+    #DO NOT EDIT THESE
+    ['config'],
+    ['delay', '300'],
+    ['gap', '3600'],
+    ['threshold_max', '30'],
+    ['threshold_min', '-1'],
+    ['use_csv_recipent', '1'],
+    ['use_csv_sender', '1'],
+    ]
+
+  if force == 'y':
+    print('\nGenerating config')
+    f = open('config.csv','w+')
+    f.close()
+    with open('config.csv', 'a') as f:                                    
+      writer = csv.writer(f)
+      writer.writerows(changes)
+    print('Generated new config')
+    exit()
+
+  if str(os.path.isfile('./config.csv')) == 'False':
+    print('\nGenerating config')
+    f = open('config.csv','w+')
+    f.close()
+    with open('config.csv', 'a') as f:                                    
+      writer = csv.writer(f)
+      writer.writerows(changes)
+    print('Generated new config')
+
+  with open('config.csv') as csv_file:
+    csv_reader = csv.reader(csv_file, delimiter=',')
+    config_count = 0
+    line_count = 0
+    for row in csv_reader:
+        if line_count == 0:
+          print('Reading config')
+          line_count += 1
+        else:
+          if row[0] == 'delay':
+            global delay
+            delay = int(row[1])
+            config_count += 1
+          elif row[0] == 'gap':
+            global gap
+            gap = int(row[1])
+            config_count += 1
+          elif row[0] == 'threshold_max':
+            global threshold_max
+            threshold_max = int(row[1])
+            config_count += 1
+          elif row[0] == 'threshold_min':
+            global threshold_min
+            threshold_min = int(row[1])
+            config_count += 1
+          elif row[0] == 'use_csv_recipent':
+            global use_csv_recipent
+            use_csv_recipent = int(row[1])
+            config_count += 1
+          elif row[0] == 'use_csv_sender':
+            global use_csv_sender
+            use_csv_sender = int(row[1])
+            config_count += 1
+          else:
+            print('Invalid config line detected\n')
+    print(f'Processed {config_count} config options, {line_count} lines')
 
 def connectToServer():
   #Connects to gmail's servers
@@ -34,48 +88,50 @@ def connectToServer():
   server.connect('smtp.gmail.com', 465)
   print('Connected to server as ' + email_sender)
   server.login(email_sender, password)
-  print('Logged in successfully')
-  print()
+  print('Logged in successfully\n')
 
 def updateRecipents():
-  with open('addresses.csv') as csv_file:
-    csv_reader = csv.reader(csv_file, delimiter=',')
-    line_count = 0
-    for row in csv_reader:
-        if line_count == 0:
-            print('Addresses:')
-            line_count += 1
-        else:
-            print(f'\t{row[0]}')
-            if len(email_recipents) + 1 == line_count:
-              email_recipents.append(str(row[0]))
-            else:
-              email_recipents[line_count - 1] = str(row[0])
-            line_count += 1
-    print()
-    print(f'Using CSV for recipent addresses, processed {line_count - 1} addresses, {line_count} lines')
-    print()
+  try:
+    with open('addresses.csv') as csv_file:
+      csv_reader = csv.reader(csv_file, delimiter=',')
+      line_count = 0
+      for row in csv_reader:
+          if line_count == 0:
+              print('Addresses:')
+              line_count += 1
+          else:
+              print(f'\t{row[0]}')
+              if len(email_recipents) + 1 == line_count:
+                email_recipents.append(str(row[0]))
+              else:
+                email_recipents[line_count - 1] = str(row[0])
+              line_count += 1
+    print(f'\nUsing CSV for recipent addresses, processed {line_count - 1} addresses, {line_count} lines')
+  except FileNotFoundError:
+    print("\nNo address file found, starting address editor: \n")
+    import address_edit
 
 def updateSender():
   global email_sender
   global password
-  with open('sender.csv') as csv_file:
-    csv_reader = csv.reader(csv_file, delimiter=',')
-    line_count = 0
-    for row in csv_reader:
-        if line_count == 0:
-            line_count += 1
-        elif line_count == 1:
-            #Sender email
-            email_sender = str(row[0])
-            line_count += 1
-        elif line_count == 2:
-            #Sender password
-            password = str(row[0])
-            line_count += 1
-    print()
-    print(f'Using CSV for credentials, processed {line_count - 1} credentials, {line_count} lines')
-    print()
+  try:
+    with open('sender.csv') as csv_file:
+      csv_reader = csv.reader(csv_file, delimiter=',')
+      line_count = 0
+      for row in csv_reader:
+          if line_count == 0:
+              line_count += 1
+          elif line_count == 1:
+              #Sender email
+              email_sender = str(row[0])
+              line_count += 1
+          elif line_count == 2:
+              #Sender password
+              password = str(row[0])
+              line_count += 1
+      print(f'Using CSV for credentials, processed {line_count - 1} credentials, {line_count} lines\n')
+  except FileNotFoundError:
+    changeSender('e')
 
 def changeSender(mode):
   if str(os.path.isfile('./sender.csv')) == 'False':
@@ -91,41 +147,47 @@ def changeSender(mode):
       writer = csv.writer(f)
       writer.writerows(changes)
     print('Done')
-  else:
-    print('Sender credentials file found')
+
   if mode == 's':
     credential = input(str('Please enter the new email address: '))
     removeLineNumber = 1
+    wFile = 1
   elif mode == 'p':
     credential = input(str('Please enter the new password: '))
     removeLineNumber = 2
+    wFile = 1
+  elif mode == 'e':
+    print('\nPlease enter the sender details: \n')
+    changeSender('s')
+    changeSender('p')
+    wFile = 0
 
-  with open('sender.csv', 'r') as csv_file:
-    r = csv.reader(csv_file)
-    for i in range(removeLineNumber):
-        next(r)
-    row = next(r)
-    removeLine = str(row)
-    removeLine = removeLine.replace("[", '')
-    removeLine = removeLine.replace("]", '')
-    removeLine = removeLine.replace("'", '')
+  if wFile == 1:
+    with open('sender.csv', 'r') as csv_file:
+      r = csv.reader(csv_file)
+      for i in range(removeLineNumber):
+          next(r)
+      row = next(r)
+      removeLine = str(row)
+      removeLine = removeLine.replace("[", '')
+      removeLine = removeLine.replace("]", '')
+      removeLine = removeLine.replace("'", '')
 
-  f = open('sender.csv','r')
-  lines = f.readlines()
-  f.close()
-  f = open('sender.csv','w')
-  for line in lines:
-    if line == removeLine + '\n':
-      f.write(credential + '\n')
-    else:
-      f.write(line)
-  f.close()
+    f = open('sender.csv','r')
+    lines = f.readlines()
+    f.close()
+    f = open('sender.csv','w')
+    for line in lines:
+      if line == removeLine + '\n':
+        f.write(credential + '\n')
+      else:
+        f.write(line)
+    f.close()
 
 def updateMessage():
   #Updates the message to be sent
   global msg
   currTime = datetime.datetime.now()
-  print(currTime)
   msg = MIMEMultipart('alternative')
   msg['Subject'] = 'Temperature Alert'
   msg['From'] = 'Pi Temperature Alerts'
@@ -152,14 +214,17 @@ def sendMessage():
     last_email_time = currTime
   else:
     print('Email was last sent ' + str(email_time_diff) + ' seconds ago')
-    print("Email not sent")
-  print()
+    print("Email not sent\n")
   server.quit()
+  print('\nLogged out\n')
 
 def measureTemp():
   #Measures the temperature
   global temp
+  print('Reading temperature:')
   temp = sensor.get_temperature()
+  currTime = datetime.datetime.now()
+  print('The temperature is ' + str(temp) + '°C at ' + str(currTime.strftime("%H:%M:%S")) + '\n')
 
 def logTemp():
   if str(os.path.isfile('./temps.log')) == 'False':
@@ -172,7 +237,7 @@ def logTemp():
     with open('temps.log', 'a') as f:                                    
       writer = csv.writer(f)
       writer.writerows(changes)
-    print('Log created')
+    print('Log created\n')
 
   currTime = datetime.datetime.now()
   logLine = 'Temperature: ' + str(temp) + '°C at ' + str(currTime.strftime("%c"))
@@ -200,16 +265,16 @@ elif sys.argv[1] == '-p' or sys.argv[1] == '--password':
 elif sys.argv[1] == '-s' or sys.argv[1] == '--sender':
   changeSender('s')
   exit()
+elif sys.argv[1] == '-c' or sys.argv[1] == '--config':
+  updateConfig('y')
+  exit()
 
 print("--------------------------------")
 counter = 0
 while counter == 0:
-
-  print('Reading temperature:')
+  updateConfig('n')
   measureTemp()
   logTemp()
-  print('The temperature is ' + str(temp) + '°C')
-  print()
   if temp >= threshold_max or temp <= threshold_min:
     if use_csv_recipent == 1:
       updateRecipents()
@@ -218,6 +283,5 @@ while counter == 0:
     updateMessage()
     connectToServer()
     sendMessage()
-    print("--------------------------------")
-    print()
+    print("--------------------------------\n")
   time.sleep(delay)
