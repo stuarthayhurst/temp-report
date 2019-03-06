@@ -3,9 +3,12 @@ A small project to report the temperature of a room to anyone on the mailing lis
 
 ## Dependencies:
 
+- ### Python / Pip
 * Python 3.6+
-* Tmux
 * w1thermsensor
+
+- ### Source / Package Manager
+* Tmux
 
 ## Installation:
 
@@ -14,10 +17,11 @@ A small project to report the temperature of a room to anyone on the mailing lis
 - `sudo apt install tmux`
 
 ## Commands and notes:
-- Make sure OneWire is enabled
+
 - Add `@reboot tmux new-session -d -s temp_report 'python3.6 /path/to/install/temp.py; exec bash -i'` to `crontab -e` to have the program start on boot
 - Use `tmux att -t temp_report` to view the program
 - Use `python3.6 temp.py -h` to view help
+- Make sure OneWire is enabled
 
 ## Wiring diagram:
 
