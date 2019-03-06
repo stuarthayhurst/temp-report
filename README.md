@@ -4,11 +4,11 @@ A small project to report the temperature of a room to anyone on the mailing lis
 ## Dependencies:
 
 - ### Python / Pip
-* Python 3.6+
-* w1thermsensor
+  * Python 3.6+
+  * w1thermsensor
 
 - ### Source / Package Manager
-* Tmux
+  * Tmux
 
 ## Installation:
 
