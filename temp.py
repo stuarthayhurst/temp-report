@@ -80,7 +80,7 @@ def updateConfig(force):
             config_count += 1
           else:
             print('Invalid config line detected\n')
-    print(f'Processed {config_count} config options, {line_count} lines')
+    print(f'Processed {config_count} config options, {line_count} lines\n')
 
 def connectToServer():
   #Connects to gmail's servers
@@ -110,7 +110,7 @@ def updateRecipents():
     print(f'\nUsing CSV for recipent addresses, processed {line_count - 1} addresses, {line_count} lines')
   except FileNotFoundError:
     print("\nNo address file found, starting address editor: \n")
-    import address_edit
+    import data_edit
 
 def updateSender():
   global email_sender
@@ -258,7 +258,7 @@ if sys.argv[1] == '-h' or sys.argv[1] == '--help':
   print('	-s | --sender : Change the address of the sender email')
   exit()
 elif sys.argv[1] == '-a' or sys.argv[1] == '--address':
-  import address_edit
+  import data_edit
   exit()
 elif sys.argv[1] == '-p' or sys.argv[1] == '--password':
   changeSender('p')

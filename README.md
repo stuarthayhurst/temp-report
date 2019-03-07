@@ -6,6 +6,7 @@ A small project to report the temperature of a room to anyone on the mailing lis
 - ### Python / Pip
   * Python 3.6+
   * w1thermsensor
+  * matplotlib
 
 - ### Source / Package Manager
   * Tmux
@@ -13,7 +14,7 @@ A small project to report the temperature of a room to anyone on the mailing lis
 ## Installation:
 
 - `git clone https://github.com/Dragon8oy/temp-report.git`
-- `sudo pip3.6 install w1thermsensor`
+- `sudo pip3.6 install w1thermsensor matplotlib`
 - `sudo apt install tmux`
 
 ## Commands and notes:
