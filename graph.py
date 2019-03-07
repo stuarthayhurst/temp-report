@@ -21,7 +21,10 @@ def produceGraph():
 
   for line in taildata:
       #data = re.findall(r"[\w']+", line)
-      data = re.findall(r"[\w:][0-5][0-9]+", line)
+      data = re.findall(r"[\w:]+", line)
+      print(data)
+      data = re.findall(r"[0-5][0-9]+", str(data))
+      #data = last index
       print(data)
       y.append(int(data[1]))
 
