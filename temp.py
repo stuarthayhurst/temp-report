@@ -1,4 +1,5 @@
 import smtplib, datetime, time, csv, sys, os
+import graph
 from w1thermsensor import W1ThermSensor
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
@@ -15,7 +16,7 @@ sensor = W1ThermSensor()
 
 def updateConfig(force):
   changes = [
-    #DO NOT EDIT THESE
+    #DO NOT EDIT THESE, these are the default values when generating a new config
     ['config'],
     ['delay', '300'],
     ['gap', '3600'],
@@ -272,15 +273,21 @@ elif sys.argv[1] == '-c' or sys.argv[1] == '--config':
 print("--------------------------------")
 counter = 0
 while counter == 0:
+  #Load the config
   updateConfig('n')
+  #Measure the temperature
   measureTemp()
   logTemp()
+  #Update addresses and credentials
   if temp >= threshold_max or temp <= threshold_min:
     if use_csv_recipent == 1:
       updateRecipents()
     if use_csv_sender == 1:
       updateSender()
+    #Create message contents
+    generateGraph()
     updateMessage()
+    #Send the message
     connectToServer()
     sendMessage()
     print("--------------------------------\n")
