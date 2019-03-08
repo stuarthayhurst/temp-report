@@ -146,6 +146,7 @@ def updateSender():
     changeSender('e')
 
 def changeSender(mode):
+  skip = 0
   if str(os.path.isfile('data/sender.csv')) == 'False':
     print("We didn't find a sender credentials file, creating on for you:")
     skip = 1
