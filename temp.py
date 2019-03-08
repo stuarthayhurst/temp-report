@@ -1,6 +1,6 @@
 import smtplib, datetime, time, csv, sys, os
 import graph
-#from w1thermsensor import W1ThermSensor
+from w1thermsensor import W1ThermSensor
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
@@ -10,7 +10,7 @@ email_sender = 'example@gmail.com' #Set sender email here if use_csv_sender = 0
 password = 'password' #Set sender email password here if use_csv_sender = 0
 last_email_time = datetime.datetime(1970, 1, 1, 0, 0)
 email_time_diff = 0
-#sensor = W1ThermSensor()
+sensor = W1ThermSensor()
 
 #See config.csv for a config file. Use python3 temp.py -c to generate a new one
 
@@ -25,7 +25,6 @@ def updateConfig(force):
     ['use_csv_recipient', '1'],
     ['use_csv_sender', '1'],
     ['graph_point_count', '12'],
-    ['graph_interval', '5'],
     ]
 
   if force == 'y':
@@ -83,10 +82,6 @@ def updateConfig(force):
           elif row[0] == 'graph_point_count':
             global graph_point_count
             graph_point_count = int(row[1])
-            config_count += 1
-          elif row[0] == 'graph_interval':
-            global graph_interval
-            graph_interval = int(row[1])
             config_count += 1
           else:
             print('Invalid config line detected\n')
@@ -233,7 +228,7 @@ def measureTemp():
   #Measures the temperature
   global temp
   print('Reading temperature:')
-  temp = 30#sensor.get_temperature()
+  temp = sensor.get_temperature()
   currTime = datetime.datetime.now()
   print('The temperature is ' + str(temp) + '°C at ' + str(currTime.strftime("%H:%M:%S")) + '\n')
 
@@ -252,7 +247,6 @@ def logTemp():
 
   currTime = datetime.datetime.now()
   
-  #logLine = 'Temperature: ' + str(temp) + '°C at ' + str(currTime.strftime("%c"))
   logLine = '[' + str(currTime.strftime("%c")) + '] Temperature: ' + str(temp) + '°C'
   changes = [
     [logLine],                                      
@@ -297,7 +291,7 @@ while counter == 0:
     if use_csv_sender == 1:
       updateSender()
     #Create message contents
-    graph.generateGraph(graph_point_count, graph_interval)
+    graph.generateGraph(graph_point_count, delay / 60)
     updateMessage()
     #Send the message
     connectToServer()
