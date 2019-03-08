@@ -218,7 +218,7 @@ def updateMessage():
   msg['Subject'] = 'Temperature Alert'
   msg['From'] = email_sender_name
   msg['To'] = 'Whomever it may concern'
-  html_wrap = '<html><body><p>The temperature is no longer between ' + str(threshold_max) + '°C and ' + str(threshold_min) + '°C. </p><p>The temperature is currently ' + str(temp) + '°C at ' + str(currTime.strftime("%H:%M:%S")) + '</p><br><img id="graph" src="cid:graph"></body></html>'
+  html_wrap = '<html><body><p>The temperature is no longer between ' + str(threshold_max) + '°C and ' + str(threshold_min) + '°C. </p><p>The temperature is currently ' + str(temp) + '°C at ' + str(currTime.strftime("%H:%M:%S")) + '</p><br><img alt="Temperature Graph" id="graph" src="cid:graph"></body></html>'
   wrap = MIMEText(html_wrap, 'html')
 
   #Define the image's ID
