@@ -27,4 +27,4 @@ A small project to report the temperature of a room to anyone on the mailing lis
 ## Wiring diagram:
 
 ![alt text](https://farm5.staticflickr.com/4215/35139160190_cea3435a09_b_d.jpg)
-- Credit: [Les Pounder](https://bigl.es/author/les/ "Les Pounder")
+- Diagram credit: [Les Pounder](https://bigl.es/author/les/ "Les Pounder")
