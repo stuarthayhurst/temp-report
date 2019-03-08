@@ -146,10 +146,8 @@ def updateSender():
     changeSender('e')
 
 def changeSender(mode):
-  skip = 0
   if str(os.path.isfile('data/sender.csv')) == 'False':
     print("We didn't find a sender credentials file, creating on for you:")
-    skip = 1
     changes = [
       ['details'],
       ['address'],
@@ -162,27 +160,27 @@ def changeSender(mode):
       writer = csv.writer(f)
       writer.writerows(changes)
     print('Done')
-  if skip == 0:
-    if mode == 's':
-      credential = input(str('Please enter the new email address: '))
-      removeLineNumber = 1
-      wFile = 1
-    elif mode == 'p':
-      credential = input(str('Please enter the new password: '))
-      removeLineNumber = 2
-      wFile = 1
-    elif mode == 'n':
-      credential = input(str('Please enter the new sender name: '))
-      removeLineNumber = 3
-      wFile = 1
-    elif mode == 'e':
-      print('\nPlease enter the sender details: \n')
-      changeSender('s')
-      changeSender('p')
-      changeSender('n')
-      wFile = 0
-  else:
-    skip = 0
+    changeSender('e')
+    exit()
+
+  if mode == 's':
+    credential = input(str('Please enter the new email address: '))
+    removeLineNumber = 1
+    wFile = 1
+  elif mode == 'p':
+    credential = input(str('Please enter the new password: '))
+    removeLineNumber = 2
+    wFile = 1
+  elif mode == 'n':
+    credential = input(str('Please enter the new sender name: '))
+    removeLineNumber = 3
+    wFile = 1
+  elif mode == 'e':
+    print('\nPlease enter the sender details: \n')
+    changeSender('s')
+    changeSender('p')
+    changeSender('n')
+    wFile = 0
 
   if wFile == 1:
     with open('data/sender.csv', 'r') as csv_file:
