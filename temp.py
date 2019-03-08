@@ -1,6 +1,6 @@
 import smtplib, datetime, time, csv, sys, os
 import graph
-#from w1thermsensor import W1ThermSensor
+from w1thermsensor import W1ThermSensor
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.image import MIMEImage
@@ -11,9 +11,9 @@ email_sender = 'example@gmail.com' #Set sender email here if use_csv_sender = 0
 password = 'password' #Set sender email password here if use_csv_sender = 0
 last_email_time = datetime.datetime(1970, 1, 1, 0, 0)
 email_time_diff = 0
-#sensor = W1ThermSensor()
+sensor = W1ThermSensor()
 
-#See config.csv for a config file. Use python3 temp.py -c to generate a new one
+#See data/config.csv for a config file. Use python3 temp.py -c to generate a new one
 
 def updateConfig(force):
   changes = [
@@ -252,7 +252,7 @@ def measureTemp():
   #Measures the temperature
   global temp
   print('Reading temperature:')
-  temp = 30#sensor.get_temperature()
+  temp = sensor.get_temperature()
   currTime = datetime.datetime.now()
   print('The temperature is ' + str(temp) + '°C at ' + str(currTime.strftime("%H:%M:%S")) + '\n')
 
