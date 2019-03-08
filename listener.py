@@ -23,7 +23,7 @@ def refreshServer():
   global data
   global server
   server = imaplib.IMAP4_SSL('imap.gmail.com')
-  server.login('', '')
+  server.login()
   server.select('INBOX')
   server.search(None, 'ALL')
   data = server.fetch('1', '(BODY[HEADER])')
