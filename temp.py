@@ -3,6 +3,7 @@ import graph
 from w1thermsensor import W1ThermSensor
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+from email.mime.image import MIMEImage
 
 #Variables for email and the sensor
 email_recipients = ['example@gmail.com', 'example@gmail.com'] #Set recipient emails here if use_csv_recipient = 0
@@ -191,6 +192,12 @@ def changeSender(mode):
     f.close()
 
 def updateMessage():
+
+  #Reads the image
+  fp = open('graph.png', 'rb')
+  html_image = MIMEImage(fp.read())
+  fp.close()
+
   #Updates the message to be sent
   global msg
   currTime = datetime.datetime.now()
@@ -198,9 +205,12 @@ def updateMessage():
   msg['Subject'] = 'Temperature Alert'
   msg['From'] = 'Pi Temperature Alerts'
   msg['To'] = 'Whomever it may concern'
-  html_wrap = '<html><body><p>The temperature is no longer between ' + str(threshold_max) + '°C and ' + str(threshold_min) + '°C. </p><p>The temperature is currently ' + str(temp) + '°C at ' + str(currTime.strftime("%H:%M:%S")) + '</p></body></html>'
+  html_wrap = '<html><body><p>The temperature is no longer between ' + str(threshold_max) + '°C and ' + str(threshold_min) + '°C. </p><p>The temperature is currently ' + str(temp) + '°C at ' + str(currTime.strftime("%H:%M:%S")) + '</p><br><img src="cid:image1"></body></html>'
   wrap = MIMEText(html_wrap, 'html')
 
+  #Define the image's ID
+  html_image.add_header('Content-ID', '<image1>')
+  msg.attach(html_image)
   msg.attach(wrap)
 
 def sendMessage():

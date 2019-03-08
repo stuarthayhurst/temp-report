@@ -8,7 +8,6 @@ y=[]
 def generateGraph(reading_count_priv, time_interval_priv):
   global reading_count
   global time_interval
-  print(time_interval_priv)
   reading_count = reading_count_priv
   time_interval = time_interval_priv
   for count in range(1, reading_count_priv):
