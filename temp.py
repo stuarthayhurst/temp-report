@@ -1,6 +1,6 @@
 import smtplib, datetime, time, csv, sys, os
 import graph
-from w1thermsensor import W1ThermSensor
+#from w1thermsensor import W1ThermSensor
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.image import MIMEImage
@@ -11,7 +11,7 @@ email_sender = 'example@gmail.com' #Set sender email here if use_csv_sender = 0
 password = 'password' #Set sender email password here if use_csv_sender = 0
 last_email_time = datetime.datetime(1970, 1, 1, 0, 0)
 email_time_diff = 0
-sensor = W1ThermSensor()
+#sensor = W1ThermSensor()
 
 #See config.csv for a config file. Use python3 temp.py -c to generate a new one
 
@@ -30,24 +30,24 @@ def updateConfig(force):
 
   if force == 'y':
     print('\nGenerating config')
-    f = open('config.csv','w+')
+    f = open('data/config.csv','w+')
     f.close()
-    with open('config.csv', 'a') as f:                                    
+    with open('data/config.csv', 'a') as f:                                    
       writer = csv.writer(f)
       writer.writerows(changes)
     print('Generated new config')
     exit()
 
-  if str(os.path.isfile('./config.csv')) == 'False':
+  if str(os.path.isfile('data/config.csv')) == 'False':
     print('\nGenerating config')
-    f = open('config.csv','w+')
+    f = open('data/config.csv','w+')
     f.close()
-    with open('config.csv', 'a') as f:                                    
+    with open('data/config.csv', 'a') as f:                                    
       writer = csv.writer(f)
       writer.writerows(changes)
     print('Generated new config')
 
-  with open('config.csv') as csv_file:
+  with open('data/config.csv') as csv_file:
     csv_reader = csv.reader(csv_file, delimiter=',')
     config_count = 0
     line_count = 0
@@ -99,7 +99,7 @@ def connectToServer():
 
 def updateRecipients():
   try:
-    with open('addresses.csv') as csv_file:
+    with open('data/addresses.csv') as csv_file:
       csv_reader = csv.reader(csv_file, delimiter=',')
       line_count = 0
       for row in csv_reader:
@@ -123,7 +123,7 @@ def updateSender():
   global password
   global email_sender_name
   try:
-    with open('sender.csv') as csv_file:
+    with open('data/sender.csv') as csv_file:
       csv_reader = csv.reader(csv_file, delimiter=',')
       line_count = 0
       for row in csv_reader:
@@ -146,7 +146,7 @@ def updateSender():
     changeSender('e')
 
 def changeSender(mode):
-  if str(os.path.isfile('./sender.csv')) == 'False':
+  if str(os.path.isfile('data/sender.csv')) == 'False':
     print("We didn't find a sender credentials file, creating on for you:")
     skip = 1
     changes = [
@@ -155,9 +155,9 @@ def changeSender(mode):
       ['password'],  
       ['name'], 
       ]
-    f = open('sender.csv','w+')
+    f = open('data/sender.csv','w+')
     f.close()
-    with open('sender.csv', 'a') as f:                                    
+    with open('data/sender.csv', 'a') as f:                                    
       writer = csv.writer(f)
       writer.writerows(changes)
     print('Done')
@@ -184,7 +184,7 @@ def changeSender(mode):
     skip = 0
 
   if wFile == 1:
-    with open('sender.csv', 'r') as csv_file:
+    with open('data/sender.csv', 'r') as csv_file:
       r = csv.reader(csv_file)
       for i in range(removeLineNumber):
           next(r)
@@ -194,10 +194,10 @@ def changeSender(mode):
       removeLine = removeLine.replace("]", '')
       removeLine = removeLine.replace("'", '')
 
-    f = open('sender.csv','r')
+    f = open('data/sender.csv','r')
     lines = f.readlines()
     f.close()
-    f = open('sender.csv','w')
+    f = open('data/sender.csv','w')
     for line in lines:
       if line == removeLine + '\n':
         f.write(credential + '\n')
@@ -252,7 +252,7 @@ def measureTemp():
   #Measures the temperature
   global temp
   print('Reading temperature:')
-  temp = sensor.get_temperature()
+  temp = 30#sensor.get_temperature()
   currTime = datetime.datetime.now()
   print('The temperature is ' + str(temp) + '°C at ' + str(currTime.strftime("%H:%M:%S")) + '\n')
 

@@ -9,7 +9,7 @@ def readFile():
   print()
   print("--------------------------------")
   print()
-  with open('addresses.csv') as csv_file:
+  with open('data/addresses.csv') as csv_file:
     csv_reader = csv.reader(csv_file, delimiter=',')
     line_count = 0
     for row in csv_reader:
@@ -41,7 +41,7 @@ def addEntry():
   changes = [
     [newAddress],                                      
     ]
-  with open('addresses.csv', 'a') as f:                                    
+  with open('data/addresses.csv', 'a') as f:                                    
     writer = csv.writer(f)
     writer.writerows(changes)
 
@@ -52,7 +52,7 @@ def selectLine():
   removeLineNumber = int(input('Please enter the line number to select: '))
   while removeLineNumber > finalLine:
     removeLineNumber = int(input('That line did not exist, please enter the line number to select: '))
-  with open('addresses.csv', 'r') as csv_file:
+  with open('data/addresses.csv', 'r') as csv_file:
     r = csv.reader(csv_file)
     for i in range(removeLineNumber):
         next(r)
@@ -64,10 +64,10 @@ def selectLine():
 
 def removeEntry():
   selectLine()
-  f = open('addresses.csv','r')
+  f = open('data/addresses.csv','r')
   lines = f.readlines()
   f.close()
-  f = open('addresses.csv','w')
+  f = open('data/addresses.csv','w')
   for line in lines:
     if line != removeLine + '\n':
       f.write(line)
@@ -77,10 +77,10 @@ def removeEntry():
 def editEntry():
   selectLine()
   newLine = str(input('Please enter the changed line: '))
-  f = open('addresses.csv','r')
+  f = open('data/addresses.csv','r')
   lines = f.readlines()
   f.close()
-  f = open('addresses.csv','w')
+  f = open('data/addresses.csv','w')
   for line in lines:
     if line == removeLine + '\n':
       f.write(newLine)
@@ -96,9 +96,9 @@ def newDatabase():
   checkDelete = str(input('Are you sure you want to erase the existing list and make a fresh one? (You may be seeing this message as the database never existed) Y/N: '))
   if checkDelete == 'Y':
     print("Deleting addresses and making new file")
-    f = open('addresses.csv','w+')
+    f = open('data/addresses.csv','w+')
     f.close()
-    with open('addresses.csv', 'a') as f:                                    
+    with open('data/addresses.csv', 'a') as f:                                    
       writer = csv.writer(f)
       writer.writerows(changes)
     print('Completed')
@@ -109,7 +109,7 @@ def newDatabase():
   print()
 
 def checkFile():
-  if str(os.path.isfile('./addresses.csv')) == 'False':
+  if str(os.path.isfile('data/addresses.csv')) == 'False':
     newDatabase()
 
 while counter == 0:
