@@ -121,6 +121,7 @@ def updateRecipients():
 def updateSender():
   global email_sender
   global password
+  global email_sender_name
   try:
     with open('sender.csv') as csv_file:
       csv_reader = csv.reader(csv_file, delimiter=',')
@@ -136,6 +137,10 @@ def updateSender():
               #Sender password
               password = str(row[0])
               line_count += 1
+          elif line_count == 3:
+              #Sender name
+              email_sender_name = str(row[0])
+              line_count += 1
       print(f'Using CSV for credentials, processed {line_count - 1} credentials, {line_count} lines\n')
   except FileNotFoundError:
     changeSender('e')
@@ -143,10 +148,12 @@ def updateSender():
 def changeSender(mode):
   if str(os.path.isfile('./sender.csv')) == 'False':
     print("We didn't find a sender credentials file, creating on for you:")
+    skip = 1
     changes = [
       ['details'],
       ['address'],
       ['password'],  
+      ['name'], 
       ]
     f = open('sender.csv','w+')
     f.close()
@@ -154,20 +161,27 @@ def changeSender(mode):
       writer = csv.writer(f)
       writer.writerows(changes)
     print('Done')
-
-  if mode == 's':
-    credential = input(str('Please enter the new email address: '))
-    removeLineNumber = 1
-    wFile = 1
-  elif mode == 'p':
-    credential = input(str('Please enter the new password: '))
-    removeLineNumber = 2
-    wFile = 1
-  elif mode == 'e':
-    print('\nPlease enter the sender details: \n')
-    changeSender('s')
-    changeSender('p')
-    wFile = 0
+  if skip == 0:
+    if mode == 's':
+      credential = input(str('Please enter the new email address: '))
+      removeLineNumber = 1
+      wFile = 1
+    elif mode == 'p':
+      credential = input(str('Please enter the new password: '))
+      removeLineNumber = 2
+      wFile = 1
+    elif mode == 'n':
+      credential = input(str('Please enter the new sender name: '))
+      removeLineNumber = 3
+      wFile = 1
+    elif mode == 'e':
+      print('\nPlease enter the sender details: \n')
+      changeSender('s')
+      changeSender('p')
+      changeSender('n')
+      wFile = 0
+  else:
+    skip = 0
 
   if wFile == 1:
     with open('sender.csv', 'r') as csv_file:
@@ -203,7 +217,7 @@ def updateMessage():
   currTime = datetime.datetime.now()
   msg = MIMEMultipart('alternative')
   msg['Subject'] = 'Temperature Alert'
-  msg['From'] = 'Pi Temperature Alerts'
+  msg['From'] = email_sender_name
   msg['To'] = 'Whomever it may concern'
   html_wrap = '<html><body><p>The temperature is no longer between ' + str(threshold_max) + '°C and ' + str(threshold_min) + '°C. </p><p>The temperature is currently ' + str(temp) + '°C at ' + str(currTime.strftime("%H:%M:%S")) + '</p><br><img src="cid:image1"></body></html>'
   wrap = MIMEText(html_wrap, 'html')
@@ -268,10 +282,12 @@ def logTemp():
 sys.argv.append(0)
 if sys.argv[1] == '-h' or sys.argv[1] == '--help':
   print('Options:')
-  print('	-h | --help    : Display the help menu')
+  print('	-h | --help      : Display the help menu')
   print('	-a | --addresses : Add, remove, view or edit recipient email addresses')
-  print('	-p | --password : Change the password for the sender email')
-  print('	-s | --sender : Change the address of the sender email')
+  print('	-p | --password  : Change the password for the sender email')
+  print('	-s | --sender    : Change the address of the sender email')
+  print('	-n | --name      : Change the name of the sender')
+  print('	-c | --config    : Generate a new config file')
   exit()
 elif sys.argv[1] == '-a' or sys.argv[1] == '--address':
   import data_edit
@@ -281,6 +297,9 @@ elif sys.argv[1] == '-p' or sys.argv[1] == '--password':
   exit()
 elif sys.argv[1] == '-s' or sys.argv[1] == '--sender':
   changeSender('s')
+  exit()
+elif sys.argv[1] == '-n' or sys.argv[1] == '--name':
+  changeSender('n')
   exit()
 elif sys.argv[1] == '-c' or sys.argv[1] == '--config':
   updateConfig('y')
