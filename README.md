@@ -21,6 +21,7 @@ A small project to report the temperature of a room to anyone on the mailing lis
 
 - Add `@reboot tmux new-session -d -s temp_report 'python3.6 /path/to/install/temp.py; exec bash -i'` to `crontab -e` to have the program start on boot
 - Use `tmux att -t temp_report` to view the program
+- After an update, back up data/config.csv and run `python3.6 temp.py -c` to update the config and then replace the values in the new config
 - Use `python3.6 temp.py -h` to view help
 - Make sure OneWire is enabled
 

@@ -10,6 +10,7 @@ def generateGraph(reading_count_priv, time_interval_priv):
   global time_interval
   reading_count = reading_count_priv
   time_interval = time_interval_priv
+  x=[]
   for count in range(0, reading_count_priv):
     x.append(count * time_interval_priv)
   print('Generating graph')

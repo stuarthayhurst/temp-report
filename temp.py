@@ -283,7 +283,7 @@ if sys.argv[1] == '-h' or sys.argv[1] == '--help':
   print('Options:')
   print('	-h | --help      : Display the help menu')
   print('	-a | --addresses : Add, remove, view or edit recipient email addresses')
-  print('	-p | --password  : Change the password for the sender email')
+  print('	-p | --password  : Update the password for the sender address used')
   print('	-s | --sender    : Change the address of the sender email')
   print('	-n | --name      : Change the name of the sender')
   print('	-c | --config    : Generate a new config file')
