@@ -304,7 +304,7 @@ elif sys.argv[1] == '-c' or sys.argv[1] == '--config':
   updateConfig('y')
   exit()
 
-print("--------------------------------")
+print('--------------------------------')
 counter = 0
 while counter == 0:
   #Load the config
@@ -324,5 +324,5 @@ while counter == 0:
     #Send the message
     connectToServer()
     sendMessage()
-    print("--------------------------------\n")
+    print('--------------------------------\n')
   time.sleep(delay)
