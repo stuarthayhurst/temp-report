@@ -29,10 +29,11 @@ def produceGraph():
 
   #Delete the graph
 
-  plt.plot(x,y, label='Temperature °C')
+  line = plt.plot(x,y, label='Temperature °C')
   plt.xlabel('Time (Last x number of mins)')
   plt.ylabel('Temperature (°C)')
   plt.title(' Last ' + str(reading_count) + ' readings\nHot off the Pi')
   plt.legend()
   plt.savefig("graph.png")
   print('Created graph\n')
+  line.cla()
