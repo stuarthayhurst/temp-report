@@ -27,13 +27,11 @@ def produceGraph():
       data = re.findall(r"[0-9][0-9]+", line)
       y.append(int(data[4]))
 
-  #Delete the graph
-
-  line = plt.plot(x,y, label='Temperature °C')
+  plt.plot(x,y, label='Temperature °C')
   plt.xlabel('Time (Last x number of mins)')
   plt.ylabel('Temperature (°C)')
   plt.title(' Last ' + str(reading_count) + ' readings\nHot off the Pi')
   plt.legend()
   plt.savefig("graph.png")
   print('Created graph\n')
-  line.cla()
+  plt.clf()
