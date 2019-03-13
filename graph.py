@@ -8,7 +8,6 @@ y=[]
 def generateGraph(reading_count_priv, time_interval_priv):
   global reading_count
   global time_interval
-  print(reading_count_priv)
   reading_count = reading_count_priv
   time_interval = time_interval_priv
   x.clear()
@@ -19,13 +18,15 @@ def generateGraph(reading_count_priv, time_interval_priv):
   produceGraph()
 
 def produceGraph():
-  global first_run
   with open("temps.log", "r") as f:
       taildata = f.readlines() [-reading_count:]
 
   for line in taildata:
+    if re.findall(r"[0-9]+\.[0-9]+", line):
+      data = re.findall(r"[0-9]+\.[0-9]+", line)
+    else:
       data = re.findall(r"[0-9][0-9]+", line)
-      y.append(int(data[4]))
+    y.append(float(data[len(data) - 1]))
 
   plt.plot(x,y, label='Temperature °C')
   plt.xlabel('Time (Last x number of mins)')

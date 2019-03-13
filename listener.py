@@ -1,24 +1,45 @@
-#Read in temp_delay (delay), graph_point_count and keywords from config
-#Check reply by keyword
-#Improve reliability
-#Allow asking for specific length of time. E.g. 'Last 2 hours'
-#Fix email icon not showing up
-#Stop checking for keywords after it is found
-
-import imaplib, smtplib, datetime, time, sys, csv, re
+import imaplib, smtplib, datetime, time, sys, os, csv, re
 import graph
-#from w1thermsensor import W1ThermSensor
+from w1thermsensor import W1ThermSensor
 from email.parser import HeaderParser
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.image import MIMEImage
 
-#sensor = W1ThermSensor()
+sensor = W1ThermSensor()
 
-temp_delay = 600 #Needs to be read in from config
-graph_point_count = 12 #Needs to be read in from config
-keywords = ['Test', 'Test1', 'test2'] #Needs to be read in from config
+keywords = ['Test', 'Latest', 'Temp', 'Temperature']
 delay = 10
+max_temp = 0
+min_temp = 0
+max_temp_time = 0
+min_temp_time = 0
+
+def updateConfig():
+  while str(os.path.isfile('data/config.csv')) == 'False':
+    print('No config found')
+    time.sleep(10)
+
+  with open('data/config.csv') as csv_file:
+    csv_reader = csv.reader(csv_file, delimiter=',')
+    config_count = 0
+    line_count = 0
+    for row in csv_reader:
+        if line_count == 0:
+          print('Reading config')
+          line_count += 1
+        else:
+          if row[0] == 'delay':
+            global temp_delay
+            temp_delay = int(row[1])
+            config_count += 1
+          elif row[0] == 'graph_point_count':
+            global graph_point_count
+            graph_point_count = int(row[1])
+            print(graph_point_count)
+            config_count += 1
+          line_count += 1
+    print(f'Processed {config_count} config options, {line_count} lines\n')
 
 def updateSender():
   global email_sender
@@ -46,6 +67,38 @@ def updateSender():
       print(f'Using CSV for credentials, processed {line_count - 1} credentials, {line_count} lines')
   except FileNotFoundError:
     print('Sender credentials file not found')
+
+def updateRecords():
+
+  while str(os.path.isfile('data/temp-records.csv')) == 'False':
+    print('No records found')
+    time.sleep(1)
+
+  with open('data/temp-records.csv') as csv_file:
+    csv_reader = csv.reader(csv_file, delimiter=',')
+    config_count = 0
+    line_count = 0
+    for row in csv_reader:
+        if line_count == 0:
+          print('Reading records')
+          line_count += 1
+        else:
+          if row[0] == 'max':
+            global max_temp
+            global max_temp_time
+            max_temp = int(row[1])
+            max_temp_time = str(row[2])
+            config_count += 1
+          elif row[0] == 'min':
+            global min_temp
+            global min_temp_time
+            min_temp = int(row[1])
+            min_temp_time = str(row[2])
+            config_count += 1
+          else:
+            print('Invalid line detected\n')
+          line_count += 1
+    print(f'Processed {config_count} temperatures, {line_count} lines\n')
 
 
 def refreshServer():
@@ -84,16 +137,21 @@ def checkMail():
       email_recipient = re.split(r"[/w>]+", str(email_recipient[1]))
       email_recipient = str(email_recipient[0])
       print('Address: ' + email_recipient)
-
-      for count in range(0, len(keywords)):
-        x = re.findall(str(keywords[count]), email_subject)
+      keyword = 0
+      keyword_counter = 0
+      #for count in range(0, len(keywords)):
+      print(len(keywords))
+      while keyword == 0 or keyword_counter == len(keywords) - 1:
+        keyword_counter += 1
+        print(keyword_counter)
+        x = re.findall(str(keywords[keyword_counter - 1]), email_subject)
         if (x):
-          print('Keyword found')
+          print('Keyword found\n')
           #Update and send the message
+          keyword = 1
           sendMessage()
         else:
           print('Reran')
-
 
       #Delete the processed email
       print('Email processed, deleting email\n')
@@ -112,12 +170,7 @@ def updateTemperature():
   global min_temp
   global max_temp_time
   global min_temp_time
-  temp = 30#sensor.get_temperature()
-  max_temp = 0
-  min_temp = 0
-  max_temp_time = 0
-  min_temp_time = 0
-
+  temp = sensor.get_temperature()
 
 def updateMessage():
   updateTemperature()
@@ -151,9 +204,11 @@ def sendMessage():
 
 counter = 0
 while counter == 0:
+  updateConfig()
   updateSender()
   refreshServer()
   connectToServer()
+  updateRecords()
   checkMail()
   print('--------------------------------\n')
   time.sleep(delay)

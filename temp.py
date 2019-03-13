@@ -11,6 +11,10 @@ email_sender = 'example@gmail.com' #Set sender email here if use_csv_sender = 0
 password = 'password' #Set sender email password here if use_csv_sender = 0
 last_email_time = datetime.datetime(1970, 1, 1, 0, 0)
 email_time_diff = 0
+max_temp = 0
+min_temp = 100
+max_time = 0
+min_time = 0
 sensor = W1ThermSensor()
 
 #See data/config.csv for a config file. Use python3 temp.py -c to generate a new one
@@ -256,6 +260,43 @@ def measureTemp():
   print('The temperature is ' + str(temp) + '°C at ' + str(currTime.strftime("%H:%M:%S")) + '\n')
 
 def logTemp():
+  global temp
+  global max_temp
+  global min_temp
+  if str(os.path.isfile('data/temp-records.csv')) == 'False':
+    print("No report file found, creating one:")
+    changes = [
+      ['Temp-report report file:'],
+      ['0', '0'],
+      ['0', '0'],
+      ]
+    f = open('data/temp-records.csv','w+')
+    f.close()
+    with open('data/temp-records.csv', 'a') as f:                                    
+      writer = csv.writer(f)
+      writer.writerows(changes)
+    print('Report file created\n')
+
+  currTime = datetime.datetime.now()
+  currTime = currTime.strftime("%H:%M:%S")
+
+  if temp > max_temp:
+    max_temp = temp
+    max_time = currTime
+  if temp < min_temp:
+    min_temp = temp
+    min_time = currTime
+
+  changes = [
+    ['Temp-report report file:'],
+    ['max', max_temp, max_time],
+    ['min', min_temp, min_time],
+    ]
+
+  with open('data/temp-records.csv', 'w') as f:
+    writer = csv.writer(f)
+    writer.writerows(changes)
+
   if str(os.path.isfile('./temps.log')) == 'False':
     print("No log found, creating one:")
     changes = [
