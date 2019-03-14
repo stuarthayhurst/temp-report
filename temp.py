@@ -259,6 +259,25 @@ def measureTemp():
   currTime = datetime.datetime.now()
   print('The temperature is ' + str(temp) + '°C at ' + str(currTime.strftime("%H:%M:%S")) + '\n')
 
+def readCSVLine(filename, position, mode, line):
+  if str(os.path.isfile(filename)) == 'False':
+    return
+  if mode == 'numbered':
+    with open(filename, 'r') as csv_file:
+      csv_reader = csv.reader(csv_file)
+      for i in range(line):
+          next(csv_reader)
+      row = next(csv_reader)
+      return row[position]
+  elif mode == 'keyword':
+    with open(filename) as csv_file:
+      csv_reader = csv.reader(csv_file, delimiter=',')
+      for row in csv_reader:
+        if row[0] == line:
+          return row[position]
+  else:
+    return
+
 def logTemp():
   global temp
   global max_temp
@@ -272,7 +291,7 @@ def logTemp():
       ]
     f = open('data/temp-records.csv','w+')
     f.close()
-    with open('data/temp-records.csv', 'a') as f:                                    
+    with open('data/temp-records.csv', 'a') as f:
       writer = csv.writer(f)
       writer.writerows(changes)
     print('Report file created\n')
@@ -283,9 +302,16 @@ def logTemp():
   if temp > max_temp:
     max_temp = temp
     max_time = currTime
+  else:
+    max_temp = readCSVLine('data/temp-records.csv', 1, 'keyword', 'max')
+    max_time = readCSVLine('data/temp-records.csv', 2, 'keyword', 'max')
+
   if temp < min_temp:
     min_temp = temp
     min_time = currTime
+  else:
+    min_temp = readCSVLine('data/temp-records.csv', 1, 'keyword', 'min')
+    min_time = readCSVLine('data/temp-records.csv', 2, 'keyword', 'min')
 
   changes = [
     ['Temp-report report file:'],
