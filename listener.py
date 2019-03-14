@@ -1,12 +1,12 @@
 import imaplib, smtplib, datetime, time, sys, os, csv, re
 import graph
-from w1thermsensor import W1ThermSensor
+#from w1thermsensor import W1ThermSensor
 from email.parser import HeaderParser
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.image import MIMEImage
 
-sensor = W1ThermSensor()
+#sensor = W1ThermSensor()
 
 keywords = ['Test', 'Latest', 'Temp', 'Temperature']
 delay = 10
@@ -86,13 +86,13 @@ def updateRecords():
           if row[0] == 'max':
             global max_temp
             global max_temp_time
-            max_temp = int(row[1])
+            max_temp = float(row[1])
             max_temp_time = str(row[2])
             config_count += 1
           elif row[0] == 'min':
             global min_temp
             global min_temp_time
-            min_temp = int(row[1])
+            min_temp = float(row[1])
             min_temp_time = str(row[2])
             config_count += 1
           else:
@@ -170,7 +170,7 @@ def updateTemperature():
   global min_temp
   global max_temp_time
   global min_temp_time
-  temp = sensor.get_temperature()
+  temp = 30#sensor.get_temperature()
 
 def updateMessage():
   updateTemperature()
