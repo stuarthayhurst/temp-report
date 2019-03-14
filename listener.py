@@ -1,12 +1,12 @@
 import imaplib, smtplib, datetime, time, sys, os, csv, re
 import graph
-#from w1thermsensor import W1ThermSensor
+from w1thermsensor import W1ThermSensor
 from email.parser import HeaderParser
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.image import MIMEImage
 
-#sensor = W1ThermSensor()
+sensor = W1ThermSensor()
 
 keywords = ['Test', 'Latest', 'Temp', 'Temperature']
 delay = 10
@@ -36,7 +36,6 @@ def updateConfig():
           elif row[0] == 'graph_point_count':
             global graph_point_count
             graph_point_count = int(row[1])
-            print(graph_point_count)
             config_count += 1
           line_count += 1
     print(f'Processed {config_count} config options, {line_count} lines\n')
@@ -170,7 +169,7 @@ def updateTemperature():
   global min_temp
   global max_temp_time
   global min_temp_time
-  temp = 30#sensor.get_temperature()
+  temp = sensor.get_temperature()
 
 def updateMessage():
   updateTemperature()
