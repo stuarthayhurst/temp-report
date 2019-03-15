@@ -8,7 +8,7 @@ from email.mime.image import MIMEImage
 
 sensor = W1ThermSensor()
 
-keywords = ['Test', 'Latest', 'Temp', 'Temperature']
+keywords = ['Test', 'Latest', 'Last', 'Temp', 'Temperature']
 delay = 10
 max_temp = 0
 min_temp = 0

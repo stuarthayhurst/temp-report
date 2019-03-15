@@ -10,9 +10,10 @@ email_recipients = ['example@gmail.com', 'example@gmail.com'] #Set recipient ema
 email_sender = 'example@gmail.com' #Set sender email here if use_csv_sender = 0
 password = 'password' #Set sender email password here if use_csv_sender = 0
 last_email_time = datetime.datetime(1970, 1, 1, 0, 0)
+record_reset_time = datetime.datetime(1970, 1, 1, 0, 0)
 email_time_diff = 0
-max_temp = 0
-min_temp = 100
+max_temp = -100.0
+min_temp = 999.9
 max_time = 0
 min_time = 0
 sensor = W1ThermSensor()
@@ -23,13 +24,14 @@ def updateConfig(force):
   changes = [
     #DO NOT EDIT THESE, these are the default values when generating a new config
     ['config'],
-    ['delay', '300'],
-    ['gap', '3600'],
-    ['threshold_max', '30'],
-    ['threshold_min', '-1'],
-    ['use_csv_recipient', '1'],
-    ['use_csv_sender', '1'],
-    ['graph_point_count', '12'],
+    ['delay', '300'], #Delay between each temperature reading
+    ['gap', '3600'], #Delay between emails
+    ['threshold_max', '30'], #Max temp for emailing
+    ['threshold_min', '-1'], #Min temp for emailing
+    ['use_csv_recipient', '1'], #Toggle for using a recipient address file
+    ['use_csv_sender', '1'], #Toggle for using a sender credentials file
+    ['graph_point_count', '12'], #Amount of points on graphs
+    ['record_reset', '24'], #Time between mix and max temp reset in hours
     ]
 
   if force == 'y':
@@ -88,10 +90,13 @@ def updateConfig(force):
             global graph_point_count
             graph_point_count = int(row[1])
             config_count += 1
+          elif row[0] == 'record_reset':
+            global record_reset
+            record_reset = int(row[1])
+            config_count += 1
           else:
             print('Invalid config line detected\n')
     print(f'Processed {config_count} config options, {line_count} lines\n')
-
 def connectToServer():
   #Connects to gmail's servers
   global server
@@ -192,10 +197,7 @@ def changeSender(mode):
       for i in range(removeLineNumber):
           next(r)
       row = next(r)
-      removeLine = str(row)
-      removeLine = removeLine.replace("[", '')
-      removeLine = removeLine.replace("]", '')
-      removeLine = removeLine.replace("'", '')
+      removeLine = row[0]
 
     f = open('data/sender.csv','r')
     lines = f.readlines()
@@ -282,6 +284,8 @@ def logTemp():
   global temp
   global max_temp
   global min_temp
+  global record_reset
+  global record_reset_time
   if str(os.path.isfile('data/temp-records.csv')) == 'False':
     print("No report file found, creating one:")
     changes = [
@@ -297,18 +301,26 @@ def logTemp():
     print('Report file created\n')
 
   currTime = datetime.datetime.now()
-  currTime = currTime.strftime("%H:%M:%S")
+  time_diff = (time.mktime(currTime.timetuple()) - time.mktime(record_reset_time.timetuple()))
+  if time_diff >= record_reset:
+    record_reset_time = datetime.datetime.now()
+    print(str(record_reset) + ' Hours have passed since last record reset, resetting record values')
+    max_temp = -100.0
+    min_temp = 999.9
+    print('Records reset\n')
 
   if temp > max_temp:
+    print('Set new max temperature\n')
     max_temp = temp
-    max_time = currTime
+    max_time = currTime.strftime("%H:%M:%S")
   else:
     max_temp = readCSVLine('data/temp-records.csv', 1, 'keyword', 'max')
     max_time = readCSVLine('data/temp-records.csv', 2, 'keyword', 'max')
 
   if temp < min_temp:
+    print('Set new max temperature\n')
     min_temp = temp
-    min_time = currTime
+    min_time = currTime.strftime("%H:%M:%S")
   else:
     min_temp = readCSVLine('data/temp-records.csv', 1, 'keyword', 'min')
     min_time = readCSVLine('data/temp-records.csv', 2, 'keyword', 'min')
@@ -320,8 +332,8 @@ def logTemp():
     ]
 
   with open('data/temp-records.csv', 'w') as f:
-    writer = csv.writer(f)
-    writer.writerows(changes)
+      writer = csv.writer(f)
+      writer.writerows(changes)
 
   if str(os.path.isfile('./temps.log')) == 'False':
     print("No log found, creating one:")
@@ -334,8 +346,6 @@ def logTemp():
       writer = csv.writer(f)
       writer.writerows(changes)
     print('Log created\n')
-
-  currTime = datetime.datetime.now()
   
   logLine = '[' + str(currTime.strftime("%c")) + '] Temperature: ' + str(temp) + '°C'
   changes = [
