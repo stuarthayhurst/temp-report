@@ -1,12 +1,12 @@
 import imaplib, smtplib, datetime, time, sys, os, csv, re
 import graph
-from w1thermsensor import W1ThermSensor
+#from w1thermsensor import W1ThermSensor
 from email.parser import HeaderParser
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.image import MIMEImage
 
-sensor = W1ThermSensor()
+#sensor = W1ThermSensor()
 
 keywords = ['Test', 'Latest', 'Last', 'Temp', 'Temperature']
 delay = 10
@@ -138,11 +138,11 @@ def checkMail():
       print('Address: ' + email_recipient)
       keyword = 0
       keyword_counter = 0
-      #for count in range(0, len(keywords)):
-      print(len(keywords))
-      while keyword == 0 or keyword_counter == len(keywords) - 1:
+      print(len(keywords) - 1)
+      while keyword == 0 and keyword_counter <= len(keywords) - 1:
         keyword_counter += 1
         print(keyword_counter)
+        print(email_subject)
         x = re.findall(str(keywords[keyword_counter - 1]), email_subject)
         if (x):
           print('Keyword found\n')
@@ -169,7 +169,7 @@ def updateTemperature():
   global min_temp
   global max_temp_time
   global min_temp_time
-  temp = sensor.get_temperature()
+  temp = 30#sensor.get_temperature()
 
 def updateMessage():
   updateTemperature()
