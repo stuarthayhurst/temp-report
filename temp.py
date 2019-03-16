@@ -1,6 +1,6 @@
 import smtplib, datetime, time, csv, sys, os
 import graph
-from w1thermsensor import W1ThermSensor
+#from w1thermsensor import W1ThermSensor
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.image import MIMEImage
@@ -16,11 +16,11 @@ max_temp = -100.0
 min_temp = 999.9
 max_time = 0
 min_time = 0
-sensor = W1ThermSensor()
+#sensor = W1ThermSensor()
 
 #See data/config.csv for a config file. Use python3 temp.py -c to generate a new one
 
-def updateConfig(force):
+def writeConfig(mode):
   changes = [
     #DO NOT EDIT THESE, these are the default values when generating a new config
     ['config'],
@@ -35,24 +35,44 @@ def updateConfig(force):
     ['record_reset', '24'], #Time between mix and max temp reset in hours
     ]
 
-  if force == 'y':
-    print('\nGenerating config')
+  if mode == 'f':
+    print('Generating config')
     f = open('data/config.csv','w+')
     f.close()
     with open('data/config.csv', 'a') as f:                                    
       writer = csv.writer(f)
       writer.writerows(changes)
-    print('Generated new config')
-    exit()
+    print('Generated new config\n')
+    return
+  elif mode == 's':
+    print('Writing only new additions')
+    for count in range(1, len(changes)):
+      searchLine = changes[count][0]
+      success = 0
+      with open('data/config.csv') as csv_file:
+        csv_reader = csv.reader(csv_file, delimiter=',')
+        for row in csv_reader:
+          if row[0] == 'config':
+            config_count = 0
+          elif row[0] == searchLine:
+            print('Found ' + searchLine + '\n')
+            success = 1
+        if success == 0:
+          print(searchLine + ' was not found')
+          print(changes[count][1])
+          with open('data/config.csv', 'a') as f:
+            writer = csv.writer(f)
+            config_add=[searchLine, changes[count][1]]
+            writer.writerow(config_add)
+        else:
+          success = 0
+  else:
+    return
 
+def updateConfig(mode):
   if str(os.path.isfile('data/config.csv')) == 'False':
-    print('\nGenerating config')
-    f = open('data/config.csv','w+')
-    f.close()
-    with open('data/config.csv', 'a') as f:                                    
-      writer = csv.writer(f)
-      writer.writerows(changes)
-    print('Generated new config')
+    print('\nNo config file found')
+    writeConfig('f')
 
   with open('data/config.csv') as csv_file:
     csv_reader = csv.reader(csv_file, delimiter=',')
@@ -364,12 +384,13 @@ def logTemp():
 sys.argv.append(0)
 if sys.argv[1] == '-h' or sys.argv[1] == '--help':
   print('Options:')
-  print('	-h | --help      : Display the help menu')
-  print('	-a | --addresses : Add, remove, view or edit recipient email addresses')
-  print('	-p | --password  : Update the password for the sender address used')
-  print('	-s | --sender    : Change the address of the sender email')
-  print('	-n | --name      : Change the name of the sender')
-  print('	-c | --config    : Generate a new config file')
+  print('	-h  | --help           : Display the help menu')
+  print('	-a  | --addresses      : Add, remove, view or edit recipient email addresses')
+  print('	-p  | --password       : Update the password for the sender address used')
+  print('	-s  | --sender         : Change the address of the sender email')
+  print('	-n  | --name           : Change the name of the sender')
+  print('	-c  | --config         : Generate a new config file')
+  print('	-cs | --config-save    : Add missing config entries')
   exit()
 elif sys.argv[1] == '-a' or sys.argv[1] == '--address':
   import data_edit
@@ -384,14 +405,17 @@ elif sys.argv[1] == '-n' or sys.argv[1] == '--name':
   changeSender('n')
   exit()
 elif sys.argv[1] == '-c' or sys.argv[1] == '--config':
-  updateConfig('y')
+  writeConfig('f')
+  exit()
+elif sys.argv[1] == '-cs' or sys.argv[1] == '--config-save':
+  writeConfig('s')
   exit()
 
 print('--------------------------------')
 counter = 0
 while counter == 0:
   #Load the config
-  updateConfig('n')
+  updateConfig()
   #Measure the temperature
   measureTemp()
   logTemp()
