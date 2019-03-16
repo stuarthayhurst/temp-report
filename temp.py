@@ -1,6 +1,6 @@
 import smtplib, datetime, time, csv, sys, os
 import graph
-#from w1thermsensor import W1ThermSensor
+from w1thermsensor import W1ThermSensor
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.image import MIMEImage
@@ -16,11 +16,13 @@ max_temp = -100.0
 min_temp = 999.9
 max_time = 0
 min_time = 0
-#sensor = W1ThermSensor()
+sensor = W1ThermSensor()
 
 #See data/config.csv for a config file. Use python3 temp.py -c to generate a new one
 
 def writeConfig(mode):
+  if str(os.path.isfile('data/config.csv')) == 'False':
+    return
   changes = [
     #DO NOT EDIT THESE, these are the default values when generating a new config
     ['config'],
@@ -45,7 +47,6 @@ def writeConfig(mode):
     print('Generated new config\n')
     return
   elif mode == 's':
-    print('Writing only new additions')
     for count in range(1, len(changes)):
       searchLine = changes[count][0]
       success = 0
@@ -55,7 +56,6 @@ def writeConfig(mode):
           if row[0] == 'config':
             config_count = 0
           elif row[0] == searchLine:
-            print('Found ' + searchLine + '\n')
             success = 1
         if success == 0:
           print(searchLine + ' was not found')
@@ -66,10 +66,11 @@ def writeConfig(mode):
             writer.writerow(config_add)
         else:
           success = 0
+    return
   else:
     return
 
-def updateConfig(mode):
+def updateConfig():
   if str(os.path.isfile('data/config.csv')) == 'False':
     print('\nNo config file found')
     writeConfig('f')
@@ -113,7 +114,7 @@ def updateConfig(mode):
             config_count += 1
           elif row[0] == 'graph_font_path':
             global graph_font_path
-            graph_font_path = int(row[1])
+            graph_font_path = str(row[1])
             config_count += 1
           elif row[0] == 'record_reset':
             global record_reset
@@ -415,6 +416,7 @@ print('--------------------------------')
 counter = 0
 while counter == 0:
   #Load the config
+  writeConfig('s')
   updateConfig()
   #Measure the temperature
   measureTemp()
