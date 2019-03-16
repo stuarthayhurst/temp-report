@@ -93,6 +93,7 @@ def updateConfig(force):
           elif row[0] == 'record_reset':
             global record_reset
             record_reset = int(row[1])
+            record_reset = record_reset * 3600
             config_count += 1
           else:
             print('Invalid config line detected\n')

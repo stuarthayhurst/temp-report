@@ -15,9 +15,17 @@ def generateGraph(reading_count_priv, time_interval_priv):
   for count in range(0, reading_count_priv):
     x.append(count * time_interval_priv)
   print('Generating graph')
+  fpath = os.path.join(rcParams["datapath"], "fonts/")
+  prop = mpl.FontProperties(fname=fpath)
+  fname = os.path.split(fpath)[1]
   produceGraph()
 
 def produceGraph():
+  if reading_count > len(open('temps.log').readlines(  )):
+    print('Not enough lines in logfile, aborting\n')
+    produceText()
+    return
+
   with open("temps.log", "r") as f:
       taildata = f.readlines() [-reading_count:]
 
@@ -36,3 +44,14 @@ def produceGraph():
   plt.savefig("graph.png")
   print('Created graph\n')
   plt.clf()
+
+def produceText():
+  from PIL import Image, ImageDraw, ImageFont
+ 
+  img = Image.new('RGB', (100, 30), color = (73, 109, 137))
+  fnt = ImageFont.truetype('/Library/Fonts/Arial.ttf', 15)
+  d = ImageDraw.Draw(img)
+  d.text((10,10), "Hello world", font=fnt, fill=(255, 255, 0))
+  img.save('graph.png')
+
+generateGraph(12, 5)
