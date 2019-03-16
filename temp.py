@@ -31,6 +31,7 @@ def updateConfig(force):
     ['use_csv_recipient', '1'], #Toggle for using a recipient address file
     ['use_csv_sender', '1'], #Toggle for using a sender credentials file
     ['graph_point_count', '12'], #Amount of points on graphs
+    ['graph_font_path', 'fonts/Lato-Regular.ttf'], #Font for graph error messages
     ['record_reset', '24'], #Time between mix and max temp reset in hours
     ]
 
@@ -89,6 +90,10 @@ def updateConfig(force):
           elif row[0] == 'graph_point_count':
             global graph_point_count
             graph_point_count = int(row[1])
+            config_count += 1
+          elif row[0] == 'graph_font_path':
+            global graph_font_path
+            graph_font_path = int(row[1])
             config_count += 1
           elif row[0] == 'record_reset':
             global record_reset
@@ -397,7 +402,7 @@ while counter == 0:
     if use_csv_sender == 1:
       updateSender()
     #Create message contents
-    graph.generateGraph(graph_point_count, delay / 60)
+    graph.generateGraph(graph_point_count, delay / 60, graph_font_path)
     updateMessage()
     #Send the message
     connectToServer()

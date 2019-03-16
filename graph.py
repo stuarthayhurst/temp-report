@@ -1,27 +1,27 @@
 import matplotlib as mpl
 mpl.use('Agg')
 import matplotlib.pyplot as plt
+from PIL import Image, ImageDraw, ImageFont
 import re
 x=[]
 y=[]
 
-def generateGraph(reading_count_priv, time_interval_priv):
+def generateGraph(reading_count_priv, time_interval_priv, font_path_priv):
   global reading_count
   global time_interval
+  global font_path
   reading_count = reading_count_priv
   time_interval = time_interval_priv
+  font_path = font_path_priv
   x.clear()
   y.clear()
   for count in range(0, reading_count_priv):
     x.append(count * time_interval_priv)
   print('Generating graph')
-  fpath = os.path.join(rcParams["datapath"], "fonts/")
-  prop = mpl.FontProperties(fname=fpath)
-  fname = os.path.split(fpath)[1]
   produceGraph()
 
 def produceGraph():
-  if reading_count > len(open('temps.log').readlines(  )):
+  if reading_count > len(open('test.log').readlines(  )):
     print('Not enough lines in logfile, aborting\n')
     produceText()
     return
@@ -46,12 +46,8 @@ def produceGraph():
   plt.clf()
 
 def produceText():
-  from PIL import Image, ImageDraw, ImageFont
- 
-  img = Image.new('RGB', (100, 30), color = (73, 109, 137))
-  fnt = ImageFont.truetype('/Library/Fonts/Arial.ttf', 15)
+  img = Image.new('RGB', (450, 40), color = (0, 0, 0))
+  fnt = ImageFont.truetype(font_path, 20)
   d = ImageDraw.Draw(img)
-  d.text((10,10), "Hello world", font=fnt, fill=(255, 255, 0))
+  d.text((20,10), "Not enough lines in the log to generate a graph", font=fnt, fill=(40, 231, 35))
   img.save('graph.png')
-
-generateGraph(12, 5)
