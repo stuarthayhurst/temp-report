@@ -7,6 +7,7 @@ A small project to report the temperature of a room to anyone on the mailing lis
   * Python 3.6+
   * w1thermsensor
   * matplotlib
+  * pillow
 
 - ### Source / Package Manager
   * Tmux
@@ -14,13 +15,13 @@ A small project to report the temperature of a room to anyone on the mailing lis
 ## Installation:
 
 - `git clone https://github.com/Dragon8oy/temp-report.git`
-- `sudo pip3.6 install w1thermsensor matplotlib`
+- `sudo pip3.6 install w1thermsensor matplotlib pillow`
 - `sudo apt install tmux`
 
 ## Commands and notes:
 
-- Add `@reboot tmux new-session -d -s temp_report 'python3.6 /path/to/install/temp.py; exec bash -i'` to `crontab -e` to have the program start on boot
-- Add `@reboot tmux new-session -d -s temp_report 'python3.6 /path/to/install/listener.py; exec bash -i'` to `crontab -e` to have the email reply bot start on boot
+- Add `@reboot tmux new-session -d -s temp_report 'cd /path/to/install && /path/to/python/install /path/to/install/temp.py; exec bash -i'` to `crontab -e` to have the program start on boot
+- Add `@reboot tmux new-session -d -s temp_listener 'cd /path/to/install && /path/to/python/install /path/to/install/listener.py; exec bash -i'` to `crontab -e` to have the email reply bot start on boot
 - Use `tmux att -t temp_report` to view the program
 - After an update, back up data/config.csv and run `python3.6 temp.py -c` to update the config and then replace the values in the new config
 - Use `python3.6 temp.py -h` to view help
