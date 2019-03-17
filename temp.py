@@ -285,6 +285,7 @@ def measureTemp():
   global temp
   print('Reading temperature:')
   temp = sensor.get_temperature()
+  temp = float(temp)
   currTime = datetime.datetime.now()
   print('The temperature is ' + str(temp) + '°C at ' + str(currTime.strftime("%H:%M:%S")) + '\n')
 

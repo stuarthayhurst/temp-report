@@ -195,7 +195,7 @@ def updateMessage():
 
 def sendMessage():
   #Use the config value for graph_point_count unless email_subject contains a command
-  graph.generateGraph(graph_point_count, temp_delay / 60)
+  graph.generateGraph(graph_point_count, (temp_delay / 60))
   updateMessage()
   print('Sending message')
   sendServer.sendmail(email_sender, email_recipient, msg.as_string())
