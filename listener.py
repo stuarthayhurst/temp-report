@@ -1,12 +1,12 @@
 import imaplib, smtplib, datetime, time, sys, os, csv, re
 import graph
-from w1thermsensor import W1ThermSensor
+#from w1thermsensor import W1ThermSensor
 from email.parser import HeaderParser
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.image import MIMEImage
 
-sensor = W1ThermSensor()
+#sensor = W1ThermSensor()
 
 keywords = ['Test', 'Latest', 'Last', 'Temp', 'Temperature']
 delay = 10
@@ -40,6 +40,10 @@ def updateConfig():
           elif row[0] == 'graph_font_path':
             global graph_font_path
             graph_font_path = str(row[1])
+            config_count += 1
+          elif row[0] == 'chart_type':
+            global chart_type
+            chart_type = str(row[1])
             config_count += 1
           line_count += 1
     print(f'Processed {config_count} config options, {line_count} lines\n')
@@ -127,6 +131,8 @@ def checkMail():
   if data[1] != [None]:
       global email_subject
       global email_recipient
+      global chart_type
+      chart_types = ['Scatter', 'scatter', 'Line', 'line']
       #Get any available emails
       print('An email was found, saving sender address')
       header_data = data[1][0][1].decode('utf-8')
@@ -142,16 +148,27 @@ def checkMail():
       print('Address: ' + email_recipient)
       keyword = 0
       keyword_counter = 0
-      print(len(keywords) - 1)
       while keyword == 0 and keyword_counter <= len(keywords) - 1:
         keyword_counter += 1
-        print(keyword_counter)
-        print(email_subject)
         x = re.findall(str(keywords[keyword_counter - 1]), email_subject)
         if (x):
           print('Keyword found\n')
           #Update and send the message
           keyword = 1
+          chart_request = 0
+          type_counter = 0
+          while chart_request == 0 and type_counter <= len(chart_types) - 1:
+            type_counter += 1
+            print(type_counter)
+            print(email_subject)
+            i = re.findall(str(chart_types[type_counter - 1]), email_subject)
+            if (i):
+              chart_request = 1
+              print('Graph type found\n')
+              chart_type = i[0].lower()
+            else:
+              print('No graph type found')
+
           sendMessage()
         else:
           print('Reran')
@@ -173,7 +190,7 @@ def updateTemperature():
   global min_temp
   global max_temp_time
   global min_temp_time
-  temp = float(sensor.get_temperature())
+  temp = 30.0#float(sensor.get_temperature())
 
 def updateMessage():
   updateTemperature()
@@ -199,7 +216,7 @@ def updateMessage():
 
 def sendMessage():
   #Use the config value for graph_point_count unless email_subject contains a command
-  graph.generateGraph(graph_point_count, graph_font_path)
+  graph.generateGraph(graph_point_count, graph_font_path, chart_type)
   updateMessage()
   print('Sending message')
   sendServer.sendmail(email_sender, email_recipient, msg.as_string())

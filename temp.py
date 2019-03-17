@@ -1,6 +1,6 @@
 import smtplib, datetime, time, csv, sys, os
 import graph
-from w1thermsensor import W1ThermSensor
+#from w1thermsensor import W1ThermSensor
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.image import MIMEImage
@@ -16,7 +16,7 @@ max_temp = -100.0
 min_temp = 999.9
 max_time = 0
 min_time = 0
-sensor = W1ThermSensor()
+#sensor = W1ThermSensor()
 
 #See data/config.csv for a config file. Use python3 temp.py -c to generate a new one
 
@@ -34,6 +34,7 @@ def writeConfig(mode):
     ['use_csv_sender', '1'], #Toggle for using a sender credentials file
     ['graph_point_count', '12'], #Amount of points on graphs
     ['graph_font_path', 'fonts/Lato-Regular.ttf'], #Font for graph error messages
+    ['chart_type', 'line'], #Type of graph to use (scatter or line)
     ['record_reset', '24'], #Time between mix and max temp reset in hours
     ]
 
@@ -115,6 +116,10 @@ def updateConfig():
           elif row[0] == 'graph_font_path':
             global graph_font_path
             graph_font_path = str(row[1])
+            config_count += 1
+          elif row[0] == 'chart_type':
+            global chart_type
+            chart_type = str(row[1])
             config_count += 1
           elif row[0] == 'record_reset':
             global record_reset
@@ -284,7 +289,7 @@ def measureTemp():
   #Measures the temperature
   global temp
   print('Reading temperature:')
-  temp = float(sensor.get_temperature())
+  temp = 30.0#float(sensor.get_temperature())
   currTime = datetime.datetime.now()
   print('The temperature is ' + str(temp) + '°C at ' + str(currTime.strftime("%H:%M:%S")) + '\n')
 
@@ -428,7 +433,7 @@ while counter == 0:
     if use_csv_sender == 1:
       updateSender()
     #Create message contents
-    graph.generateGraph(graph_point_count, graph_font_path)
+    graph.generateGraph(graph_point_count, graph_font_path, chart_type)
     updateMessage()
     #Send the message
     connectToServer()
