@@ -284,8 +284,7 @@ def measureTemp():
   #Measures the temperature
   global temp
   print('Reading temperature:')
-  temp = sensor.get_temperature()
-  temp = float(temp)
+  temp = float(sensor.get_temperature())
   currTime = datetime.datetime.now()
   print('The temperature is ' + str(temp) + '°C at ' + str(currTime.strftime("%H:%M:%S")) + '\n')
 
@@ -429,7 +428,7 @@ while counter == 0:
     if use_csv_sender == 1:
       updateSender()
     #Create message contents
-    graph.generateGraph(graph_point_count, delay / 60, graph_font_path)
+    graph.generateGraph(graph_point_count, graph_font_path)
     updateMessage()
     #Send the message
     connectToServer()
