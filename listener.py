@@ -159,8 +159,6 @@ def checkMail():
           type_counter = 0
           while chart_request == 0 and type_counter <= len(chart_types) - 1:
             type_counter += 1
-            print(type_counter)
-            print(email_subject)
             i = re.findall(str(chart_types[type_counter - 1]), email_subject)
             if (i):
               chart_request = 1
