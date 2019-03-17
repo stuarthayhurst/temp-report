@@ -33,7 +33,7 @@ def drawGraph(x,y,chart_type):
     plt.gcf().autofmt_xdate() 
     plt.xlabel('Time (Day - Hour: Minutes)')
     plt.ylabel("Temperature \u2103")
-    plt.title('Conservatory Temperature logged by Pi')
+    plt.title('Room Temperature logged by Pi')
     plt.savefig("graph.png")
     print('Created graph\n')
     plt.clf()
