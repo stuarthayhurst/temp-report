@@ -350,7 +350,7 @@ def logTemp():
     max_time = readCSVLine('data/temp-records.csv', 2, 'keyword', 'max')
 
   if temp < min_temp:
-    print('Set new max temperature\n')
+    print('Set new min temperature\n')
     min_temp = temp
     min_time = currTime.strftime("%H:%M:%S")
   else:
