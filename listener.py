@@ -1,12 +1,12 @@
 import imaplib, smtplib, datetime, time, sys, os, csv, re
 import graph
-#from w1thermsensor import W1ThermSensor
+from w1thermsensor import W1ThermSensor
 from email.parser import HeaderParser
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.image import MIMEImage
 
-#sensor = W1ThermSensor()
+sensor = W1ThermSensor()
 
 keywords = ['Test', 'Latest', 'Last', 'Temp', 'Temperature']
 delay = 10
@@ -190,7 +190,7 @@ def updateTemperature():
   global min_temp
   global max_temp_time
   global min_temp_time
-  temp = 30.0#float(sensor.get_temperature())
+  temp = float(sensor.get_temperature())
 
 def updateMessage():
   updateTemperature()
