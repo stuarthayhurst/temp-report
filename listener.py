@@ -184,10 +184,6 @@ def checkMail():
 def updateTemperature():
   print('Getting latest values for min and max temperature\n')
   global temp
-  global max_temp
-  global min_temp
-  global max_temp_time
-  global min_temp_time
   temp = float(sensor.get_temperature())
 
 def updateMessage():

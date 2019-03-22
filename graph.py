@@ -21,6 +21,8 @@ def produceText(font_path):
   img.save('graph.png')
 
 def drawGraph(x,y,chart_type):
+    plt.figure()
+    plt.clf()
     if chart_type == 'line':
       plt.grid(b=None, which='major', axis='both')
       plt.plot(x,y, label='Temperature in \u2103')
