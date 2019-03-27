@@ -32,6 +32,7 @@ def drawGraph(x,y,chart_type):
       plt.scatter(x,y, marker=".")
     else:
       print('Invalid config option')
+    #https://stackoverflow.com/questions/5283649/plot-smooth-line-with-pyplot - smooth line instead of line graphs or scatter
     plt.gcf().autofmt_xdate() 
     plt.xlabel('Time (Day - Hour: Minutes)')
     plt.ylabel("Temperature \u2103")
