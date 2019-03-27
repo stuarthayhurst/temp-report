@@ -4,10 +4,9 @@
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 import numpy as np
-from scipy.interpolate import spline
 import datetime
 import re
-
+from scipy.interpolate import spline
 
 def drawgraph (x,y):
     x2 = mdates.date2num(x)
@@ -19,7 +18,6 @@ def drawgraph (x,y):
 
     plt.style.use('ggplot')
     plt.plot([],[])
-    #plt.plot(x,y, marker=".")
     plt.plot(x_smooth, y_smooth, 'red', linewidth=1)
     plt.gcf().autofmt_xdate() 
     plt.ylabel("Temperature \u2103")
@@ -38,6 +36,7 @@ def readValues(x=[], y=[]):
             y.append(temp)
         return x,y
 
-x, y  = readValues()
-drawgraph(x,y)
+if __name__ == "__main__":
+    x, y  = readValues()
+    drawgraph(x,y)
 
