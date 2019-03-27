@@ -34,7 +34,6 @@ def writeConfig(mode):
     ['use_csv_sender', '1'], #Toggle for using a sender credentials file
     ['graph_point_count', '12'], #Amount of points on graphs
     ['graph_font_path', 'fonts/Lato-Regular.ttf'], #Font for graph error messages
-    ['chart_type', 'line'], #Type of graph to use (scatter or line)
     ['record_reset', '24'], #Time between mix and max temp reset in hours
     ]
 
@@ -116,10 +115,6 @@ def updateConfig():
           elif row[0] == 'graph_font_path':
             global graph_font_path
             graph_font_path = str(row[1])
-            config_count += 1
-          elif row[0] == 'chart_type':
-            global chart_type
-            chart_type = str(row[1])
             config_count += 1
           elif row[0] == 'record_reset':
             global record_reset
@@ -433,7 +428,7 @@ while counter == 0:
     if use_csv_sender == 1:
       updateSender()
     #Create message contents
-    graph.generateGraph(graph_point_count, graph_font_path, chart_type)
+    graph.generateGraph(graph_point_count, graph_font_path)
     updateMessage()
     #Send the message
     connectToServer()

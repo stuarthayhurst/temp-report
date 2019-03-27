@@ -55,5 +55,3 @@ def readValues(reading_count, x=[], y=[]):
             x.append(dt)
             y.append(temp)
         return x,y
-
-generateGraph(12, 'fonts/Lato-Regular.ttf')

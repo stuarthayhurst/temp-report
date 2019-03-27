@@ -41,10 +41,6 @@ def updateConfig():
             global graph_font_path
             graph_font_path = str(row[1])
             config_count += 1
-          elif row[0] == 'chart_type':
-            global chart_type
-            chart_type = str(row[1])
-            config_count += 1
           line_count += 1
     print(f'Processed {config_count} config options, {line_count} lines\n')
 
@@ -131,8 +127,8 @@ def checkMail():
   if data[1] != [None]:
       global email_subject
       global email_recipient
-      global chart_type
-      chart_types = ['Scatter', 'scatter', 'Line', 'line']
+      global extra_type
+      extra_types = ['Keyword', 'Keyword', 'Keyword', 'Keyword']
       #Get any available emails
       print('An email was found, saving sender address')
       header_data = data[1][0][1].decode('utf-8')
@@ -155,15 +151,15 @@ def checkMail():
           print('Keyword found\n')
           #Update and send the message
           keyword = 1
-          chart_request = 0
+          extra_request = 0
           type_counter = 0
-          while chart_request == 0 and type_counter <= len(chart_types) - 1:
+          while extra_request == 0 and type_counter <= len(extra_types) - 1:
             type_counter += 1
-            i = re.findall(str(chart_types[type_counter - 1]), email_subject)
+            i = re.findall(str(extra_types[type_counter - 1]), email_subject)
             if (i):
-              chart_request = 1
-              print('Graph type found\n')
-              chart_type = i[0].lower()
+              extra_request = 1
+              print('Extra type found\n')
+              extra_type = i[0].lower()
             else:
               print('No graph type found')
 
@@ -210,7 +206,7 @@ def updateMessage():
 
 def sendMessage():
   #Use the config value for graph_point_count unless email_subject contains a command
-  graph.generateGraph(graph_point_count, graph_font_path, chart_type)
+  graph.generateGraph(graph_point_count, graph_font_path)
   updateMessage()
   print('Sending message')
   sendServer.sendmail(email_sender, email_recipient, msg.as_string())
