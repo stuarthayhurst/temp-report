@@ -59,5 +59,6 @@ def readValues(reading_count, x=[], y=[]):
         return x,y
 
 if __name__ == "__main__":
-    x, y  = readValues()
-    drawgraph(x,y)
+    reading_count = 12
+    x, y  = readValues(reading_count)
+    drawGraph(x,y)
