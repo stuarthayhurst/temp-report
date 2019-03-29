@@ -8,6 +8,8 @@ from PIL import Image, ImageDraw, ImageFont
 import numpy as np
 import re, datetime, csv
 
+plt.grid(b=None, which='major', axis='both')
+
 def generateGraph(reading_count, font_path):
   x, y  = readValues(reading_count)
   if x == '':
@@ -31,7 +33,6 @@ def drawGraph(x,y):
     x_smooth = np.linspace(x_sm.min(), x_sm.max(), 200)
     y_smooth = spline(x2, y, x_smooth)
 
-    plt.grid(b=None, which='major', axis='both')
     plt.style.use('ggplot')
     plt.plot([],[])
     plt.plot(x_smooth, y_smooth, 'red', linewidth=1)
