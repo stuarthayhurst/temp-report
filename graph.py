@@ -57,3 +57,7 @@ def readValues(reading_count, x=[], y=[]):
             x.append(dt)
             y.append(temp)
         return x,y
+
+if __name__ == "__main__":
+    x, y  = readValues()
+    drawgraph(x,y)
