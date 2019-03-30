@@ -319,7 +319,15 @@ def sendMessage():
   if email_time_diff >= gap:
     #Sends an email to the addresses in the array
     for x in range(0, len(email_recipients)):
-      server.sendmail(email_sender, email_recipients[x], msg.as_string())
+      try:
+        server.sendmail(email_sender, email_recipients[x], msg.as_string())
+      except:
+        print('There was an error while sending the message')
+        error = 1
+      if error == 0:
+        print('Message sent')
+      else:
+        error == 0
       print('Email sent to ' + str(email_recipients[x]))
     print('Sent email to ' + str(len(email_recipients)) + ' addresses')
     print('Email was last sent ' + str(email_time_diff) + ' seconds ago')
@@ -483,7 +491,10 @@ while counter == 0:
     graph.generateGraph(graph_point_count, graph_font_path)
     updateMessage()
     #Send the message
-    connectToServer()
+    try:
+      connectToServer()
+    except:
+      print("There was an error while connecting to the email server")
     sendMessage()
     print('--------------------------------\n')
   time.sleep(delay)

@@ -209,8 +209,15 @@ def sendMessage():
   graph.generateGraph(graph_point_count, graph_font_path)
   updateMessage()
   print('Sending message')
-  sendServer.sendmail(email_sender, email_recipient, msg.as_string())
-  print('Message sent')
+  try:
+    sendServer.sendmail(email_sender, email_recipient, msg.as_string())
+  except:
+    print('There was an error while sending the message')
+    error = 1
+  if error == 0:
+    print('Message sent')
+  else:
+    error == 0
 
 counter = 0
 while counter == 0:
