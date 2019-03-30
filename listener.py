@@ -216,8 +216,11 @@ counter = 0
 while counter == 0:
   updateConfig()
   updateSender()
-  refreshServer()
-  connectToServer()
+  try:
+    refreshServer()
+    connectToServer()
+  except:
+    print("There was an error while connecting to the email server")
   updateRecords()
   checkMail()
   print('--------------------------------\n')
