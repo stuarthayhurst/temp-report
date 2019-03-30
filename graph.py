@@ -11,19 +11,19 @@ import re, datetime, csv
 plt.grid(b=None, which='major', axis='both')
 
 def generateGraph(reading_count, font_path):
-  x, y  = readValues(reading_count)
-  if x == '':
-    print('Not enough lines in logfile, aborting\n')
-    produceText(font_path)
-    return
-  drawGraph(x,y)
+    x, y  = readValues(reading_count)
+    if x == '':
+      print('Not enough lines in logfile, aborting\n')
+      produceText(font_path)
+      return
+    drawGraph(x,y)
 
 def produceText(font_path):
-  img = Image.new('RGB', (450, 40), color = (0, 0, 0))
-  fnt = ImageFont.truetype(font_path, 20)
-  d = ImageDraw.Draw(img)
-  d.text((20,10), "Not enough lines in the log to generate a graph", font=fnt, fill=(40, 231, 35))
-  img.save('graph.png')
+    img = Image.new('RGB', (450, 40), color = (0, 0, 0))
+    fnt = ImageFont.truetype(font_path, 20)
+    d = ImageDraw.Draw(img)
+    d.text((20,10), "Not enough lines in the log to generate a graph", font=fnt, fill=(40, 231, 35))
+    img.save('graph.png')
 
 def drawGraph(x,y):
     x2 = mdates.date2num(x)
@@ -35,7 +35,8 @@ def drawGraph(x,y):
 
     plt.style.use('ggplot')
     plt.plot([],[])
-    plt.plot(x_smooth, y_smooth, 'red', linewidth=1)
+    x_smooth_dt = mdates.num2date(x_smooth) 
+    plt.plot(x_smooth_dt, y_smooth, 'red', linewidth=1)
     plt.gcf().autofmt_xdate() 
     plt.xlabel('Time (Day - Hour: Minutes)')
     plt.ylabel("Temperature \u2103")
