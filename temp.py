@@ -320,6 +320,7 @@ def sendMessage():
     #Sends an email to the addresses in the array
     for x in range(0, len(email_recipients)):
       try:
+        error = 0
         server.sendmail(email_sender, email_recipients[x], msg.as_string())
       except:
         print('There was an error while sending the message')

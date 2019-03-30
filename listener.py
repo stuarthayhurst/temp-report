@@ -210,6 +210,7 @@ def sendMessage():
   updateMessage()
   print('Sending message')
   try:
+    error = 0
     sendServer.sendmail(email_sender, email_recipient, msg.as_string())
   except:
     print('There was an error while sending the message')
