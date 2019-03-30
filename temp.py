@@ -1,6 +1,6 @@
 import smtplib, datetime, time, csv, sys, os
 import graph
-#from w1thermsensor import W1ThermSensor
+from w1thermsensor import W1ThermSensor
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.image import MIMEImage
@@ -16,7 +16,7 @@ max_temp = -100.0
 min_temp = 999.9
 max_temp_time = 0
 min_temp_time = 0
-#sensor = W1ThermSensor()
+sensor = W1ThermSensor()
 
 #See data/config.csv for a config file. Use python3 temp.py -c to generate a new one
 
@@ -258,6 +258,7 @@ def updateMessage():
   img = open('graph.png', 'rb').read()
   msgImg = MIMEImage(img, 'png')
   msgImg.add_header('Content-ID', '<graph>')
+  msgImg.add_header('Content-Disposition', 'attachment', filename='graph.png')
   msgImg.add_header('Content-Disposition', 'inline', filename='graph.png')
 
   #html_image.add_header('Content-ID', '<graph>')
@@ -291,7 +292,7 @@ def measureTemp():
   #Measures the temperature
   global temp
   print('Reading temperature:')
-  temp = 30.0#float(sensor.get_temperature())
+  temp = float(sensor.get_temperature())
   currTime = datetime.datetime.now()
   print('The temperature is ' + str(temp) + '°C at ' + str(currTime.strftime("%H:%M:%S")) + '\n')
 
@@ -318,6 +319,8 @@ def logTemp():
   global temp
   global max_temp
   global min_temp
+  global max_temp_time
+  global min_temp_time
   global record_reset
   global record_reset_time
   if str(os.path.isfile('data/temp-records.csv')) == 'False':
