@@ -6,9 +6,7 @@ choice = 0
 cont = ''
 
 def readFile():
-  print()
-  print("--------------------------------")
-  print()
+  print("\n--------------------------------\n")
   with open('data/addresses.csv') as csv_file:
     csv_reader = csv.reader(csv_file, delimiter=',')
     line_count = 0
@@ -19,24 +17,17 @@ def readFile():
         else:
             print(f'\t[{line_count}] - {row[0]}')
             line_count += 1
-    print()
     global finalLine
     finalLine = line_count - 1
-    print(f'Processed {line_count - 1} addresses, {line_count} lines')
-    print()
-    print("--------------------------------")
-    print()
+    print(f'\nProcessed {line_count - 1} addresses, {line_count} lines')
+    print("\n--------------------------------\n")
 
 def addEntry():
   readFile()
   newAddress = str(input('Please enter the new address: '))
-  print()
-  print("--------------------------------")
-  print()
+  print("\n--------------------------------\n")
   print('New line added')
-  print()
-  print("--------------------------------")
-  print()
+  print("\n--------------------------------\n")
   time.sleep(delay)
   changes = [
     [newAddress],                                      
@@ -103,10 +94,8 @@ def newDatabase():
       writer.writerows(changes)
     print('Completed')
   else:
-    print('Deletion aborted')
-  print()
-  print("--------------------------------")
-  print()
+    print('Deletion aborted\n')
+  print("--------------------------------\n")
 
 def checkFile():
   if str(os.path.isfile('data/addresses.csv')) == 'False':
