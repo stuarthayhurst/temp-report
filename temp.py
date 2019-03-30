@@ -20,6 +20,12 @@ sensor = W1ThermSensor()
 
 #See data/config.csv for a config file. Use python3 temp.py -c to generate a new one
 
+def checkLineCount(filePath, lineCount):
+  if lineCount == len(open(filePath).readlines(  )):
+    return True
+  else:
+    return False
+
 def writeConfig(mode):
   if str(os.path.isfile('data/config.csv')) == 'False':
     return
