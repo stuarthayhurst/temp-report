@@ -173,8 +173,11 @@ def checkMail():
       server.expunge()
   else:
       print('No emails')
-  server.close()
-  server.logout()
+  try:
+    server.close()
+    server.logout()
+  except:
+    print("Failed to log out")
   print('Logged out\n')
 
 def updateTemperature():

@@ -336,8 +336,14 @@ def sendMessage():
   else:
     print('Email was last sent ' + str(email_time_diff) + ' seconds ago')
     print("Email not sent\n")
-  server.quit()
-  print('\nLogged out\n')
+  try:
+    server.quit()
+    error = 0
+  except:
+    print("Failed to logout")
+    error = 1
+  if error == 0:
+    print('\nLogged out\n')
 
 def measureTemp():
   #Measures the temperature

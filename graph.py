@@ -10,7 +10,6 @@ import sys
 import re, datetime, csv
 
 def generateGraph(reading_count, font_path):
-    plt.grid(b=None, which='major', axis='both')
     x, y  = readValues(reading_count)
     if x == '':
       print('Not enough lines in logfile, aborting\n')
@@ -47,6 +46,8 @@ def drawGraph(x,y):
     plt.clf()
 
 def readValues(reading_count, x=[], y=[]):
+    x.clear()
+    y.clear()
     with open("temps.log", "r") as f:
         taildata = f.readlines() [-reading_count:]
         if reading_count > len(taildata):
