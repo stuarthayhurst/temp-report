@@ -6,6 +6,7 @@ import matplotlib.dates as mdates
 from scipy.interpolate import spline
 from PIL import Image, ImageDraw, ImageFont
 import numpy as np
+import sys
 import re, datetime, csv
 
 plt.grid(b=None, which='major', axis='both')
@@ -60,6 +61,6 @@ def readValues(reading_count, x=[], y=[]):
         return x,y
 
 if __name__ == "__main__":
-    reading_count = 12
+    reading_count = int(sys.argv[1]) if len(sys.argv) > 1 else int(12)
     x, y  = readValues(reading_count)
     drawGraph(x,y)
