@@ -47,6 +47,8 @@ def writeConfig(mode):
     print('Generated new config\n')
     return
   elif mode == 's':
+    add_count = 0
+    remove_count = 0
     for count in range(1, len(changes)):
       searchLine = changes[count][0]
       success = 0
@@ -60,12 +62,46 @@ def writeConfig(mode):
         if success == 0:
           print(searchLine + ' was not found')
           print(changes[count][1])
+          remove_count += 1
           with open('data/config.csv', 'a') as f:
             writer = csv.writer(f)
             config_add=[searchLine, changes[count][1]]
             writer.writerow(config_add)
         else:
           success = 0
+
+    with open('data/config.csv') as csv_file:
+      csv_reader = csv.reader(csv_file, delimiter=',')
+      line_count = 0
+      for row in csv_reader:
+          if row[0] == 'config':
+              config_count  = 0
+          else:
+              for count in range(1, len(changes)):
+                searchLine = changes[count][0]
+                if row[0] == searchLine:
+                  success = 1
+              if success == 0:
+                remove_count += 1
+                print(str(row[0]))
+                removeLine = str(row)
+                removeLine = removeLine.replace("[", '')
+                removeLine = removeLine.replace("]", '')
+                removeLine = removeLine.replace("'", '')
+                removeLine = removeLine.replace(", ", ',')
+                f = open('data/config.csv','r')
+                lines = f.readlines()
+                f.close()
+                f = open('data/config.csv','w')
+                for line in lines:
+                  if line != removeLine + '\n':
+                    f.write(line)
+                f.close()
+
+              if success == 1:
+                success = 0
+      print(f'\nRemoved {remove_count} lines, added {add_count} lines')
+
     return
   else:
     return
