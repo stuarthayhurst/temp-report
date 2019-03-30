@@ -9,9 +9,8 @@ import numpy as np
 import sys
 import re, datetime, csv
 
-plt.grid(b=None, which='major', axis='both')
-
 def generateGraph(reading_count, font_path):
+    plt.grid(b=None, which='major', axis='both')
     x, y  = readValues(reading_count)
     if x == '':
       print('Not enough lines in logfile, aborting\n')
@@ -34,6 +33,7 @@ def drawGraph(x,y):
     x_smooth = np.linspace(x_sm.min(), x_sm.max(), 200)
     y_smooth = spline(x2, y, x_smooth)
 
+    plt.grid(b=True, which='major', axis='both')
     plt.style.use('ggplot')
     plt.plot([],[])
     x_smooth_dt = mdates.num2date(x_smooth) 
