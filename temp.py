@@ -1,6 +1,6 @@
 import smtplib, datetime, time, csv, sys, os
 import graph
-from w1thermsensor import W1ThermSensor
+#from w1thermsensor import W1ThermSensor
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.image import MIMEImage
@@ -14,9 +14,9 @@ record_reset_time = datetime.datetime(1970, 1, 1, 0, 0)
 email_time_diff = 0
 max_temp = -100.0
 min_temp = 999.9
-max_time = 0
-min_time = 0
-sensor = W1ThermSensor()
+max_temp_time = 0
+min_temp_time = 0
+#sensor = W1ThermSensor()
 
 #See data/config.csv for a config file. Use python3 temp.py -c to generate a new one
 
@@ -251,13 +251,20 @@ def updateMessage():
   msg['Subject'] = 'Temperature Alert'
   msg['From'] = email_sender_name
   msg['To'] = 'Whomever it may concern'
-  html_wrap = '<html><body><p>The temperature is no longer between ' + str(threshold_max) + '°C and ' + str(threshold_min) + '°C. </p><p>The temperature is currently ' + str(temp) + '°C at ' + str(currTime.strftime("%H:%M:%S")) + '</p><br><img alt="Temperature Graph" id="graph" src="cid:graph"></body></html>'
-  wrap = MIMEText(html_wrap, 'html')
+  html_wrap = '<html><body><p>The temperature is no longer between ' + str(threshold_max) + '°C and ' + str(threshold_min) + '°C. </p><p>The temperature is currently ' + str(temp) + '°C at ' + str(currTime.strftime("%H:%M:%S")) + '</p><p>The highest temperature reached recently is: ' + str(max_temp) + '°C at ' + str(max_temp_time) + '</p><p>The lowest temperature reached recently is: ' + str(min_temp) + '°C at ' + str(min_temp_time) + '</p><br><img alt="Temperature Graph" id="graph" src="cid:graph"></body></html>'
+  msgHtml = MIMEText(html_wrap, 'html')
 
   #Define the image's ID
-  html_image.add_header('Content-ID', '<graph>')
-  msg.attach(html_image)
-  msg.attach(wrap)
+  img = open('graph.png', 'rb').read()
+  msgImg = MIMEImage(img, 'png')
+  msgImg.add_header('Content-ID', '<graph>')
+  msgImg.add_header('Content-Disposition', 'inline', filename='graph.png')
+
+  #html_image.add_header('Content-ID', '<graph>')
+  #msg.add_header('Content-Disposition', 'inline', filename='graph.png')
+
+  msg.attach(msgHtml)
+  msg.attach(msgImg)
 
 def sendMessage():
   #Sends the message
@@ -284,7 +291,7 @@ def measureTemp():
   #Measures the temperature
   global temp
   print('Reading temperature:')
-  temp = float(sensor.get_temperature())
+  temp = 30.0#float(sensor.get_temperature())
   currTime = datetime.datetime.now()
   print('The temperature is ' + str(temp) + '°C at ' + str(currTime.strftime("%H:%M:%S")) + '\n')
 
@@ -339,23 +346,23 @@ def logTemp():
   if float(temp) > float(max_temp):
     print('Set new max temperature\n')
     max_temp = temp
-    max_time = currTime.strftime("%H:%M:%S")
+    max_temp_time = currTime.strftime("%H:%M:%S")
   else:
     max_temp = readCSVLine('data/temp-records.csv', 1, 'keyword', 'max')
-    max_time = readCSVLine('data/temp-records.csv', 2, 'keyword', 'max')
+    max_temp_time = readCSVLine('data/temp-records.csv', 2, 'keyword', 'max')
 
   if float(temp) < float(min_temp):
     print('Set new min temperature\n')
     min_temp = temp
-    min_time = currTime.strftime("%H:%M:%S")
+    min_temp_time = currTime.strftime("%H:%M:%S")
   else:
     min_temp = readCSVLine('data/temp-records.csv', 1, 'keyword', 'min')
-    min_time = readCSVLine('data/temp-records.csv', 2, 'keyword', 'min')
+    min_temp_time = readCSVLine('data/temp-records.csv', 2, 'keyword', 'min')
 
   changes = [
     ['Temp-report report file:'],
-    ['max', max_temp, max_time],
-    ['min', min_temp, min_time],
+    ['max', max_temp, max_temp_time],
+    ['min', min_temp, min_temp_time],
     ]
 
   with open('data/temp-records.csv', 'w') as f:
