@@ -23,7 +23,7 @@ A small project to report the temperature of a room to anyone on the mailing lis
 - Add `@reboot tmux new-session -d -s temp_report 'cd /path/to/install && /path/to/python/install /path/to/install/temp.py; exec bash -i'` to `crontab -e` to have the program start on boot
 - Add `@reboot tmux new-session -d -s temp_listener 'cd /path/to/install && /path/to/python/install /path/to/install/listener.py; exec bash -i'` to `crontab -e` to have the email reply bot start on boot
 - Use `tmux att -t temp_report` to view the program
-- After an update, b run `python3.6 temp.py -cs` to update the config with any new lines
+- After an update, run `python3.6 temp.py -cs` to update the config with any new lines
 - Use `python3.6 temp.py -h` to view help
 - When sending the program emails, use 'Scatter' or 'Line' in the subject to select the graph type
 - Make sure OneWire is enabled
