@@ -8,11 +8,20 @@ A small project to report the temperature of a room to anyone on the mailing lis
   * w1thermsensor
   * matplotlib
   * pillow
+  * numpy
+  * cython
+  * setuptools
 
 - ### Source / Package Manager
   * Tmux
+  * libopenblas-base, libopenblas-dev
+  * gcc
+  * gfortran
+  * scipy
 
 ## Installation:
+
+- Make sure to install as `pi` in `/home/pi`
 
 - `git clone https://github.com/Dragon8oy/temp-report.git`
 - `sudo pip3.6 install w1thermsensor matplotlib pillow`
