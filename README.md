@@ -25,7 +25,6 @@ A small project to report the temperature of a room to anyone on the mailing lis
 - Use `tmux att -t temp_report` to view the program
 - After an update, run `python3.6 temp.py -cs` to update the config with any new lines
 - Use `python3.6 temp.py -h` to view help
-- When sending the program emails, use 'Scatter' or 'Line' in the subject to select the graph type
 - Make sure OneWire is enabled
 
 ## Wiring diagram:
