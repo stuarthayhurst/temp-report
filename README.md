@@ -1,5 +1,5 @@
 # temp-report
-A small project to report the temperature of a room to anyone on the mailing list when it reaches a certain temperature with an integrated csv editor and handle replies
+A small project to report the temperature of a room to anyone on the mailing list when it reaches a certain temperature with an integrated csv editor and handle email replies
 
 ## Dependencies:
 
