@@ -1,5 +1,5 @@
 # temp-report
-A small project to report the temperature of a room to anyone on the mailing list when it reaches a certain temperature with an integrated csv editor
+A small project to report the temperature of a room to anyone on the mailing list when it reaches a certain temperature with an integrated csv editor and handle replies
 
 ## Dependencies:
 
@@ -8,24 +8,32 @@ A small project to report the temperature of a room to anyone on the mailing lis
   * w1thermsensor
   * matplotlib
   * pillow
-  * numpy
-  * cython
-  * setuptools
+  * scipy
 
 - ### Source / Package Manager
   * Tmux
-  * libopenblas-base, libopenblas-dev
-  * gcc
-  * gfortran
-  * scipy
+-   #### Recommended:
+    * Htop
+
+- ### Build:
+-   #### Python / Pip:
+    * numpy - required for scipy after build
+    * cython
+    * setuptools
+
+-   #### Source / Package Manager:
+    * libopenblas-base, libopenblas-dev
+    * gcc
+    * gfortran
 
 ## Installation:
 
 - Make sure to install as `pi` in `/home/pi`
 
 - `git clone https://github.com/Dragon8oy/temp-report.git`
-- `sudo pip3.6 install w1thermsensor matplotlib pillow`
-- `sudo apt install tmux`
+- `./install.sh`
+
+ - See wiki for manual installation
 
 ## Commands and notes:
 
@@ -35,6 +43,7 @@ A small project to report the temperature of a room to anyone on the mailing lis
 - After an update, run `python3.6 temp.py -cs` to update the config with any new lines
 - Use `python3.6 temp.py -h` to view help
 - Make sure OneWire is enabled
+- See wiki for more information
 
 ## Wiring diagram:
 
