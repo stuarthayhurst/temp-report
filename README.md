@@ -1,5 +1,6 @@
 # temp-report
-A small project to report the temperature of a room to anyone on the mailing list when it reaches a certain temperature with an integrated csv editor and handle email replies
+A small project to create a system that can the output from a Pi temperature logger.
+The system maintains a maillist and will respond to mail requests and report when the temperature moves outside of a defined range. Reports include temperature charts.
 
 ## Dependencies:
 
