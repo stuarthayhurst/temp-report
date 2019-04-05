@@ -1,6 +1,6 @@
 # temp-report
 A small project to create a system that can the output from a Pi temperature logger.
-The system maintains a maillist and will respond to mail requests and report when the temperature moves outside of a defined range. Reports include temperature charts.
+The system maintains a maillist and will respond to mail requests. Reports include temperature charts and are generated when the temperature moves outside of a defined range or an email is received requesting a report. 
 
 ## Dependencies:
 
