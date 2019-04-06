@@ -200,12 +200,17 @@ def updateMessage():
   msg['From'] = email_sender_name
   msg['To'] = email_recipient
   html_wrap = '<html><body><p>Here is the data you requested:</p><p>The temperature is currently ' + str(temp) + '°C at ' + str(currTime.strftime("%H:%M:%S")) + '</p><p>The highest temperature reached recently is: ' + str(max_temp) + '°C at ' + str(max_temp_time) + '</p><p>The lowest temperature reached recently is: ' + str(min_temp) + '°C at ' + str(min_temp_time) + '</p><br><img alt="Temperature Graph" id="graph" src="cid:graph"></body></html>'
-  wrap = MIMEText(html_wrap, 'html')
+  msgHtml = MIMEText(html_wrap, 'html')
 
   #Define the image's ID
-  html_image.add_header('Content-ID', '<graph>')
-  msg.attach(html_image)
-  msg.attach(wrap)
+  img = open('graph.png', 'rb').read()
+  msgImg = MIMEImage(img, 'png')
+  msgImg.add_header('Content-ID', '<graph>')
+  msgImg.add_header('Content-Disposition', 'attachment', filename='graph.png')
+  msgImg.add_header('Content-Disposition', 'inline', filename='graph.png')
+
+  msg.attach(msgHtml)
+  msg.attach(msgImg)
 
 def sendMessage():
   #Use the config value for graph_point_count unless email_subject contains a command

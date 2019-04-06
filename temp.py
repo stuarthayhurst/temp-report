@@ -303,9 +303,6 @@ def updateMessage():
   msgImg.add_header('Content-Disposition', 'attachment', filename='graph.png')
   msgImg.add_header('Content-Disposition', 'inline', filename='graph.png')
 
-  #html_image.add_header('Content-ID', '<graph>')
-  #msg.add_header('Content-Disposition', 'inline', filename='graph.png')
-
   msg.attach(msgHtml)
   msg.attach(msgImg)
 
