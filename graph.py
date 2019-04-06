@@ -62,6 +62,15 @@ def readValues(reading_count, x=[], y=[]):
         return x,y
 
 if __name__ == "__main__":
-    reading_count = int(sys.argv[1]) if len(sys.argv) > 1 else int(12)
+    try:
+        reading_count = int(sys.argv[1])
+    except IndexError:
+        print("python3 graph.py [int] :Optional integer number of readings to plot\n")
+        print( "                        set at last 12 readings if not specified\n")
+        reading_count = int(12)
+    except ValueError:
+        print("Needs to be an integer")
+        sys.exit(1)
+
     x, y  = readValues(reading_count)
     drawGraph(x,y)
