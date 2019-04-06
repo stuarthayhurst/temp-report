@@ -15,6 +15,18 @@ delswap() {
   sudo rm /var/swap.temp
 }
 
+#Get latest version
+PULL=`git pull`
+echo $PULL
+if echo $PULL |grep 'install.sh'; then
+    echo "Installer script was updated, restarting"
+    /bin/bash $DIR/install.sh
+    exit
+else
+    echo "No updates found for the installer, continuing"
+fi
+
+
 sudo apt-get install tmux -y
 
 if ! { [ "$TERM" = "screen" ] && [ -n "$TMUX" ]; } then
@@ -35,9 +47,6 @@ else
   echo "Please set /usr/bin/python3 to Python 3.6+"
   exit
 fi
-
-#Get latest version
-git pull
 
 #Scipy
 MEM=$(grep MemTotal /proc/meminfo | awk '{print $2}' | xargs -I {} echo "scale=4; {}/1024^2" | bc)
@@ -78,7 +87,7 @@ else
 fi
 
 #Setup program files
-python3 temp.py -c
+python3 temp.py -cs
 
 #Add user credentials and tell them how to add addresses
 echo "Use 'python3 temp.py -s' to set a sender email address"
