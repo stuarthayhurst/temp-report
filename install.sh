@@ -15,8 +15,6 @@ delswap() {
   sudo rm /var/swap.temp
 }
 
-sudo echo ""
-
 sudo apt-get install tmux -y
 
 if ! { [ "$TERM" = "screen" ] && [ -n "$TMUX" ]; } then
