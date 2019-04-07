@@ -15,6 +15,8 @@ delswap() {
   sudo rm /var/swap.temp
 }
 
+sudo apt-get install tmux git -y
+
 #Get latest version
 PULL=`git pull`
 echo $PULL
@@ -25,9 +27,6 @@ if echo $PULL |grep 'install.sh'; then
 else
     echo "No updates found for the installer, continuing"
 fi
-
-
-sudo apt-get install tmux -y
 
 if ! { [ "$TERM" = "screen" ] && [ -n "$TMUX" ]; } then
   tmux new-session -d -s temp_installer '/bin/bash '$DIR'/install.sh'
