@@ -231,7 +231,7 @@ while counter == 0:
     connectToServer()
   except:
     print("There was an error while connecting to the email server")
-  updateRecords()
   checkMail()
+  updateRecords()
   print('--------------------------------\n')
   time.sleep(delay)

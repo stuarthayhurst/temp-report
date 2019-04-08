@@ -271,6 +271,8 @@ def readRecords():
     print('No records found')
     time.sleep(1)
 
+  currTime = datetime.datetime.now()
+
   max_temp = tempreport.readCSVLine('data/temp-records.csv', 1, 'keyword', 'max')
   max_temp_time = tempreport.readCSVLine('data/temp-records.csv', 2, 'keyword', 'max')
   if float(temp) > float(max_temp):
