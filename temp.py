@@ -1,5 +1,5 @@
 import smtplib, datetime, time, csv, sys, os
-import temp-report
+import tempreport
 import graph
 from w1thermsensor import W1ThermSensor
 from email.mime.multipart import MIMEMultipart
@@ -24,7 +24,7 @@ sensor = W1ThermSensor()
 def updateConfig():
   if str(os.path.isfile('data/config.csv')) == 'False':
     print('\nNo config file found')
-    temp-report.writeConfig('f')
+    tempreport.writeConfig('f')
 
   with open('data/config.csv') as csv_file:
     csv_reader = csv.reader(csv_file, delimiter=',')
@@ -271,15 +271,15 @@ def readRecords():
     print('No records found')
     time.sleep(1)
 
-  max_temp = temp-report.readCSVLine('data/temp-records.csv', 1, 'keyword', 'max')
-  max_temp_time = temp-report.readCSVLine('data/temp-records.csv', 2, 'keyword', 'max')
+  max_temp = tempreport.readCSVLine('data/temp-records.csv', 1, 'keyword', 'max')
+  max_temp_time = tempreport.readCSVLine('data/temp-records.csv', 2, 'keyword', 'max')
   if float(temp) > float(max_temp):
     print('Current temp was higher than recorded max temp, updating locally\n')
     max_temp = temp
     max_temp_time = currTime.strftime("%H:%M:%S")
 
-  min_temp = temp-report.readCSVLine('data/temp-records.csv', 1, 'keyword', 'min')
-  min_temp_time = temp-report.readCSVLine('data/temp-records.csv', 2, 'keyword', 'min')
+  min_temp = tempreport.readCSVLine('data/temp-records.csv', 1, 'keyword', 'min')
+  min_temp_time = tempreport.readCSVLine('data/temp-records.csv', 2, 'keyword', 'min')
   if float(temp) < float(min_temp):
     print('Current temp was lower than recorded min temp, updating locally\n')
     min_temp = temp
@@ -309,17 +309,17 @@ elif sys.argv[1] == '-n' or sys.argv[1] == '--name':
   changeSender('n')
   exit()
 elif sys.argv[1] == '-c' or sys.argv[1] == '--config':
-  temp-report.writeConfig('f')
+  tempreport.writeConfig('f')
   exit()
 elif sys.argv[1] == '-cs' or sys.argv[1] == '--config-save':
-  temp-report.writeConfig('s')
+  tempreport.writeConfig('s')
   exit()
 
 print('--------------------------------')
 counter = 0
 while counter == 0:
   #Load the config
-  temp-report.writeConfig('s')
+  tempreport.writeConfig('s')
   updateConfig()
   #Measure the temperature
   measureTemp()

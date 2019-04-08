@@ -1,5 +1,5 @@
 import datetime, time, os, csv
-import temp-report
+import tempreport
 from w1thermsensor import W1ThermSensor
 
 record_reset_time = datetime.datetime(1970, 1, 1, 0, 0)
@@ -67,16 +67,16 @@ def logTemp():
     max_temp = temp
     max_temp_time = currTime.strftime("%H:%M:%S")
   else:
-    max_temp = temp-report.readCSVLine('data/temp-records.csv', 1, 'keyword', 'max')
-    max_temp_time = temp-report.readCSVLine('data/temp-records.csv', 2, 'keyword', 'max')
+    max_temp = tempreport.readCSVLine('data/temp-records.csv', 1, 'keyword', 'max')
+    max_temp_time = tempreport.readCSVLine('data/temp-records.csv', 2, 'keyword', 'max')
 
   if float(temp) < float(min_temp):
     print('Set new min temperature\n')
     min_temp = temp
     min_temp_time = currTime.strftime("%H:%M:%S")
   else:
-    min_temp = temp-report.readCSVLine('data/temp-records.csv', 1, 'keyword', 'min')
-    min_temp_time = temp-report.readCSVLine('data/temp-records.csv', 2, 'keyword', 'min')
+    min_temp = tempreport.readCSVLine('data/temp-records.csv', 1, 'keyword', 'min')
+    min_temp_time = tempreport.readCSVLine('data/temp-records.csv', 2, 'keyword', 'min')
 
   changes = [
     ['Temp-report report file:'],
