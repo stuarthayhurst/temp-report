@@ -1,4 +1,5 @@
 import datetime, time, os, csv
+import temp-report
 from w1thermsensor import W1ThermSensor
 
 record_reset_time = datetime.datetime(1970, 1, 1, 0, 0)
@@ -7,25 +8,6 @@ min_temp = 999.9
 max_temp_time = 0
 min_temp_time = 0
 sensor = W1ThermSensor()
-
-def readCSVLine(filename, position, mode, line):
-  if str(os.path.isfile(filename)) == 'False':
-    return
-  if mode == 'numbered':
-    with open(filename, 'r') as csv_file:
-      csv_reader = csv.reader(csv_file)
-      for i in range(line):
-          next(csv_reader)
-      row = next(csv_reader)
-      return row[position]
-  elif mode == 'keyword':
-    with open(filename) as csv_file:
-      csv_reader = csv.reader(csv_file, delimiter=',')
-      for row in csv_reader:
-        if row[0] == line:
-          return row[position]
-  else:
-    return
 
 def updateConfig():
   with open('data/config.csv') as csv_file:
@@ -85,16 +67,16 @@ def logTemp():
     max_temp = temp
     max_temp_time = currTime.strftime("%H:%M:%S")
   else:
-    max_temp = readCSVLine('data/temp-records.csv', 1, 'keyword', 'max')
-    max_temp_time = readCSVLine('data/temp-records.csv', 2, 'keyword', 'max')
+    max_temp = temp-report.readCSVLine('data/temp-records.csv', 1, 'keyword', 'max')
+    max_temp_time = temp-report.readCSVLine('data/temp-records.csv', 2, 'keyword', 'max')
 
   if float(temp) < float(min_temp):
     print('Set new min temperature\n')
     min_temp = temp
     min_temp_time = currTime.strftime("%H:%M:%S")
   else:
-    min_temp = readCSVLine('data/temp-records.csv', 1, 'keyword', 'min')
-    min_temp_time = readCSVLine('data/temp-records.csv', 2, 'keyword', 'min')
+    min_temp = temp-report.readCSVLine('data/temp-records.csv', 1, 'keyword', 'min')
+    min_temp_time = temp-report.readCSVLine('data/temp-records.csv', 2, 'keyword', 'min')
 
   changes = [
     ['Temp-report report file:'],

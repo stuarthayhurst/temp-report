@@ -1,4 +1,5 @@
 import smtplib, datetime, time, csv, sys, os
+import temp-report
 import graph
 from w1thermsensor import W1ThermSensor
 from email.mime.multipart import MIMEMultipart
@@ -20,121 +21,10 @@ sensor = W1ThermSensor()
 
 #See data/config.csv for a config file. Use python3 temp.py -c to generate a new one
 
-def checkLineCount(filePath, lineCount):
-  if lineCount == len(open(filePath).readlines(  )):
-    return True
-  else:
-    return False
-
-def readCSVLine(filename, position, mode, line):
-  if str(os.path.isfile(filename)) == 'False':
-    return
-  if mode == 'numbered':
-    with open(filename, 'r') as csv_file:
-      csv_reader = csv.reader(csv_file)
-      for i in range(line):
-          next(csv_reader)
-      row = next(csv_reader)
-      return row[position]
-  elif mode == 'keyword':
-    with open(filename) as csv_file:
-      csv_reader = csv.reader(csv_file, delimiter=',')
-      for row in csv_reader:
-        if row[0] == line:
-          return row[position]
-  else:
-    return
-
-def writeConfig(mode):
-  if str(os.path.isfile('data/config.csv')) == 'False':
-    return
-  changes = [
-    #DO NOT EDIT THESE, these are the default values when generating a new config
-    ['config'],
-    ['delay', '300'], #Delay between each temperature reading
-    ['gap', '3600'], #Delay between emails
-    ['threshold_max', '30'], #Max temp for emailing
-    ['threshold_min', '-1'], #Min temp for emailing
-    ['use_csv_recipient', '1'], #Toggle for using a recipient address file
-    ['use_csv_sender', '1'], #Toggle for using a sender credentials file
-    ['graph_point_count', '12'], #Amount of points on graphs
-    ['graph_font_path', 'fonts/Lato-Regular.ttf'], #Font for graph error messages
-    ['record_reset', '24'], #Time between mix and max temp reset in hours
-    ]
-
-  if mode == 'f':
-    print('Generating config')
-    f = open('data/config.csv','w+')
-    f.close()
-    with open('data/config.csv', 'a') as f:                                    
-      writer = csv.writer(f)
-      writer.writerows(changes)
-    print('Generated new config\n')
-    return
-  elif mode == 's':
-    add_count = 0
-    remove_count = 0
-    for count in range(1, len(changes)):
-      searchLine = changes[count][0]
-      success = 0
-      with open('data/config.csv') as csv_file:
-        csv_reader = csv.reader(csv_file, delimiter=',')
-        for row in csv_reader:
-          if row[0] == 'config':
-            config_count = 0
-          elif row[0] == searchLine:
-            success = 1
-        if success == 0:
-          print(searchLine + ' was not found')
-          print(changes[count][1])
-          remove_count += 1
-          with open('data/config.csv', 'a') as f:
-            writer = csv.writer(f)
-            config_add=[searchLine, changes[count][1]]
-            writer.writerow(config_add)
-        else:
-          success = 0
-
-    with open('data/config.csv') as csv_file:
-      csv_reader = csv.reader(csv_file, delimiter=',')
-      line_count = 0
-      for row in csv_reader:
-          if row[0] == 'config':
-              config_count  = 0
-          else:
-              for count in range(1, len(changes)):
-                searchLine = changes[count][0]
-                if row[0] == searchLine:
-                  success = 1
-              if success == 0:
-                remove_count += 1
-                print(str(row[0]))
-                removeLine = str(row)
-                removeLine = removeLine.replace("[", '')
-                removeLine = removeLine.replace("]", '')
-                removeLine = removeLine.replace("'", '')
-                removeLine = removeLine.replace(", ", ',')
-                f = open('data/config.csv','r')
-                lines = f.readlines()
-                f.close()
-                f = open('data/config.csv','w')
-                for line in lines:
-                  if line != removeLine + '\n':
-                    f.write(line)
-                f.close()
-
-              if success == 1:
-                success = 0
-      print(f'\nRemoved {remove_count} config lines, added {add_count} config lines')
-
-    return
-  else:
-    return
-
 def updateConfig():
   if str(os.path.isfile('data/config.csv')) == 'False':
     print('\nNo config file found')
-    writeConfig('f')
+    temp-report.writeConfig('f')
 
   with open('data/config.csv') as csv_file:
     csv_reader = csv.reader(csv_file, delimiter=',')
@@ -381,15 +271,15 @@ def readRecords():
     print('No records found')
     time.sleep(1)
 
-  max_temp = readCSVLine('data/temp-records.csv', 1, 'keyword', 'max')
-  max_temp_time = readCSVLine('data/temp-records.csv', 2, 'keyword', 'max')
+  max_temp = temp-report.readCSVLine('data/temp-records.csv', 1, 'keyword', 'max')
+  max_temp_time = temp-report.readCSVLine('data/temp-records.csv', 2, 'keyword', 'max')
   if float(temp) > float(max_temp):
     print('Current temp was higher than recorded max temp, updating locally\n')
     max_temp = temp
     max_temp_time = currTime.strftime("%H:%M:%S")
 
-  min_temp = readCSVLine('data/temp-records.csv', 1, 'keyword', 'min')
-  min_temp_time = readCSVLine('data/temp-records.csv', 2, 'keyword', 'min')
+  min_temp = temp-report.readCSVLine('data/temp-records.csv', 1, 'keyword', 'min')
+  min_temp_time = temp-report.readCSVLine('data/temp-records.csv', 2, 'keyword', 'min')
   if float(temp) < float(min_temp):
     print('Current temp was lower than recorded min temp, updating locally\n')
     min_temp = temp
@@ -419,17 +309,17 @@ elif sys.argv[1] == '-n' or sys.argv[1] == '--name':
   changeSender('n')
   exit()
 elif sys.argv[1] == '-c' or sys.argv[1] == '--config':
-  writeConfig('f')
+  temp-report.writeConfig('f')
   exit()
 elif sys.argv[1] == '-cs' or sys.argv[1] == '--config-save':
-  writeConfig('s')
+  temp-report.writeConfig('s')
   exit()
 
 print('--------------------------------')
 counter = 0
 while counter == 0:
   #Load the config
-  writeConfig('s')
+  temp-report.writeConfig('s')
   updateConfig()
   #Measure the temperature
   measureTemp()

@@ -1,4 +1,5 @@
 import imaplib, smtplib, datetime, time, sys, os, csv, re
+import temp-report
 import graph
 from w1thermsensor import W1ThermSensor
 from email.parser import HeaderParser
@@ -82,15 +83,15 @@ def updateRecords():
     print('No records found')
     time.sleep(1)
 
-  max_temp = readCSVLine('data/temp-records.csv', 1, 'keyword', 'max')
-  max_temp_time = readCSVLine('data/temp-records.csv', 2, 'keyword', 'max')
+  max_temp = temp-report.readCSVLine('data/temp-records.csv', 1, 'keyword', 'max')
+  max_temp_time = temp-report.readCSVLine('data/temp-records.csv', 2, 'keyword', 'max')
   if float(temp) > float(max_temp):
     print('Current temp was higher than recorded max temp, updating locally\n')
     max_temp = temp
     max_temp_time = currTime.strftime("%H:%M:%S")
 
-  min_temp = readCSVLine('data/temp-records.csv', 1, 'keyword', 'min')
-  min_temp_time = readCSVLine('data/temp-records.csv', 2, 'keyword', 'min')
+  min_temp = temp-report.readCSVLine('data/temp-records.csv', 1, 'keyword', 'min')
+  min_temp_time = temp-report.readCSVLine('data/temp-records.csv', 2, 'keyword', 'min')
   if float(temp) < float(min_temp):
     print('Current temp was lower than recorded min temp, updating locally\n')
     min_temp = temp
