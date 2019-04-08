@@ -61,8 +61,8 @@ def logTemp():
     print("No report file found, creating one:")
     changes = [
       ['Temp-report report file:'],
-      ['0', '0'],
-      ['0', '0'],
+      ['max', '0', '0'],
+      ['min', '0', '0'],
       ]
     f = open('data/temp-records.csv','w+')
     f.close()
