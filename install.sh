@@ -18,7 +18,9 @@ delswap() {
 #Function to generate the systemd jobs
 generatejobs() {
     echo "Generating systemd jobs:"
-
+    sed "s|ExecStart=|ExecStart=/bin/bash $DIR/autostart.sh -t|" install/temp-report.service > temp.txt && mv temp.txt install/temp-report.service
+    sed "s|ExecStart=|ExecStart=/bin/bash $DIR/autostart.sh -r|" install/temp-listener.service > temp.txt && mv temp.txt install/temp-listener.service
+    sed "s|ExecStart=|ExecStart=/bin/bash $DIR/autostart.sh -l|" install/temp-log.service > temp.txt && mv temp.txt install/temp-log.service
     echo "Done"
 }
 
@@ -50,7 +52,7 @@ else
 fi
 
 while [[ "$#" -gt 0 ]]; do case $1 in
-  -s|--start-up) echo "Installing systemd jobs:"; generatejobs; installjobs;;
+  -s|--start-up) echo "Generating and installing systemd jobs:"; generatejobs; installjobs; echo "Done generating and installing systemd jobs";;
   *) echo "Unknown parameter passed: $1"; exit 1;;
 esac; shift; done
 
@@ -127,3 +129,4 @@ else
 fi
 
 echo "install/ may now be removed with 'rm -rf install/'"
+echo "Installation complete"
