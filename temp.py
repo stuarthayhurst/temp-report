@@ -26,6 +26,25 @@ def checkLineCount(filePath, lineCount):
   else:
     return False
 
+def readCSVLine(filename, position, mode, line):
+  if str(os.path.isfile(filename)) == 'False':
+    return
+  if mode == 'numbered':
+    with open(filename, 'r') as csv_file:
+      csv_reader = csv.reader(csv_file)
+      for i in range(line):
+          next(csv_reader)
+      row = next(csv_reader)
+      return row[position]
+  elif mode == 'keyword':
+    with open(filename) as csv_file:
+      csv_reader = csv.reader(csv_file, delimiter=',')
+      for row in csv_reader:
+        if row[0] == line:
+          return row[position]
+  else:
+    return
+
 def writeConfig(mode):
   if str(os.path.isfile('data/config.csv')) == 'False':
     return
@@ -166,6 +185,7 @@ def updateConfig():
           else:
             print('Invalid config line detected\n')
     print(f'Processed {config_count} config options, {line_count} lines\n')
+
 def connectToServer():
   #Connects to gmail's servers
   global server
@@ -349,25 +369,6 @@ def measureTemp():
   temp = float(sensor.get_temperature())
   currTime = datetime.datetime.now()
   print('The temperature is ' + str(temp) + '°C at ' + str(currTime.strftime("%H:%M:%S")) + '\n')
-
-def readCSVLine(filename, position, mode, line):
-  if str(os.path.isfile(filename)) == 'False':
-    return
-  if mode == 'numbered':
-    with open(filename, 'r') as csv_file:
-      csv_reader = csv.reader(csv_file)
-      for i in range(line):
-          next(csv_reader)
-      row = next(csv_reader)
-      return row[position]
-  elif mode == 'keyword':
-    with open(filename) as csv_file:
-      csv_reader = csv.reader(csv_file, delimiter=',')
-      for row in csv_reader:
-        if row[0] == line:
-          return row[position]
-  else:
-    return
 
 def logTemp():
   global temp
