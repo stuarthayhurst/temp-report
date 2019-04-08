@@ -57,7 +57,8 @@ while [[ "$#" -gt 0 ]]; do case $1 in
 esac; shift; done
 
 if ! { [ "$TERM" = "screen" ] && [ -n "$TMUX" ]; } then
-  tmux new-session -d -s temp_installer '/bin/bash '$DIR'/install.sh'
+  tmux new-session -d -s temp_installer '/bin/bash '$DIR'/install.sh; exec bash -i'
+  tmux att -t temp_installer
   exit
 fi
 
