@@ -8,6 +8,25 @@ max_temp_time = 0
 min_temp_time = 0
 sensor = W1ThermSensor()
 
+def readCSVLine(filename, position, mode, line):
+  if str(os.path.isfile(filename)) == 'False':
+    return
+  if mode == 'numbered':
+    with open(filename, 'r') as csv_file:
+      csv_reader = csv.reader(csv_file)
+      for i in range(line):
+          next(csv_reader)
+      row = next(csv_reader)
+      return row[position]
+  elif mode == 'keyword':
+    with open(filename) as csv_file:
+      csv_reader = csv.reader(csv_file, delimiter=',')
+      for row in csv_reader:
+        if row[0] == line:
+          return row[position]
+  else:
+    return
+
 def updateConfig():
   with open('data/config.csv') as csv_file:
     csv_reader = csv.reader(csv_file, delimiter=',')
@@ -27,8 +46,6 @@ def updateConfig():
             record_reset = int(row[1])
             record_reset = record_reset * 3600
             config_count += 1
-          else:
-            print('Unused config line detected\n')
     print(f'Processed {config_count} config options, {line_count} lines\n')
 
 def logTemp():
