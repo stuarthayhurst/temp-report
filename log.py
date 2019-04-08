@@ -118,14 +118,16 @@ def measureTemp():
   print('Temperature ' + str(temp) + '°C at ' + str(currTime.strftime("%H:%M:%S")) + '\n' + 'Added to log\n')
 
 
+while str(os.path.isfile('data/config.csv')) == 'False':
+  time.sleep(1)
+
 counter = 0
 while counter == 0:
   #Load the config
-  if str(os.path.isfile('data/config.csv')) == 'True':
-    updateConfig()
-    #Measure the temperature
-    measureTemp()
-    logTemp()
+  updateConfig()
+  #Measure the temperature
+  measureTemp()
+  logTemp()
   else:
     print('No config file found, skipping run')
   print('--------------------------------\n')
