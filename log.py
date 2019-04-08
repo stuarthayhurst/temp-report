@@ -1,4 +1,4 @@
-import datetime, time
+import datetime, time, os
 from w1thermsensor import W1ThermSensor
 
 record_reset_time = datetime.datetime(1970, 1, 1, 0, 0)
