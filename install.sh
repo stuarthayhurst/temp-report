@@ -15,6 +15,27 @@ delswap() {
   sudo rm /var/swap.temp
 }
 
+#Function to generate the systemd jobs
+generatejobs() {
+    echo "Generating systemd jobs:"
+
+    echo "Done"
+}
+
+#Function to install the systemd jobs
+installjobs() {
+  echo "Installing systemd jobs:"
+  sudo cp install/temp-* /etc/systemd/system/
+  sudo systemctl start temp-report
+  sudo systemctl start temp-listener
+  sudo systemctl start temp-log
+
+  sudo systemctl enable temp-report
+  sudo systemctl enable temp-listener
+  sudo systemctl enable temp-log
+    echo "Done"
+}
+
 sudo apt-get install tmux git -y
 
 #Get latest version
@@ -27,6 +48,11 @@ if echo $PULL |grep 'install.sh'; then
 else
     echo "No updates found for the installer, continuing"
 fi
+
+while [[ "$#" -gt 0 ]]; do case $1 in
+  -s|--start-up) echo "Installing systemd jobs:"; generatejobs; installjobs;;
+  *) echo "Unknown parameter passed: $1"; exit 1;;
+esac; shift; done
 
 if ! { [ "$TERM" = "screen" ] && [ -n "$TMUX" ]; } then
   tmux new-session -d -s temp_installer '/bin/bash '$DIR'/install.sh'
@@ -67,15 +93,10 @@ cd scipy && python3 setup.py build && sudo python3 setup.py install && cd ../ &&
 sudo apt-get install htop -y
 sudo pip3 install w1thermsensor matplotlib pillow
 
-sudo cp install/temp-* /etc/systemd/system/
-sudo systemctl start temp-report
-sudo systemctl start temp-listener
-sudo systemctl start temp-log
+generatejobs
+installjobs
 
-sudo systemctl enable temp-report
-sudo systemctl enable temp-listener
-sudo systemctl enable temp-log
-
+#Enable OneWire
 if grep -Fxq "dtoverlay=w1-gpio" /boot/config.txt
 then
     echo "OneWire is enabled"
@@ -105,4 +126,4 @@ else
   delswap
 fi
 
-rm -rf install/
+echo "install/ may now be removed with 'rm -rf install/'"
