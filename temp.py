@@ -125,7 +125,7 @@ def writeConfig(mode):
 
               if success == 1:
                 success = 0
-      print(f'\nRemoved {remove_count} lines, added {add_count} lines')
+      print(f'\nRemoved {remove_count} config lines, added {add_count} config lines')
 
     return
   else:
@@ -449,5 +449,5 @@ while counter == 0:
     except:
       print("There was an error while connecting to the email server")
     sendMessage()
-    print('--------------------------------\n')
+  print('--------------------------------\n')
   time.sleep(delay)
