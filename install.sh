@@ -128,5 +128,5 @@ else
   delswap
 fi
 
-echo "install/ may now be removed with 'rm -rf install/'"
+rm -rf install/
 echo "Installation complete"
