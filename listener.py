@@ -72,36 +72,29 @@ def updateSender():
     print('Sender credentials file not found')
 
 def updateRecords():
+  global temp
+  global max_temp
+  global min_temp
+  global max_temp_time
+  global min_temp_time
 
   while str(os.path.isfile('data/temp-records.csv')) == 'False':
     print('No records found')
     time.sleep(1)
 
-  with open('data/temp-records.csv') as csv_file:
-    csv_reader = csv.reader(csv_file, delimiter=',')
-    config_count = 0
-    line_count = 0
-    for row in csv_reader:
-        if line_count == 0:
-          print('Reading records')
-          line_count += 1
-        else:
-          if row[0] == 'max':
-            global max_temp
-            global max_temp_time
-            max_temp = float(row[1])
-            max_temp_time = str(row[2])
-            config_count += 1
-          elif row[0] == 'min':
-            global min_temp
-            global min_temp_time
-            min_temp = float(row[1])
-            min_temp_time = str(row[2])
-            config_count += 1
-          else:
-            print('Invalid line detected\n')
-          line_count += 1
-    print(f'Processed {config_count} temperatures, {line_count} lines\n')
+  max_temp = readCSVLine('data/temp-records.csv', 1, 'keyword', 'max')
+  max_temp_time = readCSVLine('data/temp-records.csv', 2, 'keyword', 'max')
+  if float(temp) > float(max_temp):
+    print('Current temp was higher than recorded max temp, updating locally\n')
+    max_temp = temp
+    max_temp_time = currTime.strftime("%H:%M:%S")
+
+  min_temp = readCSVLine('data/temp-records.csv', 1, 'keyword', 'min')
+  min_temp_time = readCSVLine('data/temp-records.csv', 2, 'keyword', 'min')
+  if float(temp) < float(min_temp):
+    print('Current temp was lower than recorded min temp, updating locally\n')
+    min_temp = temp
+    min_temp_time = currTime.strftime("%H:%M:%S")
 
 
 def refreshServer():
@@ -181,7 +174,7 @@ def checkMail():
   print('Logged out\n')
 
 def updateTemperature():
-  print('Getting latest values for min and max temperature\n')
+  print('Reading current temperature\n')
   global temp
   temp = float(sensor.get_temperature())
 

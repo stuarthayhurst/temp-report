@@ -370,82 +370,30 @@ def measureTemp():
   currTime = datetime.datetime.now()
   print('The temperature is ' + str(temp) + '°C at ' + str(currTime.strftime("%H:%M:%S")) + '\n')
 
-def logTemp():
+def readRecords():
   global temp
   global max_temp
   global min_temp
   global max_temp_time
   global min_temp_time
-  global record_reset
-  global record_reset_time
-  if str(os.path.isfile('data/temp-records.csv')) == 'False':
-    print("No report file found, creating one:")
-    changes = [
-      ['Temp-report report file:'],
-      ['0', '0'],
-      ['0', '0'],
-      ]
-    f = open('data/temp-records.csv','w+')
-    f.close()
-    with open('data/temp-records.csv', 'a') as f:
-      writer = csv.writer(f)
-      writer.writerows(changes)
-    print('Report file created\n')
 
-  currTime = datetime.datetime.now()
-  time_diff = (time.mktime(currTime.timetuple()) - time.mktime(record_reset_time.timetuple()))
-  if time_diff >= record_reset:
-    record_reset_time = datetime.datetime.now()
-    print(str(record_reset) + ' Hours have passed since last record reset, resetting record values')
-    max_temp = -100.0
-    min_temp = 999.9
-    print('Records reset\n')
+  while str(os.path.isfile('data/temp-records.csv')) == 'False':
+    print('No records found')
+    time.sleep(1)
 
+  max_temp = readCSVLine('data/temp-records.csv', 1, 'keyword', 'max')
+  max_temp_time = readCSVLine('data/temp-records.csv', 2, 'keyword', 'max')
   if float(temp) > float(max_temp):
-    print('Set new max temperature\n')
+    print('Current temp was higher than recorded max temp, updating locally\n')
     max_temp = temp
     max_temp_time = currTime.strftime("%H:%M:%S")
-  else:
-    max_temp = readCSVLine('data/temp-records.csv', 1, 'keyword', 'max')
-    max_temp_time = readCSVLine('data/temp-records.csv', 2, 'keyword', 'max')
 
+  min_temp = readCSVLine('data/temp-records.csv', 1, 'keyword', 'min')
+  min_temp_time = readCSVLine('data/temp-records.csv', 2, 'keyword', 'min')
   if float(temp) < float(min_temp):
-    print('Set new min temperature\n')
+    print('Current temp was lower than recorded min temp, updating locally\n')
     min_temp = temp
     min_temp_time = currTime.strftime("%H:%M:%S")
-  else:
-    min_temp = readCSVLine('data/temp-records.csv', 1, 'keyword', 'min')
-    min_temp_time = readCSVLine('data/temp-records.csv', 2, 'keyword', 'min')
-
-  changes = [
-    ['Temp-report report file:'],
-    ['max', max_temp, max_temp_time],
-    ['min', min_temp, min_temp_time],
-    ]
-
-  with open('data/temp-records.csv', 'w') as f:
-      writer = csv.writer(f)
-      writer.writerows(changes)
-
-  if str(os.path.isfile('./temps.log')) == 'False':
-    print("No log found, creating one:")
-    changes = [
-      ['Temp-report logfile:'],
-      ]
-    f = open('temps.log','w+')
-    f.close()
-    with open('temps.log', 'a') as f:                                    
-      writer = csv.writer(f)
-      writer.writerows(changes)
-    print('Log created\n')
-  
-  logLine = '[' + str(currTime.strftime("%c")) + '] Temperature: ' + str(temp) + '°C'
-  changes = [
-    [logLine],                                      
-    ]
-  with open('temps.log', 'a') as f:                                    
-    writer = csv.writer(f)
-    writer.writerows(changes)
 
 sys.argv.append(0)
 if sys.argv[1] == '-h' or sys.argv[1] == '--help':
@@ -485,7 +433,7 @@ while counter == 0:
   updateConfig()
   #Measure the temperature
   measureTemp()
-  logTemp()
+  readRecords()
   #Update addresses and credentials
   if temp >= threshold_max or temp <= threshold_min:
     if use_csv_recipient == 1:
