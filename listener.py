@@ -83,6 +83,8 @@ def updateRecords():
     print('No records found')
     time.sleep(1)
 
+  currTime = datetime.datetime.now()
+
   max_temp = tempreport.readCSVLine('data/temp-records.csv', 1, 'keyword', 'max')
   max_temp_time = tempreport.readCSVLine('data/temp-records.csv', 2, 'keyword', 'max')
   if float(temp) > float(max_temp):
@@ -180,7 +182,6 @@ def updateTemperature():
   temp = float(sensor.get_temperature())
 
 def updateMessage():
-  updateTemperature()
   #Reads the image
   fp = open('graph.png', 'rb')
   html_image = MIMEImage(fp.read())
@@ -232,6 +233,7 @@ while counter == 0:
   except:
     print("There was an error while connecting to the email server")
   checkMail()
+  updateTemperature()
   updateRecords()
   print('--------------------------------\n')
   time.sleep(delay)
