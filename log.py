@@ -133,7 +133,7 @@ def measureTemp():
   print('Reading temperature:')
   temp = float(sensor.get_temperature())
   currTime = datetime.datetime.now()
-  print('The temperature is ' + str(temp) + '°C at ' + str(currTime.strftime("%H:%M:%S")) + '\n')
+  print('Temperature ' + str(temp) + '°C at ' + str(currTime.strftime("%H:%M:%S")) + '\n' + 'Added to log\n')
 
 
 counter = 0
