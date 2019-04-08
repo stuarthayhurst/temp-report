@@ -38,6 +38,8 @@ The system maintains a mail-list and will respond to mail requests. Reports incl
 
 - Run `./install.sh -s` to allow the program to start on boot
 - Use `tmux att -t temp_report` to view the program
+- Use `tmux att -t temp_listener` to view the email reply bot
+- Use `tmux att -t temp_log` to view the automatic temperature log
 - After an update, run `python3 temp.py -cs` to update the config with any new lines
 - Use `python3 temp.py -h` to view help
 - Make sure OneWire is enabled
