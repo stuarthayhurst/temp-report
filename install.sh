@@ -1,28 +1,6 @@
 #!/bin/bash
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
-memcheck() {
-  MEM=$(grep MemTotal /proc/meminfo | awk '{print $2}' | xargs -I {} echo "scale=4; {}/1024^2" | bc)
-  if [[ "$MEM" > "1.5" ]]
-  then
-    echo "Enough RAM detected, not generating a new swapfile"
-  else
-    echo "Not enough RAM detected, generating a new swapfile"
-    addswap
-  fi
-}
-
-delmemcheck() {
-  MEM=$(grep MemTotal /proc/meminfo | awk '{print $2}' | xargs -I {} echo "scale=4; {}/1024^2" | bc)
-  if [[ "$MEM" > "1.5" ]]
-  then
-    echo "No temporary swapfile to remove"
-  else
-    echo "Removing temporary swapfile"
-    delswap
-  fi
-}
-
 #Function to make swap space
 addswap() {
   sudo /bin/dd if=/dev/zero of=/var/swap.temp bs=1M count=1024
@@ -35,6 +13,30 @@ addswap() {
 delswap() {
   sudo swapoff /var/swap.temp
   sudo rm /var/swap.temp
+}
+
+#Checks for enough memory
+memcheck() {
+  MEM=$(grep MemTotal /proc/meminfo | awk '{print $2}' | xargs -I {} echo "scale=4; {}/1024^2" | bc)
+  if [[ "$MEM" > "2" ]]
+  then
+    echo "Enough RAM detected, not generating a new swapfile"
+  else
+    echo "Not enough RAM detected, generating a new swapfile"
+    addswap
+  fi
+}
+
+#Works out whether or not a new swapfile was created
+delmemcheck() {
+  MEM=$(grep MemTotal /proc/meminfo | awk '{print $2}' | xargs -I {} echo "scale=4; {}/1024^2" | bc)
+  if [[ "$MEM" > "2" ]]
+  then
+    echo "No temporary swapfile to remove"
+  else
+    echo "Removing temporary swapfile"
+    delswap
+  fi
 }
 
 #Function to generate the systemd jobs
@@ -74,17 +76,20 @@ installpython() {
   cd ../ && sudo rm -rf cpython/
 }
 
+#Installs scipy
 installscipy() {
   git clone https://github.com/scipy/scipy.git
   cd scipy && python3 setup.py build && sudo python3 setup.py install && cd ../ && rm -rf scipy
 }
 
+#Installs dependencies
 installdeps() {
   checktmux
   sudo apt update && sudo apt upgrade -y
   sudo apt install libopenblas-dev libopenblas-base gcc g++ gfortran htop build-essential tk-dev libncurses5-dev libncursesw5-dev libreadline6-dev libdb5.3-dev libgdbm-dev libsqlite3-dev libssl-dev libbz2-dev libexpat1-dev liblzma-dev zlib1g-dev libffi-dev libjpeg9 libjpeg9-dev libtiff5 libtiff5-dev -y
 }
 
+#Checks for tmux
 checktmux() {
   if ! { [ "$TERM" = "screen" ] && [ -n "$TMUX" ]; } then
     echo "Moving installer to a tmux session:"
