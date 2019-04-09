@@ -3,7 +3,7 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
 #Function to make swap space
 addswap() {
-  sudo /bin/dd if=/dev/zero of=/var/swap.temp bs=1M count=1024
+  sudo /bin/dd if=/dev/zero of=/var/swap.temp bs=1M count=2048
   sudo /sbin/mkswap /var/swap.temp
   sudo chmod 600 /var/swap.temp
   sudo /sbin/swapon /var/swap.temp
