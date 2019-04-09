@@ -17,8 +17,8 @@ delswap() {
 
 #Checks for enough memory
 memcheck() {
-  MEM=$(grep MemTotal /proc/meminfo | awk '{print $2}' | xargs -I {} echo "scale=4; {}/1024^2" | bc)
-  if [[ "$MEM" > "2" ]]
+  MEM=$(grep MemTotal /proc/meminfo | awk '{print $2}' | bc)
+  if [[ "$MEM" > "2097152" ]]
   then
     echo "Enough RAM detected, not generating a new swapfile"
   else
@@ -29,8 +29,8 @@ memcheck() {
 
 #Works out whether or not a new swapfile was created
 delmemcheck() {
-  MEM=$(grep MemTotal /proc/meminfo | awk '{print $2}' | xargs -I {} echo "scale=4; {}/1024^2" | bc)
-  if [[ "$MEM" > "2" ]]
+  MEM=$(grep MemTotal /proc/meminfo | awk '{print $2}' | bc)
+  if [[ "$MEM" > "2097152" ]]
   then
     echo "No temporary swapfile to remove"
   else
