@@ -87,7 +87,8 @@ installdeps() {
 
 checktmux() {
   if ! { [ "$TERM" = "screen" ] && [ -n "$TMUX" ]; } then
-    tmux new-session -d -s temp_installer '/bin/bash '$DIR'/install.sh '$1'; exec bash -i'
+    echo "Moving installer to a tmux session:"
+    tmux new-session -d -s temp_installer 'echo "Installer moved to a tmux session, restarting"; /bin/bash '$DIR'/install.sh '$1'; exec bash -i'
     tmux att -t temp_installer
     exit
   fi
