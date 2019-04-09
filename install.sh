@@ -82,7 +82,7 @@ installscipy() {
 installdeps() {
   checktmux
   sudo apt update && sudo apt upgrade -y
-  sudo apt install libopenblas-dev libopenblas-base gcc g++ gfortran htop build-essential tk-dev libncurses5-dev libncursesw5-dev libreadline6-dev libdb5.3-dev libgdbm-dev libsqlite3-dev libssl-dev libbz2-dev libexpat1-dev liblzma-dev zlib1g-dev libffi-dev libjpeg9 libjpeg9-dev openjpeg-tools libtiff5 libtiff5-dev -y
+  sudo apt install libopenblas-dev libopenblas-base gcc g++ gfortran htop build-essential tk-dev libncurses5-dev libncursesw5-dev libreadline6-dev libdb5.3-dev libgdbm-dev libsqlite3-dev libssl-dev libbz2-dev libexpat1-dev liblzma-dev zlib1g-dev libffi-dev libjpeg9 libjpeg9-dev libtiff5 libtiff5-dev -y
 }
 
 checktmux() {
