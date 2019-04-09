@@ -1,5 +1,26 @@
 #!/bin/bash
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+MEM=$(grep MemTotal /proc/meminfo | awk '{print $2}' | xargs -I {} echo "scale=4; {}/1024^2" | bc)
+
+memcheck() {
+  if [[ "$MEM" > "1.5" ]]
+  then
+    echo "Enough RAM detected, not generating a new swapfile"
+  else
+    echo "Not enough RAM detected, generating a new swapfile"
+    addswap
+  fi
+}
+
+delmemcheck() {
+  if [[ "$MEM" > "1.5" ]]
+  then
+    echo "No temporary swapfile to remove"
+  else
+    echo "Removing temporary swapfile"
+    delswap
+  fi
+}
 
 #Function to make swap space
 addswap() {
@@ -35,21 +56,41 @@ installjobs() {
   sudo systemctl enable temp-report
   sudo systemctl enable temp-listener
   sudo systemctl enable temp-log
-    echo "Done"
+  echo "Done"
+  rm -rf install/
 }
 
+#Function to build and install python
 installpython() {
   git clone -b 3.7 https://github.com/python/cpython.git
   cd cpython
-  ./configure
-  make -j4
-  make -j4 test
+  sudo ./configure
+  sudo make -j 4
   sudo make install
   sudo pip3 install --upgrade pip
   cd ../ && rm -rf cpython/
 }
 
-sudo apt-get install tmux git -y
+installscipy() {
+  git clone https://github.com/scipy/scipy.git
+  cd scipy && python3 setup.py build && sudo python3 setup.py install && cd ../ && rm -rf scipy
+}
+
+installdeps() {
+  checktmux
+  sudo apt update && sudo apt upgrade -y
+  sudo apt install libopenblas-dev libopenblas-base gcc g++ gfortran htop build-essential tk-dev libncurses5-dev libncursesw5-dev libreadline6-dev libdb5.3-dev libgdbm-dev libsqlite3-dev libssl-dev libbz2-dev libexpat1-dev liblzma-dev zlib1g-dev libffi-dev -y
+}
+
+checktmux() {
+  if ! { [ "$TERM" = "screen" ] && [ -n "$TMUX" ]; } then
+    tmux new-session -d -s temp_installer '/bin/bash '$DIR'/install.sh '$1'; exec bash -i'
+    tmux att -t temp_installer
+    exit
+  fi
+}
+
+sudo apt-get install tmux -y
 
 #Get latest version
 PULL=`git pull`
@@ -62,17 +103,29 @@ else
     echo "No updates found for the installer, continuing"
 fi
 
+#Check for arguments
 while [[ "$#" -gt 0 ]]; do case $1 in
-  -s|--start-up) echo "Generating and installing systemd jobs:"; generatejobs; installjobs; echo "Done generating and installing systemd jobs";;
+  -h|--help) echo "Help:"; echo "-h | --help     : Display this page and exit"; echo "-d | --deps     : Install dependencies and exit"; echo "-p | --python   : Install Python and exit"; echo "-s | --start-up : Generate and add systemd jobs"; exit;;
+
+  -d|--deps) echo "Installing dependencies:"; installdeps; memcheck; installscipy; delmemcheck; exit;;
+
+  -p|--python) echo "Installing Python and dependencies:"; installdeps; memcheck; installpython; delmemcheck; exit;;
+
+  -s|--start-up) echo "Generating and installing systemd jobs:"; generatejobs; installjobs; echo "Done generating and installing systemd jobs"; exit;;
+
   *) echo "Unknown parameter passed: $1"; exit 1;;
 esac; shift; done
 
-if ! { [ "$TERM" = "screen" ] && [ -n "$TMUX" ]; } then
-  tmux new-session -d -s temp_installer '/bin/bash '$DIR'/install.sh; exec bash -i'
-  tmux att -t temp_installer
-  exit
-fi
+#Check for tmux
+checktmux
 
+#Check RAM size before compiling anything
+memcheck
+
+#Install build dependencies
+installdeps
+
+#Check Python version and build Python 3.7
 PYVER=$(python3 -V 2>&1 | grep -Po '(?<=Python )(.+)')
 shopt -s extglob
 read -r Z _ <<< "${PYVER//[^[:digit:] ]/}"
@@ -89,25 +142,14 @@ else
   exit
 fi
 
-#Scipy
-MEM=$(grep MemTotal /proc/meminfo | awk '{print $2}' | xargs -I {} echo "scale=4; {}/1024^2" | bc)
+#Install build and program dependencies
+sudo pip3 install cython setuptools numpy w1thermsensor matplotlib pillow
 
-if [[ "$MEM" > "1.5" ]]
-then
-  echo "Enough RAM detected, not generating a new swapfile"
-else
-  echo "Not enough RAM detected, generating a new swapfile"
-  addswap
-fi
-
-sudo apt-get install libopenblas-dev libopenblas-base gcc gfortran -y
-sudo pip3 install cython setuptools numpy
+#Build and install Scipy
 git clone https://github.com/scipy/scipy.git
 cd scipy && python3 setup.py build && sudo python3 setup.py install && cd ../ && rm -rf scipy
 
-#Install temp-report
-sudo apt-get install htop -y
-sudo pip3 install w1thermsensor matplotlib pillow
+#Install temp-report systemd jobs
 
 generatejobs
 installjobs
@@ -132,15 +174,6 @@ echo "Use 'python3 temp.py -p' to update the password for the sender address"
 echo "Use 'python3 temp.py -a' to add or edit addresses on the mailing list"
 
 #Cleanup
-MEM=$(grep MemTotal /proc/meminfo | awk '{print $2}' | xargs -I {} echo "scale=4; {}/1024^2" | bc)
+delmemcheck
 
-if [[ "$MEM" > "1.5" ]]
-then
-  echo "No temporary swapfile to remove"
-else
-  echo "Removing temporary swapfile"
-  delswap
-fi
-
-rm -rf install/
 echo "Installation complete"
