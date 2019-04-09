@@ -17,7 +17,6 @@ max_temp = -100.0
 min_temp = 999.9
 max_temp_time = 0
 min_temp_time = 0
-sensor = W1ThermSensor()
 
 #See data/config.csv for a config file. Use python3 temp.py -c to generate a new one
 
@@ -256,6 +255,7 @@ def measureTemp():
   #Measures the temperature
   global temp
   print('Reading temperature:')
+  sensor = W1ThermSensor()
   temp = float(sensor.get_temperature())
   currTime = datetime.datetime.now()
   print('The temperature is ' + str(temp) + '°C at ' + str(currTime.strftime("%H:%M:%S")) + '\n')

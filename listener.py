@@ -7,8 +7,6 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.image import MIMEImage
 
-sensor = W1ThermSensor()
-
 keywords = ['Test', 'Latest', 'Last', 'Temp', 'Temperature']
 delay = 10
 max_temp = 0
@@ -177,8 +175,9 @@ def checkMail():
   print('Logged out\n')
 
 def updateTemperature():
-  print('Reading current temperature\n')
   global temp
+  print('Reading current temperature\n')
+  sensor = W1ThermSensor()
   temp = float(sensor.get_temperature())
 
 def updateMessage():
