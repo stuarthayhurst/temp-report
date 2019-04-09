@@ -1,8 +1,8 @@
 #!/bin/bash
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-MEM=$(grep MemTotal /proc/meminfo | awk '{print $2}' | xargs -I {} echo "scale=4; {}/1024^2" | bc)
 
 memcheck() {
+  MEM=$(grep MemTotal /proc/meminfo | awk '{print $2}' | xargs -I {} echo "scale=4; {}/1024^2" | bc)
   if [[ "$MEM" > "1.5" ]]
   then
     echo "Enough RAM detected, not generating a new swapfile"
@@ -13,6 +13,7 @@ memcheck() {
 }
 
 delmemcheck() {
+  MEM=$(grep MemTotal /proc/meminfo | awk '{print $2}' | xargs -I {} echo "scale=4; {}/1024^2" | bc)
   if [[ "$MEM" > "1.5" ]]
   then
     echo "No temporary swapfile to remove"
@@ -90,7 +91,7 @@ checktmux() {
   fi
 }
 
-sudo apt-get install tmux -y
+sudo apt-get install tmux bc -y
 
 #Get latest version
 PULL=`git pull`
