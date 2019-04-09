@@ -45,6 +45,7 @@ installpython() {
   make -j4
   make -j4 test
   sudo make install
+  sudo pip3 install --upgrade pip
   cd ../ && rm -rf cpython/
 }
 
