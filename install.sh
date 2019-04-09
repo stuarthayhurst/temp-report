@@ -65,11 +65,13 @@ installjobs() {
 installpython() {
   git clone -b 3.7 https://github.com/python/cpython.git
   cd cpython
-  sudo ./configure
-  sudo make -j 4
-  sudo make install
+  ./configure
+  make -j 4
+  sudo make -j 4 altinstall
+  sudo update-alternatives --install /usr/bin/pip3 pip3 /usr/local/bin/pip3.7 1
+  sudo update-alternatives --set pip3 /usr/local/bin/pip3.7
   sudo pip3 install --upgrade pip
-  cd ../ && rm -rf cpython/
+  cd ../ && sudo rm -rf cpython/
 }
 
 installscipy() {
@@ -147,8 +149,7 @@ fi
 sudo pip3 install cython setuptools numpy w1thermsensor matplotlib pillow
 
 #Build and install Scipy
-git clone https://github.com/scipy/scipy.git
-cd scipy && python3 setup.py build && sudo python3 setup.py install && cd ../ && rm -rf scipy
+installscipy
 
 #Install temp-report systemd jobs
 
