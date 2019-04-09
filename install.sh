@@ -38,6 +38,16 @@ installjobs() {
     echo "Done"
 }
 
+installpython() {
+  git clone -b 3.7 https://github.com/python/cpython.git
+  cd cpython
+  ./configure
+  make -j4
+  make -j4 test
+  sudo make install
+  cd ../ && rm -rf cpython/
+}
+
 sudo apt-get install tmux git -y
 
 #Get latest version
@@ -72,7 +82,9 @@ if [ "$SHORT" -gt "35" ]
 then
   echo "Sufficient Python version found"
 else
-  echo "Please set /usr/bin/python3 to Python 3.6+"
+  echo "Insufficient Python version found" && echo "Press enter to install Python 3.7" && echo "Press CTRL+C to quit"
+  read CONTINUE
+  installpython
   exit
 fi
 
