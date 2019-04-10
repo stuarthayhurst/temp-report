@@ -127,7 +127,5 @@ while True:
   #Measure the temperature
   measureTemp()
   logTemp()
-  else:
-    print('No config file found, skipping run')
   print('--------------------------------\n')
   time.sleep(delay)
