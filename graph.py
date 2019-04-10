@@ -32,7 +32,11 @@ def drawGraph(x,y):
     x_smooth = np.linspace(x_sm.min(), x_sm.max(), 200)
     y_smooth = spline(x2, y, x_smooth)
 
-    plt.grid(b=True, which='major', axis='both')
+    mpl.rcParams['axes.spines.top'] = False
+    mpl.rcParams['axes.spines.right'] = False
+    mpl.rc('axes',edgecolor='black')
+
+    plt.grid(b=True, which='major', axis='both', color='black')
     plt.style.use('ggplot')
     plt.plot([],[])
     x_smooth_dt = mdates.num2date(x_smooth) 
