@@ -7,10 +7,6 @@ addresses.csv
 config.csv
 sender.csv
 
-install/temp-listener.service
-install/temp-report.service
-install/temp-log.service
-
 file.txt
 super-ultra-mega-top-secret-plans.txt
 test.sh
