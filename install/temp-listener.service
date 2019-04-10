@@ -1,7 +1,7 @@
 [Unit]
 Description=temp-report email reply listener
 After=network.target
-StartLimitIntervalSec=10
+StartLimitIntervalSec=5
 
 [Service]
 Type=simple
