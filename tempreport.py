@@ -28,8 +28,6 @@ def readCSVLine(filename, position, mode, line):
     return
 
 def writeConfig(mode):
-  if str(os.path.isfile('data/config.csv')) == 'False':
-    return
   changes = [
     #DO NOT EDIT THESE, these are the default values when generating a new config
     ['config'],
