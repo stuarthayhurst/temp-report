@@ -106,7 +106,7 @@ PULL=`git pull`
 echo $PULL
 if echo $PULL |grep 'install.sh'; then
     echo "Installer script was updated, restarting"
-    /bin/bash $DIR/install.sh
+    /bin/bash $DIR/install.sh $1
     exit
 else
     echo "No updates found for the installer, continuing"
