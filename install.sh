@@ -75,9 +75,7 @@ installpython() {
 
 #Installs scipy
 installscipy() {
-  wget https://github.com/scipy/scipy/releases/download/v1.2.1/scipy-1.2.1.zip
-  unzip scipy-1.2.1.zip -d scipy
-  rm scipy-1.2.1.zip
+  git clone -b maintenance/1.2.x https://github.com/scipy/scipy.git
   cd scipy && python3 setup.py build && sudo python3 setup.py install && cd ../ && sudo rm -rf scipy
 }
 
