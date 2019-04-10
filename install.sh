@@ -114,7 +114,7 @@ fi
 
 #Check for arguments
 while [[ "$#" -gt 0 ]]; do case $1 in
-  -h|--help) echo "Help:"; echo "-h | --help     : Display this page and exit"; echo "-d | --deps     : Install dependencies and exit"; echo "-p | --python   : Install Python and exit"; echo "-s | --start-up : Generate and add systemd jobs"; echo "-r | --remove-swap : Remove the swapfile the program creates if it crashed before cleanup"; exit;;
+  -h|--help) echo "Help:"; echo "-h | --help        : Display this page and exit"; echo "-d | --deps        : Install dependencies and exit"; echo "-p | --python      : Install Python and exit"; echo "-s | --start-up    : Generate and add systemd jobs"; echo "-r | --remove-swap : Remove the swapfile the program creates if it crashed before cleanup"; exit;;
 
   -d|--deps) echo "Installing dependencies:"; installdeps; memcheck; installscipy; delmemcheck; exit;;
 
@@ -149,7 +149,6 @@ then
 else
   echo "Insufficient Python version found" && echo "Python 3.7 will now be installed, Press CTRL+C quickly to quit"
   installpython
-  exit
 fi
 
 #Install build and program dependencies
