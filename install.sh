@@ -41,26 +41,21 @@ delmemcheck() {
 
 #Function to generate the systemd jobs
 generatejobs() {
-    echo "Generating systemd jobs:"
-    sed "s|ExecStart=|ExecStart=/bin/bash $DIR/autostart.sh -t|" install/temp-report.service > temp.txt && mv temp.txt install/temp-report.service
-    sed "s|ExecStart=|ExecStart=/bin/bash $DIR/autostart.sh -r|" install/temp-listener.service > temp.txt && mv temp.txt install/temp-listener.service
-    sed "s|ExecStart=|ExecStart=/bin/bash $DIR/autostart.sh -l|" install/temp-log.service > temp.txt && mv temp.txt install/temp-log.service
-    echo "Done"
+  echo "Generating systemd jobs:"
+  sed -i 's|.*ExecStart=.*|ExecStart=/bin/bash $DIR/autostart.sh -t|' install/temp-report.service
+  sed -i 's|.*ExecStart=.*|ExecStart=/bin/bash $DIR/autostart.sh -r|' install/temp-listener.service
+  sed -i 's|.*ExecStart=.*|ExecStart=/bin/bash $DIR/autostart.sh -l|' install/temp-log.service
+  echo "Done"
 }
 
 #Function to install the systemd jobs
 installjobs() {
   echo "Installing systemd jobs:"
   sudo cp install/temp-* /etc/systemd/system/
-  sudo systemctl start temp-report
-  sudo systemctl start temp-listener
-  sudo systemctl start temp-log
-
   sudo systemctl enable temp-report
   sudo systemctl enable temp-listener
   sudo systemctl enable temp-log
   echo "Done"
-  rm -rf install/
 }
 
 #Function to build and install python
@@ -81,7 +76,7 @@ installpython() {
 #Installs scipy
 installscipy() {
   git clone https://github.com/scipy/scipy.git
-  cd scipy && python3 setup.py build && sudo python3 setup.py install && cd ../ && rm -rf scipy
+  cd scipy && python3 setup.py build && sudo python3 setup.py install && cd ../ && sudo rm -rf scipy
 }
 
 #Installs dependencies
@@ -182,6 +177,7 @@ echo "Use 'python3 temp.py -s' to set a sender email address"
 echo "Use 'python3 temp.py -n' to set a sender name"
 echo "Use 'python3 temp.py -p' to update the password for the sender address"
 echo "Use 'python3 temp.py -a' to add or edit addresses on the mailing list"
+echo "Add in the information and then reboot for the program to begin working"
 
 #Cleanup
 delmemcheck
