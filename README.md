@@ -3,6 +3,7 @@ A small project to create a system that can handle the output from a Pi temperat
 The system maintains a mail-list and will respond to mail requests. Reports include temperature charts and are generated when the temperature moves outside of a defined range or an email is received requesting a report. 
 
 ## Dependencies:
+All required and reccomended packages are automatically installed when running the installer
 
 - ### Python / Pip
   * Python 3.6+
@@ -24,8 +25,10 @@ The system maintains a mail-list and will respond to mail requests. Reports incl
 
 -   #### Source / Package Manager:
     * libopenblas-base, libopenblas-dev
-    * gcc
+    * gcc & g++
     * gfortran
+    * build-essential
+    * libjpeg & libjpeg-dev
 
 ## Installation:
 
