@@ -152,7 +152,7 @@ else
 fi
 
 #Install build and program dependencies
-sudo pip3 install cython setuptools numpy w1thermsensor matplotlib pillow
+sudo pip3 install --upgrade cython setuptools numpy w1thermsensor matplotlib pillow
 
 #Build and install Scipy
 installscipy
@@ -168,7 +168,7 @@ then
     echo "OneWire is enabled"
 else
     echo "OneWire is not enabled, enabling"
-    sudo echo "dtoverlay=w1-gpio" >> /boot/config.txt
+    sudo su root -c 'echo "dtoverlay=w1-gpio" >> /boot/config.txt'
     echo "OneWire is now enabled"
 fi
 
