@@ -114,13 +114,15 @@ fi
 
 #Check for arguments
 while [[ "$#" -gt 0 ]]; do case $1 in
-  -h|--help) echo "Help:"; echo "-h | --help     : Display this page and exit"; echo "-d | --deps     : Install dependencies and exit"; echo "-p | --python   : Install Python and exit"; echo "-s | --start-up : Generate and add systemd jobs"; exit;;
+  -h|--help) echo "Help:"; echo "-h | --help     : Display this page and exit"; echo "-d | --deps     : Install dependencies and exit"; echo "-p | --python   : Install Python and exit"; echo "-s | --start-up : Generate and add systemd jobs"; echo "-r | --remove-swap : Remove the swapfile the program creates if it crashed before cleanup"; exit;;
 
   -d|--deps) echo "Installing dependencies:"; installdeps; memcheck; installscipy; delmemcheck; exit;;
 
   -p|--python) echo "Installing Python and dependencies:"; installdeps; memcheck; installpython; delmemcheck; exit;;
 
   -s|--start-up) echo "Generating and installing systemd jobs:"; generatejobs; installjobs; echo "Done generating and installing systemd jobs"; exit;;
+
+  -r|--remove-swap) echo "Removing swapfile:"; delswap; echo "Done"; exit;;
 
   *) echo "Unknown parameter passed: $1"; exit 1;;
 esac; shift; done
