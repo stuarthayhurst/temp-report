@@ -42,9 +42,9 @@ delmemcheck() {
 #Function to generate the systemd jobs
 generatejobs() {
   echo "Generating systemd jobs:"
-  sed -i 's|.*ExecStart=.*|ExecStart=/bin/bash $DIR/autostart.sh -t|' install/temp-report.service
-  sed -i 's|.*ExecStart=.*|ExecStart=/bin/bash $DIR/autostart.sh -r|' install/temp-listener.service
-  sed -i 's|.*ExecStart=.*|ExecStart=/bin/bash $DIR/autostart.sh -l|' install/temp-log.service
+  sed 's|.*ExecStart=.*|ExecStart=/bin/bash $DIR/autostart.sh -t|' install/temp-report.service > install/temp-report-temp.service
+  sed 's|.*ExecStart=.*|ExecStart=/bin/bash $DIR/autostart.sh -r|' install/temp-listener.service > install/temp-listener-temp.service
+  sed 's|.*ExecStart=.*|ExecStart=/bin/bash $DIR/autostart.sh -l|' install/temp-log.service > install/temp-log-temp.service
   echo "Done"
 }
 
@@ -52,6 +52,9 @@ generatejobs() {
 installjobs() {
   echo "Installing systemd jobs:"
   sudo cp install/temp-* /etc/systemd/system/
+  sudo rm install/temp-report-temp.service
+  sudo rm install/temp-listener-temp.service
+  sudo rm install/temp-log-temp.service
   sudo systemctl enable temp-report
   sudo systemctl enable temp-listener
   sudo systemctl enable temp-log
