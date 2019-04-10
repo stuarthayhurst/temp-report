@@ -32,6 +32,7 @@ All required and reccomended packages are automatically installed when running t
 
 ## Installation:
 
+- Make sure the wiring for the sensor is complete first
 - `git clone https://github.com/Dragon8oy/temp-report.git`
 - `./install.sh`
 
