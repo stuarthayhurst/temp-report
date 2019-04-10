@@ -8,6 +8,7 @@ Type=simple
 Restart=always
 RestartSec=1
 User=pi
+ExecStartPre=/bin/sleep 30
 ExecStart=
 
 [Install]

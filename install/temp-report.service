@@ -1,13 +1,14 @@
 [Unit]
 Description=temp-report automatic emailer
 After=network.target
-StartLimitIntervalSec=10
+StartLimitIntervalSec=5
 
 [Service]
 Type=simple
 Restart=always
 RestartSec=1
 User=pi
+ExecStartPre=/bin/sleep 30
 ExecStart=
 
 [Install]
