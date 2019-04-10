@@ -51,9 +51,11 @@ generatejobs() {
 #Function to install the systemd jobs
 installjobs() {
   echo "Installing systemd jobs:"
-  sudo cp install/temp-* /etc/systemd/system/
+  sudo cp install/temp-report-temp.service /etc/systemd/system/temp-report.service
   sudo rm install/temp-report-temp.service
+  sudo cp install/temp-listener-temp.service /etc/systemd/system/temp-listener.service
   sudo rm install/temp-listener-temp.service
+  sudo cp install/temp-log-temp.service /etc/systemd/system/temp-log.service
   sudo rm install/temp-log-temp.service
   sudo systemctl enable temp-report
   sudo systemctl enable temp-listener
