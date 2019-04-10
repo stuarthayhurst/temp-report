@@ -42,9 +42,9 @@ delmemcheck() {
 #Function to generate the systemd jobs
 generatejobs() {
   echo "Generating systemd jobs:"
-  sed 's|.*ExecStart=.*|ExecStart=/bin/bash $DIR/autostart.sh -t|' install/temp-report.service > install/temp-report-temp.service
-  sed 's|.*ExecStart=.*|ExecStart=/bin/bash $DIR/autostart.sh -r|' install/temp-listener.service > install/temp-listener-temp.service
-  sed 's|.*ExecStart=.*|ExecStart=/bin/bash $DIR/autostart.sh -l|' install/temp-log.service > install/temp-log-temp.service
+  sed 's|.*ExecStart=.*|ExecStart=/bin/bash '$DIR'/autostart.sh -t|' install/temp-report.service > install/temp-report-temp.service
+  sed 's|.*ExecStart=.*|ExecStart=/bin/bash '$DIR'/autostart.sh -r|' install/temp-listener.service > install/temp-listener-temp.service
+  sed 's|.*ExecStart=.*|ExecStart=/bin/bash '$DIR'/autostart.sh -l|' install/temp-log.service > install/temp-log-temp.service
   echo "Done"
 }
 
