@@ -145,8 +145,7 @@ if [ "$SHORT" -gt "35" ]
 then
   echo "Sufficient Python version found"
 else
-  echo "Insufficient Python version found" && echo "Press enter to install Python 3.7" && echo "Press CTRL+C to quit"
-  read CONTINUE
+  echo "Insufficient Python version found" && echo "Python 3.7 will now be installed, Press CTRL+C quickly to quit"
   installpython
   exit
 fi
