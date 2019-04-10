@@ -4,7 +4,7 @@ After=network.target
 StartLimitIntervalSec=0
 
 [Service]
-Type=simple
+Type=forking
 Restart=always
 RestartSec=1
 User=pi
