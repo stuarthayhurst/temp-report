@@ -13,6 +13,7 @@ max_temp = 0
 min_temp = 0
 max_temp_time = 0
 min_temp_time = 0
+sensor = W1ThermSensor()
 
 def updateConfig():
   while str(os.path.isfile('data/config.csv')) == 'False':
@@ -177,7 +178,6 @@ def checkMail():
 def updateTemperature():
   global temp
   print('Reading current temperature\n')
-  sensor = W1ThermSensor()
   temp = float(sensor.get_temperature())
 
 def updateMessage():
