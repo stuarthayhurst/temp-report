@@ -318,8 +318,7 @@ elif sys.argv[1] == '-cs' or sys.argv[1] == '--config-save':
   exit()
 
 print('--------------------------------')
-counter = 0
-while counter == 0:
+while True:
   #Load the config
   tempreport.writeConfig('s')
   updateConfig()

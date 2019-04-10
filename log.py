@@ -121,8 +121,7 @@ def measureTemp():
 while str(os.path.isfile('data/config.csv')) == 'False':
   time.sleep(1)
 
-counter = 0
-while counter == 0:
+while True:
   #Load the config
   updateConfig()
   #Measure the temperature

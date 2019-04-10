@@ -1,6 +1,5 @@
 import time, csv, sys, os
 
-counter = 0
 delay = 0.5
 choice = 0
 cont = ''
@@ -101,7 +100,7 @@ def checkFile():
   if str(os.path.isfile('data/addresses.csv')) == 'False':
     newDatabase()
 
-while counter == 0:
+while True:
   print('Enter 1 to read the saved addresses')
   print('Enter 2 to add an entry')
   print('Enter 3 to delete an entry')

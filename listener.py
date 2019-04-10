@@ -222,8 +222,7 @@ def sendMessage():
   else:
     error == 0
 
-counter = 0
-while counter == 0:
+while True:
   updateConfig()
   updateSender()
   try:
