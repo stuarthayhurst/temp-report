@@ -72,7 +72,7 @@ installpython() {
   sudo make -j 4 altinstall
   sudo update-alternatives --install /usr/bin/pip3 pip3 /usr/local/bin/pip3.7 1
   sudo update-alternatives --set pip3 /usr/local/bin/pip3.7
-  sudo update-alternatives --install /usr/bin/python3 pip3 /usr/local/bin/python3.7 1
+  sudo update-alternatives --install /usr/bin/python3 python3 /usr/local/bin/python3.7 1
   sudo update-alternatives --set python3 /usr/local/bin/python3.7
   sudo pip3 install --upgrade pip
   cd ../ && sudo rm -rf cpython/
