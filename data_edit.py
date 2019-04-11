@@ -83,7 +83,10 @@ def newDatabase():
   changes = [
     ['address'],
     ]
-  checkDelete = str(input('Are you sure you want to erase the existing list and make a fresh one? (You may be seeing this message as the database never existed) Y/N: '))
+  if str(os.path.isfile('data/addresses.csv')) == 'True':
+    checkDelete = str(input('Are you sure you want to erase the existing list and make a fresh one? (Y/N): '))
+  else:
+    checkDelete = 'Y'
   if checkDelete == 'Y':
     print("Deleting addresses and making new file")
     f = open('data/addresses.csv','w+')
