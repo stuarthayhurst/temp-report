@@ -3,7 +3,7 @@ import matplotlib as mpl
 mpl.use('Agg')
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
-from scipy.interpolate import spline
+from scipy.interpolate import make_interp_spline, BSpline
 from PIL import Image, ImageDraw, ImageFont
 import numpy as np
 import sys
@@ -30,7 +30,8 @@ def drawGraph(x,y):
     y_sm = np.array(y)
 
     x_smooth = np.linspace(x_sm.min(), x_sm.max(), 200)
-    y_smooth = spline(x2, y, x_smooth)
+    spl = make_interp_spline(x2, y, k=3)
+    y_smooth = spl(x_smooth)
 
     mpl.rcParams['axes.spines.top'] = False
     mpl.rcParams['axes.spines.right'] = False
