@@ -39,7 +39,6 @@ All required and recommended packages are automatically installed when running t
 - Use `tmux att -t temp_log` to view the automatic temperature log
 - After an update, run `python3 temp.py -cs` to update the config with any new lines
 - Use `python3 temp.py -h` to view help
-- Make sure OneWire is enabled
 - See wiki for more information
 
 ## Wiring diagram:
