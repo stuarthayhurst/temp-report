@@ -18,27 +18,17 @@ sensor = W1ThermSensor()
 def updateConfig():
   while str(os.path.isfile('data/config.csv')) == 'False':
     print('No config found')
-    time.sleep(10)
+    time.sleep(2)
+  global delay
+  delay = int(tempreport.readCSVLine('data/config.csv', 1, 'keyword', 'delay'))
+  global graph_point_count
+  graph_point_count = int(tempreport.readCSVLine('data/config.csv', 1, 'keyword', 'graph_point_count'))
 
-  with open('data/config.csv') as csv_file:
-    csv_reader = csv.reader(csv_file, delimiter=',')
-    config_count = 0
-    line_count = 0
-    for row in csv_reader:
-        if line_count == 0:
-          print('Reading config')
-          line_count += 1
-        else:
-          if row[0] == 'delay':
-            global temp_delay
-            temp_delay = int(row[1])
-            config_count += 1
-          elif row[0] == 'graph_point_count':
-            global graph_point_count
-            graph_point_count = int(row[1])
-            config_count += 1
-          line_count += 1
-    print(f'Processed {config_count} config options, {line_count} lines\n')
+  if delay == None:
+    print('Errors occured while reading config values, attempting to fix config file:')
+    tempreport.writeConfig('s')
+    print('Done')
+    updateConfig()
 
 def updateSender():
   global email_sender
