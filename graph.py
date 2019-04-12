@@ -6,7 +6,7 @@ import matplotlib.dates as mdates
 from scipy.interpolate import make_interp_spline, BSpline
 import numpy as np
 import sys
-import re, datetime, csv
+import re, datetime
 
 def generateGraph(reading_count):
     x, y  = readValues(reading_count)
@@ -45,9 +45,10 @@ def readValues(reading_count, x=[], y=[]):
     x.clear()
     y.clear()
     with open('temps.log', 'r') as f:
-        taildata = f.readlines() [-reading_count:]
-        if reading_count > len(taildata):
-          return ['', '']
+        try:
+            taildata = f.readlines() [-reading_count:]
+        except IndexError:
+            return ['', '']
         for line in taildata:
             data = re.split("\[(.*?)\]", line)
             temp = re.findall("\d+\.\d+", data[2]) 
