@@ -35,8 +35,6 @@ def writeConfig(mode):
     ['gap', '3600'], #Delay between emails
     ['threshold_max', '30'], #Max temp for emailing
     ['threshold_min', '-1'], #Min temp for emailing
-    ['use_csv_recipient', '1'], #Toggle for using a recipient address file
-    ['use_csv_sender', '1'], #Toggle for using a sender credentials file
     ['graph_point_count', '12'], #Amount of points on graphs
     ['record_reset', '24'], #Time between mix and max temp reset in hours
     ]

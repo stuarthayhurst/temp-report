@@ -7,9 +7,9 @@ from email.mime.text import MIMEText
 from email.mime.image import MIMEImage
 
 #Variables for email and the sensor
-email_recipients = ['example@gmail.com', 'example@gmail.com'] #Set recipient emails here if use_csv_recipient = 0
-email_sender = 'example@gmail.com' #Set sender email here if use_csv_sender = 0
-password = 'password' #Set sender email password here if use_csv_sender = 0
+email_recipients = ['']
+email_sender = ''
+password = ''
 last_email_time = datetime.datetime(1970, 1, 1, 0, 0)
 record_reset_time = datetime.datetime(1970, 1, 1, 0, 0)
 email_time_diff = 0
@@ -30,10 +30,6 @@ def updateConfig():
   threshold_max = float(tempreport.readCSVLine('data/config.csv', 1, 'keyword', 'threshold_max'))
   global threshold_min
   threshold_min = float(tempreport.readCSVLine('data/config.csv', 1, 'keyword', 'threshold_min'))
-  global use_csv_recipient
-  use_csv_recipient = int(tempreport.readCSVLine('data/config.csv', 1, 'keyword', 'use_csv_recipient'))
-  global use_csv_sender
-  use_csv_sender = int(tempreport.readCSVLine('data/config.csv', 1, 'keyword', 'use_csv_sender'))
   global graph_point_count
   graph_point_count = int(tempreport.readCSVLine('data/config.csv', 1, 'keyword', 'graph_point_count'))
   global record_reset
@@ -295,10 +291,8 @@ while True:
   readRecords()
   #Update addresses and credentials
   if temp >= threshold_max or temp <= threshold_min:
-    if use_csv_recipient == 1:
-      updateRecipients()
-    if use_csv_sender == 1:
-      updateSender()
+    updateRecipients()
+    updateSender()
     #Create message contents
     graph.generateGraph(graph_point_count)
     updateMessage()
