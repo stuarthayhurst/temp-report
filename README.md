@@ -3,30 +3,25 @@ A small project to create a system that can handle the output from a Pi temperat
 The system maintains a mail-list and will respond to mail requests. Reports include temperature charts and are generated when the temperature moves outside of a defined range or an email is received requesting a report. 
 
 ## Dependencies:
-All required and reccomended packages are automatically installed when running the installer
+All required and recommended packages are automatically installed when running the installer
 
 - ### Python / Pip
   * Python 3.6+
   * w1thermsensor
   * matplotlib
   * scipy
+  * numpy
+  * cython
+  * setuptools
 
 - ### Source / Package Manager
   * Tmux
+  * libopenblas-dev && libopenblas-base
+  * gcc && g++
+  * build-essential && gfortran
 -   #### Recommended:
     * Htop
 
-- ### Build:
--   #### Python / Pip:
-    * numpy - required for scipy after build
-    * cython
-    * setuptools
-
--   #### Source / Package Manager:
-    * libopenblas-base, libopenblas-dev
-    * gcc & g++
-    * gfortran
-    * build-essential
 
 ## Installation:
 
