@@ -36,8 +36,6 @@ def updateConfig():
   use_csv_sender = int(tempreport.readCSVLine('data/config.csv', 1, 'keyword', 'use_csv_sender'))
   global graph_point_count
   graph_point_count = int(tempreport.readCSVLine('data/config.csv', 1, 'keyword', 'graph_point_count'))
-  global graph_font_path
-  graph_font_path = str(tempreport.readCSVLine('data/config.csv', 1, 'keyword', 'graph_font_path'))
   global record_reset
   record_reset = int(tempreport.readCSVLine('data/config.csv', 1, 'keyword', 'record_reset'))
 
@@ -303,7 +301,7 @@ while True:
     if use_csv_sender == 1:
       updateSender()
     #Create message contents
-    graph.generateGraph(graph_point_count, graph_font_path)
+    graph.generateGraph(graph_point_count)
     updateMessage()
     #Send the message
     try:

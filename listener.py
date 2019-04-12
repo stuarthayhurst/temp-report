@@ -37,10 +37,6 @@ def updateConfig():
             global graph_point_count
             graph_point_count = int(row[1])
             config_count += 1
-          elif row[0] == 'graph_font_path':
-            global graph_font_path
-            graph_font_path = str(row[1])
-            config_count += 1
           line_count += 1
     print(f'Processed {config_count} config options, {line_count} lines\n')
 
@@ -208,7 +204,7 @@ def updateMessage():
 
 def sendMessage():
   #Use the config value for graph_point_count unless email_subject contains a command
-  graph.generateGraph(graph_point_count, graph_font_path)
+  graph.generateGraph(graph_point_count)
   updateMessage()
   print('Sending message')
   try:

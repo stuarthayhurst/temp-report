@@ -38,7 +38,6 @@ def writeConfig(mode):
     ['use_csv_recipient', '1'], #Toggle for using a recipient address file
     ['use_csv_sender', '1'], #Toggle for using a sender credentials file
     ['graph_point_count', '12'], #Amount of points on graphs
-    ['graph_font_path', 'fonts/Lato-Regular.ttf'], #Font for graph error messages
     ['record_reset', '24'], #Time between mix and max temp reset in hours
     ]
 
