@@ -88,7 +88,7 @@ installscipy() {
 installdeps() {
   checktmux
   sudo apt update && sudo apt upgrade -y
-  sudo apt install htop libopenblas-dev libopenblas-base gcc g++ gfortran build-essential tk-dev libncurses5-dev libncursesw5-dev libreadline6-dev libdb5.3-dev libgdbm-dev libsqlite3-dev libssl-dev libbz2-dev libexpat1-dev liblzma-dev libffi-dev zlib1g-dev libffi-dev libjpeg9 libjpeg9-dev -y
+  sudo apt install htop libopenblas-dev libopenblas-base gcc g++ gfortran build-essential tk-dev libncurses5-dev libncursesw5-dev libreadline6-dev libdb5.3-dev libgdbm-dev libsqlite3-dev libssl-dev libbz2-dev libexpat1-dev liblzma-dev libffi-dev -y
 }
 
 #Checks for tmux
@@ -154,7 +154,7 @@ else
 fi
 
 #Install build and program dependencies
-sudo pip3 install --upgrade cython setuptools numpy w1thermsensor matplotlib pillow
+sudo pip3 install --upgrade cython setuptools numpy w1thermsensor matplotlib
 
 #Build and install Scipy
 installscipy

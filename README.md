@@ -9,7 +9,6 @@ All required and reccomended packages are automatically installed when running t
   * Python 3.6+
   * w1thermsensor
   * matplotlib
-  * pillow
   * scipy
 
 - ### Source / Package Manager
@@ -28,7 +27,6 @@ All required and reccomended packages are automatically installed when running t
     * gcc & g++
     * gfortran
     * build-essential
-    * libjpeg & libjpeg-dev
 
 ## Installation:
 
