@@ -100,7 +100,7 @@ def updateSender():
 
 def changeSender(mode):
   if str(os.path.isfile('data/sender.csv')) == 'False':
-    print('We didn't find a sender credentials file, creating on for you:')
+    print("We didn't find a sender credentials file, creating on for you:")
     changes = [
       ['details'],
       ['address'],
