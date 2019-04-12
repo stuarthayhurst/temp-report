@@ -1,7 +1,7 @@
 import smtplib, datetime, time, csv, sys, os
 import tempreport
 import graph
-from w1thermsensor import W1ThermSensor
+#from w1thermsensor import W1ThermSensor
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.image import MIMEImage
@@ -17,64 +17,35 @@ max_temp = -100.0
 min_temp = 999.9
 max_temp_time = 0
 min_temp_time = 0
-sensor = W1ThermSensor()
+#sensor = W1ThermSensor()
 
 #See data/config.csv for a config file. Use python3 temp.py -c to generate a new one
 
 def updateConfig():
-  if str(os.path.isfile('data/config.csv')) == 'False':
-    print('\nNo config file found')
-    tempreport.writeConfig('f')
+  global delay
+  delay = int(tempreport.readCSVLine('data/config.csv', 1, 'keyword', 'delay'))
+  global gap
+  gap = int(tempreport.readCSVLine('data/config.csv', 1, 'keyword', 'gap'))
+  global threshold_max
+  threshold_max = float(tempreport.readCSVLine('data/config.csv', 1, 'keyword', 'threshold_max'))
+  global threshold_min
+  threshold_min = float(tempreport.readCSVLine('data/config.csv', 1, 'keyword', 'threshold_min'))
+  global use_csv_recipient
+  use_csv_recipient = int(tempreport.readCSVLine('data/config.csv', 1, 'keyword', 'use_csv_recipient'))
+  global use_csv_sender
+  use_csv_sender = int(tempreport.readCSVLine('data/config.csv', 1, 'keyword', 'use_csv_sender'))
+  global graph_point_count
+  graph_point_count = int(tempreport.readCSVLine('data/config.csv', 1, 'keyword', 'graph_point_count'))
+  global graph_font_path
+  graph_font_path = str(tempreport.readCSVLine('data/config.csv', 1, 'keyword', 'graph_font_path'))
+  global record_reset
+  record_reset = int(tempreport.readCSVLine('data/config.csv', 1, 'keyword', 'record_reset'))
 
-  with open('data/config.csv') as csv_file:
-    csv_reader = csv.reader(csv_file, delimiter=',')
-    config_count = 0
-    line_count = 0
-    for row in csv_reader:
-        if line_count == 0:
-          print('Reading config')
-          line_count += 1
-        else:
-          if row[0] == 'delay':
-            global delay
-            delay = int(row[1])
-            config_count += 1
-          elif row[0] == 'gap':
-            global gap
-            gap = int(row[1])
-            config_count += 1
-          elif row[0] == 'threshold_max':
-            global threshold_max
-            threshold_max = int(row[1])
-            config_count += 1
-          elif row[0] == 'threshold_min':
-            global threshold_min
-            threshold_min = int(row[1])
-            config_count += 1
-          elif row[0] == 'use_csv_recipient':
-            global use_csv_recipient
-            use_csv_recipient = int(row[1])
-            config_count += 1         
-          elif row[0] == 'use_csv_sender':
-            global use_csv_sender
-            use_csv_sender = int(row[1])
-            config_count += 1
-          elif row[0] == 'graph_point_count':
-            global graph_point_count
-            graph_point_count = int(row[1])
-            config_count += 1
-          elif row[0] == 'graph_font_path':
-            global graph_font_path
-            graph_font_path = str(row[1])
-            config_count += 1
-          elif row[0] == 'record_reset':
-            global record_reset
-            record_reset = int(row[1])
-            record_reset = record_reset * 3600
-            config_count += 1
-          else:
-            print('Invalid config line detected\n')
-    print(f'Processed {config_count} config options, {line_count} lines\n')
+  if delay == None:
+    print('Errors occured while reading config values, attempting to fix config file:')
+    tempreport.writeConfig('s')
+    print('Done')
+    updateConfig()
 
 def connectToServer():
   #Connects to gmail's servers
@@ -256,7 +227,7 @@ def measureTemp():
   #Measures the temperature
   global temp
   print('Reading temperature:')
-  temp = float(sensor.get_temperature())
+  temp = 30.0#float(sensor.get_temperature())
   currTime = datetime.datetime.now()
   print('The temperature is ' + str(temp) + '°C at ' + str(currTime.strftime("%H:%M:%S")) + '\n')
 
