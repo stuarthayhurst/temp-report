@@ -35,16 +35,16 @@ def drawGraph(x,y):
     plt.plot(x_smooth_dt, y_smooth, 'red', linewidth=1)
     plt.gcf().autofmt_xdate() 
     plt.xlabel('Time (Day - Hour: Minutes)')
-    plt.ylabel("Temperature \u2103")
+    plt.ylabel('Temperature \u2103')
     plt.title('Room Temperature logged by Pi')
-    plt.savefig("graph.png")
+    plt.savefig('graph.png')
     print('Created graph\n')
     plt.clf()
 
 def readValues(reading_count, x=[], y=[]):
     x.clear()
     y.clear()
-    with open("temps.log", "r") as f:
+    with open('temps.log', 'r') as f:
         taildata = f.readlines() [-reading_count:]
         if reading_count > len(taildata):
           return ['', '']
@@ -57,15 +57,15 @@ def readValues(reading_count, x=[], y=[]):
             y.append(temp)
         return x,y
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     try:
         reading_count = int(sys.argv[1])
     except IndexError:
-        print("python3 graph.py [int] :Optional integer number of readings to plot\n")
-        print( "                        set at last 12 readings if not specified\n")
+        print('python3 graph.py [int] :Optional integer number of readings to plot\n')
+        print( '                        set at last 12 readings if not specified\n')
         reading_count = int(12)
     except ValueError:
-        print("Needs to be an integer")
+        print('Needs to be an integer')
         sys.exit(1)
 
     x, y  = readValues(reading_count)

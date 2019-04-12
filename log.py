@@ -40,7 +40,7 @@ def logTemp():
   global record_reset_time
 
   if str(os.path.isfile('data/temp-records.csv')) == 'False':
-    print("No report file found, creating one:")
+    print('No report file found, creating one:')
     changes = [
       ['Temp-report report file:'],
       ['max', '0', '0'],
@@ -89,7 +89,7 @@ def logTemp():
       writer.writerows(changes)
 
   if str(os.path.isfile('./temps.log')) == 'False':
-    print("No log found, creating one:")
+    print('No log found, creating one:')
     changes = [
       ['Temp-report logfile:'],
       ]

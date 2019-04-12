@@ -158,7 +158,7 @@ def checkMail():
     server.close()
     server.logout()
   except:
-    print("Failed to log out")
+    print('Failed to log out')
   print('Logged out\n')
 
 def updateTemperature():
@@ -215,7 +215,7 @@ while True:
     refreshServer()
     connectToServer()
   except:
-    print("There was an error while connecting to the email server")
+    print('There was an error while connecting to the email server')
   updateTemperature()
   updateRecords()
   checkMail()

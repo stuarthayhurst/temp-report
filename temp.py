@@ -68,7 +68,7 @@ def updateRecipients():
               line_count += 1
     print(f'\nUsing CSV for recipient addresses, processed {line_count - 1} addresses, {line_count} lines')
   except FileNotFoundError:
-    print("\nNo address file found, starting address editor: \n")
+    print('\nNo address file found, starting address editor: \n')
     import data_edit
 
 def updateSender():
@@ -100,7 +100,7 @@ def updateSender():
 
 def changeSender(mode):
   if str(os.path.isfile('data/sender.csv')) == 'False':
-    print("We didn't find a sender credentials file, creating on for you:")
+    print('We didn't find a sender credentials file, creating on for you:')
     changes = [
       ['details'],
       ['address'],
@@ -206,12 +206,12 @@ def sendMessage():
     last_email_time = currTime
   else:
     print('Email was last sent ' + str(email_time_diff) + ' seconds ago')
-    print("Email not sent\n")
+    print('Email not sent\n')
   try:
     server.quit()
     error = 0
   except:
-    print("Failed to logout")
+    print('Failed to logout')
     error = 1
   if error == 0:
     print('\nLogged out\n')
@@ -300,7 +300,7 @@ while True:
     try:
       connectToServer()
     except:
-      print("There was an error while connecting to the email server")
+      print('There was an error while connecting to the email server')
     sendMessage()
   print('--------------------------------\n')
   time.sleep(delay)
