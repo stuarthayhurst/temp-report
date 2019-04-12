@@ -33,13 +33,13 @@ All required and recommended packages are automatically installed when running t
 
 ## Commands and notes:
 
-- Run `./install.sh -s` to allow the program to start on boot
+- Use `python3 temp.py -h` to view help
 - Use `tmux att -t temp_report` to view the program
 - Use `tmux att -t temp_listener` to view the email reply bot
 - Use `tmux att -t temp_log` to view the automatic temperature log
+- Run `./install.sh -s` to allow the program to start on boot
 - After an update, run `python3 temp.py -cs` to update the config with any new lines
-- Use `python3 temp.py -h` to view help
-- Make sure OneWire is enabled
+- You can use `./import.sh -h` to import and export csv files
 - See wiki for more information
 
 ## Wiring diagram:
