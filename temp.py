@@ -1,7 +1,7 @@
 import smtplib, datetime, time, csv, sys, os
 import tempreport
 import graph
-#from w1thermsensor import W1ThermSensor
+from w1thermsensor import W1ThermSensor
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.image import MIMEImage
@@ -17,7 +17,7 @@ max_temp = -100.0
 min_temp = 999.9
 max_temp_time = 0
 min_temp_time = 0
-#sensor = W1ThermSensor()
+sensor = W1ThermSensor()
 
 #See data/config.csv for a config file. Use python3 temp.py -c to generate a new one
 
@@ -159,7 +159,6 @@ def changeSender(mode):
     f.close()
 
 def updateMessage():
-
   #Reads the image
   fp = open('graph.png', 'rb')
   html_image = MIMEImage(fp.read())
@@ -225,7 +224,7 @@ def measureTemp():
   #Measures the temperature
   global temp
   print('Reading temperature:')
-  temp = 30.0#float(sensor.get_temperature())
+  temp = float(sensor.get_temperature())
   currTime = datetime.datetime.now()
   print('The temperature is ' + str(temp) + '°C at ' + str(currTime.strftime("%H:%M:%S")) + '\n')
 
