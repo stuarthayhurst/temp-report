@@ -46,15 +46,11 @@ def readValues(reading_count, x=[], y=[]):
     y.clear()
     log_dt_format = '%a %b %d %H:%M:%S %Y'
     dt_format = '%Y/%m/%d-%H:%M'
-    from_dt, to_dt = '2019/03/30-00:00', '2019/03/30-23:59'
+    from_dt, to_dt = '2019/03/30-00:00', '2019/04/05-23:59'
     from_dt = datetime.datetime.strptime(from_dt, dt_format)
     to_dt = datetime.datetime.strptime(to_dt, dt_format)
     with open('temps.log', 'r') as f:
-        try:
-            taildata = f.readlines()
-        except IndexError:
-            return ['', '']
-        for line in taildata:
+        for line in f:
             data = re.split("\[(.*?)\]", line)
             temp = re.findall("\d+\.\d+", data[2]) 
             temp = float(temp[0])
