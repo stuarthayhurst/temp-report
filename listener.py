@@ -56,14 +56,14 @@ def updateRecords():
   currTime = datetime.datetime.now()
 
   max_temp = tempreport.readCSVLine('data/temp-records.csv', 2, 'keyword', 'max', 'float')
-  max_temp_time = tempreport.readCSVLine('data/temp-records.csv', 3, 'keyword', 'max', '')
+  max_temp_time = tempreport.readCSVLine('data/temp-records.csv', 3, 'keyword', 'max')
   if float(temp) > float(max_temp):
     print('Current temp was higher than recorded max temp, updating locally\n')
     max_temp = temp
     max_temp_time = currTime.strftime("%H:%M:%S")
 
   min_temp = tempreport.readCSVLine('data/temp-records.csv', 2, 'keyword', 'min', 'float')
-  min_temp_time = tempreport.readCSVLine('data/temp-records.csv', 3, 'keyword', 'min', '')
+  min_temp_time = tempreport.readCSVLine('data/temp-records.csv', 3, 'keyword', 'min')
   if float(temp) < float(min_temp):
     print('Current temp was lower than recorded min temp, updating locally\n')
     min_temp = temp

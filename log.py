@@ -61,7 +61,7 @@ def logTemp():
     max_temp_time = currTime.strftime("%H:%M:%S")
   else:
     max_temp = tempreport.readCSVLine('data/temp-records.csv', 2, 'keyword', 'max', 'float')
-    max_temp_time = tempreport.readCSVLine('data/temp-records.csv', 3, 'keyword', 'max', '')
+    max_temp_time = tempreport.readCSVLine('data/temp-records.csv', 3, 'keyword', 'max')
 
   if float(temp) < float(min_temp):
     print('Set new min temperature\n')
@@ -69,7 +69,7 @@ def logTemp():
     min_temp_time = currTime.strftime("%H:%M:%S")
   else:
     min_temp = tempreport.readCSVLine('data/temp-records.csv', 2, 'keyword', 'min', 'float')
-    min_temp_time = tempreport.readCSVLine('data/temp-records.csv', 3, 'keyword', 'min', '')
+    min_temp_time = tempreport.readCSVLine('data/temp-records.csv', 3, 'keyword', 'min')
 
   changes = [
     ['Temp-report report file:'],
