@@ -3,7 +3,7 @@
 import os, datetime, time, csv
 
 def checkLineCount(filePath, lineCount):
-  if lineCount == len(open(filePath).readlines(  )):
+  if lineCount >= len(open(filePath).readlines(  )):
     return True
   else:
     return False
