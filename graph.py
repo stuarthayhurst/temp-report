@@ -46,7 +46,7 @@ def readValues(reading_count, x=[], y=[]):
     y.clear()
     log_dt_format = '%a %b %d %H:%M:%S %Y'
     dt_format = '%Y/%m/%d-%H:%M'
-    from_dt, to_dt = '2019/04/10-00:00', '2019/04/11-23:59'
+    from_dt, to_dt = '2019/03/30-00:00', '2019/03/30-23:59'
     from_dt = datetime.datetime.strptime(from_dt, dt_format)
     to_dt = datetime.datetime.strptime(to_dt, dt_format)
     with open('temps.log', 'r') as f:
