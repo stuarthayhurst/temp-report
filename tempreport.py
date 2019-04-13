@@ -23,7 +23,7 @@ def readCSVLine(filename, position, mode, line):
   if mode == 'numbered':
     with open(filename, 'r') as f:
       reader = csv.reader(f)
-      for i in range(line):
+      for i in range(line - 1):
           next(reader)
       row = next(reader)
       return row[position]
