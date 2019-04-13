@@ -35,10 +35,10 @@ def updateSender():
   global password
   global email_sender_name
   try:
-    with open('data/sender.csv') as csv_file:
-      csv_reader = csv.reader(csv_file, delimiter=',')
+    with open('data/sender.csv') as f:
+      reader = csv.reader(f, delimiter=',')
       line_count = 0
-      for row in csv_reader:
+      for row in reader:
           if line_count == 0:
               line_count += 1
           elif line_count == 1:
@@ -168,9 +168,8 @@ def updateTemperature():
 
 def updateMessage():
   #Reads the image
-  fp = open('graph.png', 'rb')
-  html_image = MIMEImage(fp.read())
-  fp.close()
+  with open('graph.png', 'rb') as fp:
+    html_image = MIMEImage(fp.read())
 
   #Updates the message to be sent
   global msg

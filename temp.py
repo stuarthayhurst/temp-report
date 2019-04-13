@@ -52,10 +52,10 @@ def connectToServer():
 
 def updateRecipients():
   try:
-    with open('data/addresses.csv') as csv_file:
-      csv_reader = csv.reader(csv_file, delimiter=',')
+    with open('data/addresses.csv') as f:
+      reader = csv.reader(f, delimiter=',')
       line_count = 0
-      for row in csv_reader:
+      for row in reader:
           if line_count == 0:
               print('Addresses:')
               line_count += 1
@@ -76,10 +76,10 @@ def updateSender():
   global password
   global email_sender_name
   try:
-    with open('data/sender.csv') as csv_file:
-      csv_reader = csv.reader(csv_file, delimiter=',')
+    with open('data/sender.csv') as f:
+      reader = csv.reader(f, delimiter=',')
       line_count = 0
-      for row in csv_reader:
+      for row in reader:
           if line_count == 0:
               line_count += 1
           elif line_count == 1:
@@ -110,7 +110,7 @@ def changeSender(mode):
     f = open('data/sender.csv','w+')
     f.close()
     with open('data/sender.csv', 'a') as f:                                    
-      writer = csv.writer(f)
+      writer = csv.writer(f, lineterminator="\n")
       writer.writerows(changes)
     print('Done')
     changeSender('e')
@@ -136,29 +136,26 @@ def changeSender(mode):
     wFile = 0
 
   if wFile == 1:
-    with open('data/sender.csv', 'r') as csv_file:
-      r = csv.reader(csv_file)
+    with open('data/sender.csv', 'r') as f:
+      reader = csv.reader(f)
       for i in range(removeLineNumber):
-          next(r)
-      row = next(r)
+          next(reader)
+      row = next(reader)
       removeLine = row[0]
 
-    f = open('data/sender.csv','r')
-    lines = f.readlines()
-    f.close()
-    f = open('data/sender.csv','w')
-    for line in lines:
-      if line == removeLine + '\n':
-        f.write(credential + '\n')
-      else:
-        f.write(line)
-    f.close()
+    with open('data/sender.csv','r') as f:
+      lines = f.readlines()
+    with open('data/sender.csv','w') as f:
+      for line in lines:
+        if line == removeLine + '\n':
+          f.write(credential + '\n')
+        else:
+          f.write(line)
 
 def updateMessage():
   #Reads the image
-  fp = open('graph.png', 'rb')
-  html_image = MIMEImage(fp.read())
-  fp.close()
+  with open('graph.png', 'rb') as fp:
+    html_image = MIMEImage(fp.read())
 
   #Updates the message to be sent
   global msg

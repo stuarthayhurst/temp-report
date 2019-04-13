@@ -12,16 +12,16 @@ def readCSVLine(filename, position, mode, line):
   if str(os.path.isfile(filename)) == 'False':
     return
   if mode == 'numbered':
-    with open(filename, 'r') as csv_file:
-      csv_reader = csv.reader(csv_file)
+    with open(filename, 'r') as f:
+      reader = csv.reader(f)
       for i in range(line):
-          next(csv_reader)
-      row = next(csv_reader)
+          next(reader)
+      row = next(reader)
       return row[position]
   elif mode == 'keyword':
-    with open(filename) as csv_file:
-      csv_reader = csv.reader(csv_file, delimiter=',')
-      for row in csv_reader:
+    with open(filename) as f:
+      reader = csv.reader(f, delimiter=',')
+      for row in reader:
         if row[0] == line:
           return row[position]
   else:
@@ -44,7 +44,7 @@ def writeConfig(mode):
     f = open('data/config.csv','w+')
     f.close()
     with open('data/config.csv', 'a') as f:                                    
-      writer = csv.writer(f)
+      writer = csv.writer(f, lineterminator="\n")
       writer.writerows(changes)
     print('Generated new config\n')
     return
@@ -54,9 +54,9 @@ def writeConfig(mode):
     for count in range(1, len(changes)):
       searchLine = changes[count][0]
       success = 0
-      with open('data/config.csv') as csv_file:
-        csv_reader = csv.reader(csv_file, delimiter=',')
-        for row in csv_reader:
+      with open('data/config.csv') as f:
+        reader = csv.reader(f, delimiter=',')
+        for row in reader:
           if row[0] == 'config':
             config_count = 0
           elif row[0] == searchLine:
@@ -66,16 +66,16 @@ def writeConfig(mode):
           print(changes[count][1])
           remove_count += 1
           with open('data/config.csv', 'a') as f:
-            writer = csv.writer(f)
+            writer = csv.writer(f, lineterminator="\n")
             config_add=[searchLine, changes[count][1]]
             writer.writerow(config_add)
         else:
           success = 0
 
-    with open('data/config.csv') as csv_file:
-      csv_reader = csv.reader(csv_file, delimiter=',')
+    with open('data/config.csv') as f:
+      reader = csv.reader(f, delimiter=',')
       line_count = 0
-      for row in csv_reader:
+      for row in reader:
           if row[0] == 'config':
               config_count  = 0
           else:
@@ -91,15 +91,12 @@ def writeConfig(mode):
                 removeLine = removeLine.replace("]", '')
                 removeLine = removeLine.replace("'", '')
                 removeLine = removeLine.replace(", ", ',')
-                f = open('data/config.csv','r')
-                lines = f.readlines()
-                f.close()
-                f = open('data/config.csv','w')
-                for line in lines:
-                  if line != removeLine + '\n':
-                    f.write(line)
-                f.close()
-
+                with open('data/config.csv','r') as f:
+                  lines = f.readlines()
+                with open('data/config.csv','w') as f:
+                  for line in lines:
+                    if line != removeLine + '\n':
+                      f.write(line)
               if success == 1:
                 success = 0
       print(f'\nRemoved {remove_count} config lines, added {add_count} config lines')
