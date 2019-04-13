@@ -21,9 +21,9 @@ def updateConfig():
     time.sleep(2)
 
   global delay
-  delay = int(tempreport.readCSVLine('data/config.csv', 1, 'keyword', 'delay'))
+  delay = tempreport.readCSVLine('data/config.csv', 1, 'keyword', 'delay', 'int')
   global graph_point_count
-  graph_point_count = int(tempreport.readCSVLine('data/config.csv', 1, 'keyword', 'graph_point_count'))
+  graph_point_count = tempreport.readCSVLine('data/config.csv', 1, 'keyword', 'graph_point_count', 'int')
 
   if delay == None:
     print('Errors occured while reading config values, attempting to fix config file:')
@@ -72,14 +72,14 @@ def updateRecords():
 
   currTime = datetime.datetime.now()
 
-  max_temp = tempreport.readCSVLine('data/temp-records.csv', 1, 'keyword', 'max')
+  max_temp = tempreport.readCSVLine('data/temp-records.csv', 1, 'keyword', 'max', 'float')
   max_temp_time = tempreport.readCSVLine('data/temp-records.csv', 2, 'keyword', 'max')
   if float(temp) > float(max_temp):
     print('Current temp was higher than recorded max temp, updating locally\n')
     max_temp = temp
     max_temp_time = currTime.strftime("%H:%M:%S")
 
-  min_temp = tempreport.readCSVLine('data/temp-records.csv', 1, 'keyword', 'min')
+  min_temp = tempreport.readCSVLine('data/temp-records.csv', 1, 'keyword', 'min', 'float')
   min_temp_time = tempreport.readCSVLine('data/temp-records.csv', 2, 'keyword', 'min')
   if float(temp) < float(min_temp):
     print('Current temp was lower than recorded min temp, updating locally\n')

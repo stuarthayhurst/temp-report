@@ -12,9 +12,9 @@ sensor = W1ThermSensor()
 def updateConfig():
 
   global delay
-  delay = int(tempreport.readCSVLine('data/config.csv', 1, 'keyword', 'delay'))
+  delay = tempreport.readCSVLine('data/config.csv', 1, 'keyword', 'delay', 'int')
   global record_reset
-  record_reset = int(tempreport.readCSVLine('data/config.csv', 1, 'keyword', 'record_reset')) * 3600
+  record_reset = tempreport.readCSVLine('data/config.csv', 1, 'keyword', 'record_reset', 'int') * 3600
 
   if delay == None:
     print('Errors occured while reading config values, attempting to fix config file:')
@@ -60,7 +60,7 @@ def logTemp():
     max_temp = temp
     max_temp_time = currTime.strftime("%H:%M:%S")
   else:
-    max_temp = tempreport.readCSVLine('data/temp-records.csv', 1, 'keyword', 'max')
+    max_temp = tempreport.readCSVLine('data/temp-records.csv', 1, 'keyword', 'max', 'float')
     max_temp_time = tempreport.readCSVLine('data/temp-records.csv', 2, 'keyword', 'max')
 
   if float(temp) < float(min_temp):
@@ -68,7 +68,7 @@ def logTemp():
     min_temp = temp
     min_temp_time = currTime.strftime("%H:%M:%S")
   else:
-    min_temp = tempreport.readCSVLine('data/temp-records.csv', 1, 'keyword', 'min')
+    min_temp = tempreport.readCSVLine('data/temp-records.csv', 1, 'keyword', 'min', 'float')
     min_temp_time = tempreport.readCSVLine('data/temp-records.csv', 2, 'keyword', 'min')
 
   changes = [
