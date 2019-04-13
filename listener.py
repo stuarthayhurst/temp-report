@@ -19,6 +19,7 @@ def updateConfig():
   while str(os.path.isfile('data/config.csv')) == 'False':
     print('No config found')
     time.sleep(2)
+
   global delay
   delay = int(tempreport.readCSVLine('data/config.csv', 1, 'keyword', 'delay'))
   global graph_point_count

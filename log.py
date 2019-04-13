@@ -10,25 +10,17 @@ min_temp_time = 0
 sensor = W1ThermSensor()
 
 def updateConfig():
-  with open('data/config.csv') as f:
-    reader = csv.reader(f, delimiter=',')
-    config_count = 0
-    line_count = 0
-    for row in reader:
-        if line_count == 0:
-          print('Reading config')
-          line_count += 1
-        else:
-          if row[0] == 'delay':
-            global delay
-            delay = int(row[1])
-            config_count += 1
-          elif row[0] == 'record_reset':
-            global record_reset
-            record_reset = int(row[1])
-            record_reset = record_reset * 3600
-            config_count += 1
-    print(f'Processed {config_count} config options, {line_count} lines\n')
+
+  global delay
+  delay = int(tempreport.readCSVLine('data/config.csv', 1, 'keyword', 'delay'))
+  global record_reset
+  record_reset = int(tempreport.readCSVLine('data/config.csv', 1, 'keyword', 'record_reset')) * 3600
+
+  if delay == None:
+    print('Errors occured while reading config values, attempting to fix config file:')
+    tempreport.writeConfig('s')
+    print('Done')
+    updateConfig()
 
 def logTemp():
   global temp

@@ -33,7 +33,7 @@ def updateConfig():
   global graph_point_count
   graph_point_count = int(tempreport.readCSVLine('data/config.csv', 1, 'keyword', 'graph_point_count'))
   global record_reset
-  record_reset = int(tempreport.readCSVLine('data/config.csv', 1, 'keyword', 'record_reset'))
+  record_reset = int(tempreport.readCSVLine('data/config.csv', 1, 'keyword', 'record_reset')) * 3600
 
   if delay == None:
     print('Errors occured while reading config values, attempting to fix config file:')
