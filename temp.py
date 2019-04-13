@@ -1,7 +1,7 @@
 import smtplib, datetime, time, csv, sys, os
 import tempreport
 import graph
-from w1thermsensor import W1ThermSensor
+#from w1thermsensor import W1ThermSensor
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.image import MIMEImage
@@ -17,7 +17,7 @@ max_temp = -100.0
 min_temp = 999.9
 max_temp_time = 0
 min_temp_time = 0
-sensor = W1ThermSensor()
+#sensor = W1ThermSensor()
 
 #See data/config.csv for a config file. Use python3 temp.py -c to generate a new one
 
@@ -231,7 +231,7 @@ def measureTemp():
   #Measures the temperature
   global temp
   print('Reading temperature:')
-  temp = float(sensor.get_temperature())
+  temp = 30.0#float(sensor.get_temperature())
   currTime = datetime.datetime.now()
   print('The temperature is ' + str(temp) + '°C at ' + str(currTime.strftime("%H:%M:%S")) + '\n')
 
@@ -249,14 +249,14 @@ def readRecords():
   currTime = datetime.datetime.now()
 
   max_temp = tempreport.readCSVLine('data/temp-records.csv', 1, 'keyword', 'max', 'float')
-  max_temp_time = tempreport.readCSVLine('data/temp-records.csv', 2, 'keyword', 'max')
+  max_temp_time = tempreport.readCSVLine('data/temp-records.csv', 2, 'keyword', 'max', '')
   if float(temp) > float(max_temp):
     print('Current temp was higher than recorded max temp, updating locally\n')
     max_temp = temp
     max_temp_time = currTime.strftime("%H:%M:%S")
 
   min_temp = tempreport.readCSVLine('data/temp-records.csv', 1, 'keyword', 'min', 'float')
-  min_temp_time = tempreport.readCSVLine('data/temp-records.csv', 2, 'keyword', 'min')
+  min_temp_time = tempreport.readCSVLine('data/temp-records.csv', 2, 'keyword', 'min', '')
   if float(temp) < float(min_temp):
     print('Current temp was lower than recorded min temp, updating locally\n')
     min_temp = temp
