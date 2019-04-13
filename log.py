@@ -84,7 +84,7 @@ def logTemp():
   if str(os.path.isfile('./temps.log')) == 'False':
     print('No log found, creating one:')
     changes = [
-      [''],
+      ['Temp-report logfile:'],
       ]
     f = open('temps.log','w+')
     f.close()
