@@ -1,5 +1,5 @@
 __pycache__/
-temps.log
+temps.log*
 graph.png
 
 temp-records.csv
