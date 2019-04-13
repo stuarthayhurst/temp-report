@@ -20,6 +20,8 @@ def checkLineCount(filePath, lineCount):
 def readCSVLine(filename, position, mode, line, var_type):
   if str(os.path.isfile(filename)) == 'False':
     return
+  if position == 0:
+    return
   try:
     if mode == 'numbered':
       with open(filename, 'r') as f:
@@ -27,13 +29,13 @@ def readCSVLine(filename, position, mode, line, var_type):
         for i in range(line - 1):
             next(reader)
         row = next(reader)
-        value = row[position]
+        value = row[position - 1]
     elif mode == 'keyword':
       with open(filename) as f:
         reader = csv.reader(f, delimiter=',')
         for row in reader:
           if row[0] == line:
-            value = row[position]
+            value = row[position - 1]
     else:
       return
     if var_type == 'str':
