@@ -7,6 +7,7 @@ from scipy.interpolate import make_interp_spline, BSpline
 import numpy as np
 import sys
 import re, datetime
+from itertools import dropwhile, takewhile
 
 def generateGraph(reading_count):
     x, y  = readValues(reading_count)
@@ -44,16 +45,24 @@ def drawGraph(x,y):
 def readValues(reading_count, x=[], y=[]):
     x.clear()
     y.clear()
+    dt_format = '%a %b %d %H:%M:%S %Y'
+    from_dt, to_dt = 'Tue Apr  10 00:00:00 2019', 'Tue Apr  10 23:59:59 2019'
+    from_dt = datetime.datetime.strptime(from_dt, dt_format)
+    to_dt = datetime.datetime.strptime(to_dt, dt_format)
+    from_dt = mdates.date2num(from_dt)
+    to_dt = mdates.date2num(to_dt)
+    print(from_dt, to_dt)
     with open('temps.log', 'r') as f:
         try:
-            taildata = f.readlines() [-reading_count:]
+            #taildata = f.readlines() [-reading_count:]
+            taildata = takewhile(lambda L: L <= to_dt, dropwhile(lambda L: L <= from_dt, f))
         except IndexError:
             return ['', '']
         for line in taildata:
             data = re.split("\[(.*?)\]", line)
             temp = re.findall("\d+\.\d+", data[2]) 
             temp = float(temp[0])
-            dt = datetime.datetime.strptime(data[1], "%a %b %d %H:%M:%S %Y")
+            dt = datetime.datetime.strptime(data[1], dt_format)
             x.append(dt)
             y.append(temp)
         return x,y
