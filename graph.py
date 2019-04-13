@@ -41,17 +41,27 @@ def drawGraph(x,y):
     print('Created graph\n')
     plt.clf()
 
-def readValues(reading_count, x=[], y=[]):
+def readValues(*args, **kwargs):
+    #for key, value in kwargs.items(): 
+        #print ("%s == %s" %(key, value))
+    print(reading_count)
+    if kwargs['from_date']: from_date = kwargs.get('from_date')
+    if kwargs['to_date']: to_date = kwargs.get('to_date')
+
+    x=[]
+    y=[]
     x.clear()
     y.clear()
     log_dt_format = '%a %b %d %H:%M:%S %Y'
     dt_format = '%Y/%m/%d-%H:%M'
-    from_dt, to_dt = '2019/03/30-00:00', '2019/04/05-23:59'
-    from_dt = datetime.datetime.strptime(from_dt, dt_format)
-    to_dt = datetime.datetime.strptime(to_dt, dt_format)
+    #from_dt, to_dt = '2019/03/30-00:00', '2019/04/05-23:59'
+    print(from_date, to_date)
+    from_dt = datetime.datetime.strptime(from_date, dt_format)
+    to_dt = datetime.datetime.strptime(to_date, dt_format)
     with open('temps.log', 'r') as f:
         for line in f:
             data = re.split("\[(.*?)\]", line)
+            if len(data) !=3: continue #ignore lines that don't have 3 elements
             temp = re.findall("\d+\.\d+", data[2]) 
             temp = float(temp[0])
             dt = datetime.datetime.strptime(data[1], log_dt_format)
@@ -71,6 +81,7 @@ if __name__ == '__main__':
     except ValueError:
         print('Needs to be an integer')
         sys.exit(1)
-
-    x, y  = readValues(reading_count)
+    kwargs={'from_date' : '2019/03/27-00:00', 'to_date' : '2019/03/30-00:00' }
+    args={reading_count}
+    x, y  = readValues(*args, **kwargs) 
     drawGraph(x,y)
