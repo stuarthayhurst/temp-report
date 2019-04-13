@@ -1,7 +1,7 @@
 import smtplib, datetime, time, csv, sys, os
 import tempreport
 import graph
-from w1thermsensor import W1ThermSensor
+#from w1thermsensor import W1ThermSensor
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.image import MIMEImage
@@ -17,7 +17,7 @@ max_temp = -100.0
 min_temp = 999.9
 max_temp_time = 0
 min_temp_time = 0
-sensor = W1ThermSensor()
+#sensor = W1ThermSensor()
 
 #See data/config.csv for a config file. Use python3 temp.py -c to generate a new one
 
@@ -40,6 +40,7 @@ def updateConfig():
     tempreport.writeConfig('s')
     print('Done')
     updateConfig()
+  print('Read config values')
 
 def connectToServer():
   #Connects to gmail's servers
@@ -51,6 +52,20 @@ def connectToServer():
   print('Logged in successfully as ' + email_sender + '\n')
 
 def updateRecipients():
+  if str(os.path.isfile('data/addresses.csv')) == 'False':
+    print('\nNo address file found, starting address editor: \n')
+    import data_edit
+  print('Addresses:')
+  line_count = tempreport.getLineCount('data/addresses.csv')
+  for line in range(2, line_count + 1):
+    if line == 2:
+      email_recipients[0] = (str(tempreport.readCSVLine('data/addresses.csv', 0, 'numbered', line)))
+      print(email_recipients[0])
+    else:
+      email_recipients.append(str(tempreport.readCSVLine('data/addresses.csv', 0, 'numbered', line)))
+      print(email_recipients[line - 2])
+
+def updateRecipientsLegacy():
   try:
     with open('data/addresses.csv') as f:
       reader = csv.reader(f, delimiter=',')
@@ -94,7 +109,7 @@ def updateSender():
               #Sender name
               email_sender_name = str(row[0])
               line_count += 1
-      print(f'Using CSV for credentials, processed {line_count - 1} credentials, {line_count} lines\n')
+      print(f'\nProcessed {line_count - 1} credentials, {line_count} lines\n')
   except FileNotFoundError:
     changeSender('e')
 
@@ -191,13 +206,12 @@ def sendMessage():
         error = 0
         server.sendmail(email_sender, email_recipients[x], msg.as_string())
       except:
-        print('There was an error while sending the message')
+        print('There was an error while sending the message to ' + email_recipients[x])
         error = 1
       if error == 0:
-        print('Message sent')
+        print('Email sent to ' + str(email_recipients[x]))
       else:
         error == 0
-      print('Email sent to ' + str(email_recipients[x]))
     print('Sent email to ' + str(len(email_recipients)) + ' addresses')
     print('Email was last sent ' + str(email_time_diff) + ' seconds ago')
     last_email_time = currTime
@@ -217,7 +231,7 @@ def measureTemp():
   #Measures the temperature
   global temp
   print('Reading temperature:')
-  temp = float(sensor.get_temperature())
+  temp = 30.0#float(sensor.get_temperature())
   currTime = datetime.datetime.now()
   print('The temperature is ' + str(temp) + '°C at ' + str(currTime.strftime("%H:%M:%S")) + '\n')
 
