@@ -44,6 +44,7 @@ def drawGraph(x,y):
 def readValues(reading_count, x=[], y=[]):
     x.clear()
     y.clear()
+    dt_format = '%a %b %d %H:%M:%S %Y'
     with open('temps.log', 'r') as f:
         try:
             taildata = f.readlines() [-reading_count:]
@@ -53,7 +54,7 @@ def readValues(reading_count, x=[], y=[]):
             data = re.split("\[(.*?)\]", line)
             temp = re.findall("\d+\.\d+", data[2]) 
             temp = float(temp[0])
-            dt = datetime.datetime.strptime(data[1], "%a %b %d %H:%M:%S %Y")
+            dt = datetime.datetime.strptime(data[1], dt_format)
             x.append(dt)
             y.append(temp)
         return x,y
