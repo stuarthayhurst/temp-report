@@ -33,31 +33,14 @@ def updateConfig():
   print('Read config values')
 
 def updateSender():
+  global email_sender_name
   global email_sender
   global password
-  global email_sender_name
-  try:
-    with open('data/sender.csv') as f:
-      reader = csv.reader(f, delimiter=',')
-      line_count = 0
-      for row in reader:
-          if line_count == 0:
-              line_count += 1
-          elif line_count == 1:
-              #Sender email
-              email_sender = str(row[0])
-              line_count += 1
-          elif line_count == 2:
-              #Sender password
-              password = str(row[0])
-              line_count += 1
-          elif line_count == 3:
-              #Sender name
-              email_sender_name = str(row[0])
-              line_count += 1
-      print(f'Using CSV for credentials, processed {line_count - 1} credentials, {line_count} lines')
-  except FileNotFoundError:
-    print('Sender credentials file not found')
+  if str(os.path.isfile('data/sender.csv')) == 'False':
+    changeSender('e')
+  email_sender = tempreport.readCSVLine('data/sender.csv', 0, 'numbered', 2, 'str')
+  password = tempreport.readCSVLine('data/sender.csv', 0, 'numbered', 3, 'str')
+  email_sender_name = tempreport.readCSVLine('data/sender.csv', 0, 'numbered', 4, 'str')
 
 def updateRecords():
   global temp
