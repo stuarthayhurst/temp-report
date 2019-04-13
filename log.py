@@ -10,11 +10,11 @@ min_temp_time = 0
 sensor = W1ThermSensor()
 
 def updateConfig():
-  with open('data/config.csv') as csv_file:
-    csv_reader = csv.reader(csv_file, delimiter=',')
+  with open('data/config.csv') as f:
+    reader = csv.reader(f, delimiter=',')
     config_count = 0
     line_count = 0
-    for row in csv_reader:
+    for row in reader:
         if line_count == 0:
           print('Reading config')
           line_count += 1
@@ -49,7 +49,7 @@ def logTemp():
     f = open('data/temp-records.csv','w+')
     f.close()
     with open('data/temp-records.csv', 'a') as f:
-      writer = csv.writer(f)
+      writer = csv.writer(f, lineterminator="\n")
       writer.writerows(changes)
     print('Report file created\n')
 
@@ -85,7 +85,7 @@ def logTemp():
     ]
 
   with open('data/temp-records.csv', 'w') as f:
-      writer = csv.writer(f)
+      writer = csv.writer(f, lineterminator="\n")
       writer.writerows(changes)
 
   if str(os.path.isfile('./temps.log')) == 'False':
@@ -96,7 +96,7 @@ def logTemp():
     f = open('temps.log','w+')
     f.close()
     with open('temps.log', 'a') as f:                                    
-      writer = csv.writer(f)
+      writer = csv.writer(f, lineterminator="\n")
       writer.writerows(changes)
     print('Log created\n')
   
@@ -105,7 +105,7 @@ def logTemp():
     [logLine],                                      
     ]
   with open('temps.log', 'a') as f:                                    
-    writer = csv.writer(f)
+    writer = csv.writer(f, lineterminator="\n")
     writer.writerows(changes)
 
 
