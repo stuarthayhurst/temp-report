@@ -21,6 +21,7 @@ def updateConfig():
     tempreport.writeConfig('s')
     print('Done')
     updateConfig()
+  print('Read config values')
 
 def logTemp():
   global temp

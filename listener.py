@@ -30,6 +30,7 @@ def updateConfig():
     tempreport.writeConfig('s')
     print('Done')
     updateConfig()
+  print('Read config values')
 
 def updateSender():
   global email_sender
