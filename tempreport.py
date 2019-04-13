@@ -6,7 +6,7 @@ def getLineCount(filePath):
   if str(os.path.isfile(filePath)) == 'False':
     return False
   else:
-  lineCount = len(open(filePath).readlines(  ))
+    lineCount = len(open(filePath).readlines(  ))
     return lineCount
 
 def checkLineCount(filePath, lineCount):
