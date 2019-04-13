@@ -54,7 +54,7 @@ def connectToServer():
 def updateRecipients():
   if str(os.path.isfile('data/addresses.csv')) == 'False':
     print('\nNo address file found, starting address editor: \n')
-    import data_edit
+    tempreport.dataEdit()
   print('Addresses:')
   line_count = tempreport.getLineCount('data/addresses.csv')
   for line in range(2, line_count + 1):
@@ -236,7 +236,7 @@ if sys.argv[1] == '-h' or sys.argv[1] == '--help':
   print('	-cs | --config-save    : Add missing config entries')
   exit()
 elif sys.argv[1] == '-a' or sys.argv[1] == '--address':
-  import data_edit
+  tempreport.dataEdit()
   exit()
 elif sys.argv[1] == '-p' or sys.argv[1] == '--password':
   changeSender('p')
