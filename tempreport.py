@@ -17,7 +17,7 @@ def checkLineCount(filePath, lineCount):
   else:
     return False
 
-def readCSVLine(filename, position, mode, line):
+def readCSVLine(filename, position, mode, line, var_type):
   if str(os.path.isfile(filename)) == 'False':
     return
   if mode == 'numbered':
@@ -26,15 +26,23 @@ def readCSVLine(filename, position, mode, line):
       for i in range(line - 1):
           next(reader)
       row = next(reader)
-      return row[position]
+      value = row[position]
   elif mode == 'keyword':
     with open(filename) as f:
       reader = csv.reader(f, delimiter=',')
       for row in reader:
         if row[0] == line:
-          return row[position]
+          value = row[position]
   else:
     return
+  if var_type == 'str':
+    return str(value)
+  elif var_type == 'int':
+    return int(value)
+  elif var_type == 'float':
+    return float(value)
+  else:
+    return value
 
 def writeConfig(mode):
   changes = [
