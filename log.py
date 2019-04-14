@@ -10,25 +10,18 @@ min_temp_time = 0
 sensor = W1ThermSensor()
 
 def updateConfig():
-  with open('data/config.csv') as csv_file:
-    csv_reader = csv.reader(csv_file, delimiter=',')
-    config_count = 0
-    line_count = 0
-    for row in csv_reader:
-        if line_count == 0:
-          print('Reading config')
-          line_count += 1
-        else:
-          if row[0] == 'delay':
-            global delay
-            delay = int(row[1])
-            config_count += 1
-          elif row[0] == 'record_reset':
-            global record_reset
-            record_reset = int(row[1])
-            record_reset = record_reset * 3600
-            config_count += 1
-    print(f'Processed {config_count} config options, {line_count} lines\n')
+
+  global delay
+  delay = tempreport.readCSVLine('data/config.csv', 2, 'keyword', 'delay', 'int')
+  global record_reset
+  record_reset = tempreport.readCSVLine('data/config.csv', 2, 'keyword', 'record_reset', 'int') * 3600
+
+  if delay == None:
+    print('Errors occured while reading config values, attempting to fix config file:')
+    tempreport.writeConfig('s')
+    print('Done')
+    updateConfig()
+  print('Read config values')
 
 def logTemp():
   global temp
@@ -49,7 +42,7 @@ def logTemp():
     f = open('data/temp-records.csv','w+')
     f.close()
     with open('data/temp-records.csv', 'a') as f:
-      writer = csv.writer(f)
+      writer = csv.writer(f, lineterminator="\n")
       writer.writerows(changes)
     print('Report file created\n')
 
@@ -67,16 +60,16 @@ def logTemp():
     max_temp = temp
     max_temp_time = currTime.strftime("%H:%M:%S")
   else:
-    max_temp = tempreport.readCSVLine('data/temp-records.csv', 1, 'keyword', 'max')
-    max_temp_time = tempreport.readCSVLine('data/temp-records.csv', 2, 'keyword', 'max')
+    max_temp = tempreport.readCSVLine('data/temp-records.csv', 2, 'keyword', 'max', 'float')
+    max_temp_time = tempreport.readCSVLine('data/temp-records.csv', 3, 'keyword', 'max')
 
   if float(temp) < float(min_temp):
     print('Set new min temperature\n')
     min_temp = temp
     min_temp_time = currTime.strftime("%H:%M:%S")
   else:
-    min_temp = tempreport.readCSVLine('data/temp-records.csv', 1, 'keyword', 'min')
-    min_temp_time = tempreport.readCSVLine('data/temp-records.csv', 2, 'keyword', 'min')
+    min_temp = tempreport.readCSVLine('data/temp-records.csv', 2, 'keyword', 'min', 'float')
+    min_temp_time = tempreport.readCSVLine('data/temp-records.csv', 3, 'keyword', 'min')
 
   changes = [
     ['Temp-report report file:'],
@@ -85,7 +78,7 @@ def logTemp():
     ]
 
   with open('data/temp-records.csv', 'w') as f:
-      writer = csv.writer(f)
+      writer = csv.writer(f, lineterminator="\n")
       writer.writerows(changes)
 
   if str(os.path.isfile('./temps.log')) == 'False':
@@ -96,7 +89,7 @@ def logTemp():
     f = open('temps.log','w+')
     f.close()
     with open('temps.log', 'a') as f:                                    
-      writer = csv.writer(f)
+      writer = csv.writer(f, lineterminator="\n")
       writer.writerows(changes)
     print('Log created\n')
   
@@ -105,7 +98,7 @@ def logTemp():
     [logLine],                                      
     ]
   with open('temps.log', 'a') as f:                                    
-    writer = csv.writer(f)
+    writer = csv.writer(f, lineterminator="\n")
     writer.writerows(changes)
 
 

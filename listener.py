@@ -19,43 +19,28 @@ def updateConfig():
   while str(os.path.isfile('data/config.csv')) == 'False':
     print('No config found')
     time.sleep(2)
+
   global delay
-  delay = int(tempreport.readCSVLine('data/config.csv', 1, 'keyword', 'delay'))
+  delay = tempreport.readCSVLine('data/config.csv', 2, 'keyword', 'delay', 'int')
   global graph_point_count
-  graph_point_count = int(tempreport.readCSVLine('data/config.csv', 1, 'keyword', 'graph_point_count'))
+  graph_point_count = tempreport.readCSVLine('data/config.csv', 2, 'keyword', 'graph_point_count', 'int')
 
   if delay == None:
     print('Errors occured while reading config values, attempting to fix config file:')
     tempreport.writeConfig('s')
     print('Done')
     updateConfig()
+  print('Read config values')
 
 def updateSender():
+  global email_sender_name
   global email_sender
   global password
-  global email_sender_name
-  try:
-    with open('data/sender.csv') as csv_file:
-      csv_reader = csv.reader(csv_file, delimiter=',')
-      line_count = 0
-      for row in csv_reader:
-          if line_count == 0:
-              line_count += 1
-          elif line_count == 1:
-              #Sender email
-              email_sender = str(row[0])
-              line_count += 1
-          elif line_count == 2:
-              #Sender password
-              password = str(row[0])
-              line_count += 1
-          elif line_count == 3:
-              #Sender name
-              email_sender_name = str(row[0])
-              line_count += 1
-      print(f'Using CSV for credentials, processed {line_count - 1} credentials, {line_count} lines')
-  except FileNotFoundError:
-    print('Sender credentials file not found')
+  if str(os.path.isfile('data/sender.csv')) == 'False':
+    changeSender('e')
+  email_sender      = tempreport.readCSVLine('data/sender.csv', 1, 'numbered', 2, 'str')
+  password          = tempreport.readCSVLine('data/sender.csv', 1, 'numbered', 3, 'str')
+  email_sender_name = tempreport.readCSVLine('data/sender.csv', 1, 'numbered', 4, 'str')
 
 def updateRecords():
   global temp
@@ -70,15 +55,15 @@ def updateRecords():
 
   currTime = datetime.datetime.now()
 
-  max_temp = tempreport.readCSVLine('data/temp-records.csv', 1, 'keyword', 'max')
-  max_temp_time = tempreport.readCSVLine('data/temp-records.csv', 2, 'keyword', 'max')
+  max_temp = tempreport.readCSVLine('data/temp-records.csv', 2, 'keyword', 'max', 'float')
+  max_temp_time = tempreport.readCSVLine('data/temp-records.csv', 3, 'keyword', 'max')
   if float(temp) > float(max_temp):
     print('Current temp was higher than recorded max temp, updating locally\n')
     max_temp = temp
     max_temp_time = currTime.strftime("%H:%M:%S")
 
-  min_temp = tempreport.readCSVLine('data/temp-records.csv', 1, 'keyword', 'min')
-  min_temp_time = tempreport.readCSVLine('data/temp-records.csv', 2, 'keyword', 'min')
+  min_temp = tempreport.readCSVLine('data/temp-records.csv', 2, 'keyword', 'min', 'float')
+  min_temp_time = tempreport.readCSVLine('data/temp-records.csv', 3, 'keyword', 'min')
   if float(temp) < float(min_temp):
     print('Current temp was lower than recorded min temp, updating locally\n')
     min_temp = temp
@@ -168,9 +153,8 @@ def updateTemperature():
 
 def updateMessage():
   #Reads the image
-  fp = open('graph.png', 'rb')
-  html_image = MIMEImage(fp.read())
-  fp.close()
+  with open('graph.png', 'rb') as fp:
+    html_image = MIMEImage(fp.read())
 
   #Updates the message to be sent
   global msg

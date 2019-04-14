@@ -23,23 +23,24 @@ sensor = W1ThermSensor()
 
 def updateConfig():
   global delay
-  delay = int(tempreport.readCSVLine('data/config.csv', 1, 'keyword', 'delay'))
+  delay = tempreport.readCSVLine('data/config.csv', 2, 'keyword', 'delay', 'int')
   global gap
-  gap = int(tempreport.readCSVLine('data/config.csv', 1, 'keyword', 'gap'))
+  gap = tempreport.readCSVLine('data/config.csv', 2, 'keyword', 'gap', 'int')
   global threshold_max
-  threshold_max = float(tempreport.readCSVLine('data/config.csv', 1, 'keyword', 'threshold_max'))
+  threshold_max = tempreport.readCSVLine('data/config.csv', 2, 'keyword', 'threshold_max', 'float')
   global threshold_min
-  threshold_min = float(tempreport.readCSVLine('data/config.csv', 1, 'keyword', 'threshold_min'))
+  threshold_min = tempreport.readCSVLine('data/config.csv', 2, 'keyword', 'threshold_min', 'float')
   global graph_point_count
-  graph_point_count = int(tempreport.readCSVLine('data/config.csv', 1, 'keyword', 'graph_point_count'))
+  graph_point_count = tempreport.readCSVLine('data/config.csv', 2, 'keyword', 'graph_point_count', 'int')
   global record_reset
-  record_reset = int(tempreport.readCSVLine('data/config.csv', 1, 'keyword', 'record_reset'))
+  record_reset = tempreport.readCSVLine('data/config.csv', 2, 'keyword', 'record_reset', 'int') * 3600
 
   if delay == None:
     print('Errors occured while reading config values, attempting to fix config file:')
     tempreport.writeConfig('s')
     print('Done')
     updateConfig()
+  print('Read config values')
 
 def connectToServer():
   #Connects to gmail's servers
@@ -51,52 +52,28 @@ def connectToServer():
   print('Logged in successfully as ' + email_sender + '\n')
 
 def updateRecipients():
-  try:
-    with open('data/addresses.csv') as csv_file:
-      csv_reader = csv.reader(csv_file, delimiter=',')
-      line_count = 0
-      for row in csv_reader:
-          if line_count == 0:
-              print('Addresses:')
-              line_count += 1
-          else:
-              print(f'\t{row[0]}')
-              if len(email_recipients) + 1 == line_count:
-                email_recipients.append(str(row[0]))
-              else:
-                email_recipients[line_count - 1] = str(row[0])
-              line_count += 1
-    print(f'\nUsing CSV for recipient addresses, processed {line_count - 1} addresses, {line_count} lines')
-  except FileNotFoundError:
+  if str(os.path.isfile('data/addresses.csv')) == 'False':
     print('\nNo address file found, starting address editor: \n')
-    import data_edit
+    tempreport.dataEdit()
+  print('Addresses:')
+  line_count = tempreport.getLineCount('data/addresses.csv')
+  for line in range(2, line_count + 1):
+    if line == 2:
+      email_recipients[0] = (tempreport.readCSVLine('data/addresses.csv', 1, 'numbered', line, 'str'))
+      print(email_recipients[0])
+    else:
+      email_recipients.append(tempreport.readCSVLine('data/addresses.csv', 1, 'numbered', line, 'str'))
+      print(email_recipients[line - 2])
 
 def updateSender():
+  global email_sender_name
   global email_sender
   global password
-  global email_sender_name
-  try:
-    with open('data/sender.csv') as csv_file:
-      csv_reader = csv.reader(csv_file, delimiter=',')
-      line_count = 0
-      for row in csv_reader:
-          if line_count == 0:
-              line_count += 1
-          elif line_count == 1:
-              #Sender email
-              email_sender = str(row[0])
-              line_count += 1
-          elif line_count == 2:
-              #Sender password
-              password = str(row[0])
-              line_count += 1
-          elif line_count == 3:
-              #Sender name
-              email_sender_name = str(row[0])
-              line_count += 1
-      print(f'Using CSV for credentials, processed {line_count - 1} credentials, {line_count} lines\n')
-  except FileNotFoundError:
+  if str(os.path.isfile('data/sender.csv')) == 'False':
     changeSender('e')
+  email_sender      = tempreport.readCSVLine('data/sender.csv', 1, 'numbered', 2, 'str')
+  password          = tempreport.readCSVLine('data/sender.csv', 1, 'numbered', 3, 'str')
+  email_sender_name = tempreport.readCSVLine('data/sender.csv', 1, 'numbered', 4, 'str')
 
 def changeSender(mode):
   if str(os.path.isfile('data/sender.csv')) == 'False':
@@ -110,7 +87,7 @@ def changeSender(mode):
     f = open('data/sender.csv','w+')
     f.close()
     with open('data/sender.csv', 'a') as f:                                    
-      writer = csv.writer(f)
+      writer = csv.writer(f, lineterminator="\n")
       writer.writerows(changes)
     print('Done')
     changeSender('e')
@@ -136,29 +113,26 @@ def changeSender(mode):
     wFile = 0
 
   if wFile == 1:
-    with open('data/sender.csv', 'r') as csv_file:
-      r = csv.reader(csv_file)
+    with open('data/sender.csv', 'r') as f:
+      reader = csv.reader(f)
       for i in range(removeLineNumber):
-          next(r)
-      row = next(r)
+          next(reader)
+      row = next(reader)
       removeLine = row[0]
 
-    f = open('data/sender.csv','r')
-    lines = f.readlines()
-    f.close()
-    f = open('data/sender.csv','w')
-    for line in lines:
-      if line == removeLine + '\n':
-        f.write(credential + '\n')
-      else:
-        f.write(line)
-    f.close()
+    with open('data/sender.csv','r') as f:
+      lines = f.readlines()
+    with open('data/sender.csv','w') as f:
+      for line in lines:
+        if line == removeLine + '\n':
+          f.write(credential + '\n')
+        else:
+          f.write(line)
 
 def updateMessage():
   #Reads the image
-  fp = open('graph.png', 'rb')
-  html_image = MIMEImage(fp.read())
-  fp.close()
+  with open('graph.png', 'rb') as fp:
+    html_image = MIMEImage(fp.read())
 
   #Updates the message to be sent
   global msg
@@ -194,13 +168,12 @@ def sendMessage():
         error = 0
         server.sendmail(email_sender, email_recipients[x], msg.as_string())
       except:
-        print('There was an error while sending the message')
+        print('There was an error while sending the message to ' + email_recipients[x])
         error = 1
       if error == 0:
-        print('Message sent')
+        print('Email sent to ' + str(email_recipients[x]))
       else:
         error == 0
-      print('Email sent to ' + str(email_recipients[x]))
     print('Sent email to ' + str(len(email_recipients)) + ' addresses')
     print('Email was last sent ' + str(email_time_diff) + ' seconds ago')
     last_email_time = currTime
@@ -237,15 +210,15 @@ def readRecords():
 
   currTime = datetime.datetime.now()
 
-  max_temp = tempreport.readCSVLine('data/temp-records.csv', 1, 'keyword', 'max')
-  max_temp_time = tempreport.readCSVLine('data/temp-records.csv', 2, 'keyword', 'max')
+  max_temp = tempreport.readCSVLine('data/temp-records.csv', 2, 'keyword', 'max', 'float')
+  max_temp_time = tempreport.readCSVLine('data/temp-records.csv', 3, 'keyword', 'max')
   if float(temp) > float(max_temp):
     print('Current temp was higher than recorded max temp, updating locally\n')
     max_temp = temp
     max_temp_time = currTime.strftime("%H:%M:%S")
 
-  min_temp = tempreport.readCSVLine('data/temp-records.csv', 1, 'keyword', 'min')
-  min_temp_time = tempreport.readCSVLine('data/temp-records.csv', 2, 'keyword', 'min')
+  min_temp = tempreport.readCSVLine('data/temp-records.csv', 2, 'keyword', 'min', 'float')
+  min_temp_time = tempreport.readCSVLine('data/temp-records.csv', 3, 'keyword', 'min')
   if float(temp) < float(min_temp):
     print('Current temp was lower than recorded min temp, updating locally\n')
     min_temp = temp
@@ -263,7 +236,7 @@ if sys.argv[1] == '-h' or sys.argv[1] == '--help':
   print('	-cs | --config-save    : Add missing config entries')
   exit()
 elif sys.argv[1] == '-a' or sys.argv[1] == '--address':
-  import data_edit
+  tempreport.dataEdit()
   exit()
 elif sys.argv[1] == '-p' or sys.argv[1] == '--password':
   changeSender('p')

@@ -64,7 +64,6 @@ def readValues(*args, **kwargs):
         to_dt = datetime.datetime.strptime(to_date, dt_format)
         from_dt = datetime.datetime.strptime(from_date, dt_format)
         to_dt = datetime.datetime.strptime(to_date, dt_format)
-
     with open('temps.log', 'r') as f:
         if tailmode:
             taildata = f.readlines() [-reading_count:]
@@ -83,6 +82,7 @@ def readValues(*args, **kwargs):
                 if (dt >= from_dt) and (dt <= to_dt):
                     x.append(dt)
                     y.append(temp)
+
 
         return x,y
 
