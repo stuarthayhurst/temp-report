@@ -7,8 +7,8 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.image import MIMEImage
 
-keywords = ['Test', 'Latest', 'Last', 'Temp', 'Temperature']
-delay = 10
+keywords = ['test', 'latest', 'last', 'temp', 'temps' 'temperature', 'temperatures']
+poll_rate = 10
 max_temp = 0
 min_temp = 0
 max_temp_time = 0
@@ -25,7 +25,7 @@ def updateConfig():
   global graph_point_count
   graph_point_count = tempreport.readCSVLine('data/config.csv', 2, 'keyword', 'graph_point_count', 'int')
 
-  if delay == None:
+  if graph_point_count == None:
     print('Errors occured while reading config values, attempting to fix config file:')
     tempreport.writeConfig('s')
     print('Done')
@@ -91,48 +91,17 @@ def connectToServer():
 
 def checkMail():
   if data[1] != [None]:
-      global email_subject
-      global email_recipient
-      global extra_type
-      extra_types = ['Keyword', 'Keyword', 'Keyword', 'Keyword']
       #Get any available emails
       print('An email was found, saving sender address')
       header_data = data[1][0][1].decode('utf-8')
       parser = HeaderParser()
       msg = parser.parsestr(header_data)
       #Get information about the email
-      email_recipient = str(msg['From'])
+      email_recipient = re.search('<(.*)>', msg['From']).group(1)
       email_subject = str(msg['Subject'])
-      #Process the information and decide whether or not to send the email
-      email_recipient = re.split(r"[/w<]+", email_recipient)
-      email_recipient = re.split(r"[/w>]+", str(email_recipient[1]))
-      email_recipient = str(email_recipient[0])
       print('Address: ' + email_recipient)
-      keyword = 0
-      keyword_counter = 0
-      while keyword == 0 and keyword_counter <= len(keywords) - 1:
-        keyword_counter += 1
-        x = re.findall(str(keywords[keyword_counter - 1]), email_subject)
-        if (x):
-          print('Keyword found\n')
-          #Update and send the message
-          keyword = 1
-          extra_request = 0
-          type_counter = 0
-          while extra_request == 0 and type_counter <= len(extra_types) - 1:
-            type_counter += 1
-            i = re.findall(str(extra_types[type_counter - 1]), email_subject)
-            if (i):
-              extra_request = 1
-              print('Extra type found\n')
-              extra_type = i[0].lower()
-            else:
-              print('No graph type found')
-
-          sendMessage()
-        else:
-          print('Reran')
-
+      #Check the email for keywords
+      checkKeywords(email_subject, email_recipient)
       #Delete the processed email
       print('Email processed, deleting email\n')
       server.store('1:*', '+X-GM-LABELS', '\\Trash')
@@ -146,12 +115,24 @@ def checkMail():
     print('Failed to log out')
   print('Logged out\n')
 
+def checkKeywords(email_subject, email_recipient):
+  if any(searchstr in email_subject.lower() for searchstr in (keywords)):
+    print('Keyword found\n')
+    if any(searchstr in email_subject.lower() for searchstr in ('hours', 'hour')):
+      print('Found request for specific time')
+      hours = re.findall(r'\d+', email_subject)
+      graph_point_count = int((int(hours[0]) * 60) / (delay / 60))
+      print(str(hours[0]) + 'Hours, ' + str(graph_point_count) + ' points')
+    graph.generateGraph(graph_point_count)
+    updateMessage(email_recipient)
+    sendMessage(email_recipient)
+
 def updateTemperature():
   global temp
   print('Reading current temperature\n')
   temp = float(sensor.get_temperature())
 
-def updateMessage():
+def updateMessage(email_recipient):
   #Reads the image
   with open('graph.png', 'rb') as fp:
     html_image = MIMEImage(fp.read())
@@ -176,10 +157,7 @@ def updateMessage():
   msg.attach(msgHtml)
   msg.attach(msgImg)
 
-def sendMessage():
-  #Use the config value for graph_point_count unless email_subject contains a command
-  graph.generateGraph(graph_point_count)
-  updateMessage()
+def sendMessage(email_recipient):
   print('Sending message')
   try:
     error = 0
@@ -204,4 +182,4 @@ while True:
   updateRecords()
   checkMail()
   print('--------------------------------\n')
-  time.sleep(delay)
+  time.sleep(poll_rate)

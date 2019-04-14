@@ -95,15 +95,15 @@ def changeSender(mode):
 
   if mode == 's':
     credential = input(str('Please enter the new email address: '))
-    removeLineNumber = 1
+    selectLineNumber = 1
     wFile = 1
   elif mode == 'p':
     credential = input(str('Please enter the new password: '))
-    removeLineNumber = 2
+    selectLineNumber = 2
     wFile = 1
   elif mode == 'n':
     credential = input(str('Please enter the new sender name: '))
-    removeLineNumber = 3
+    selectLineNumber = 3
     wFile = 1
   elif mode == 'e':
     print('\nPlease enter the sender details: \n')
@@ -115,16 +115,16 @@ def changeSender(mode):
   if wFile == 1:
     with open('data/sender.csv', 'r') as f:
       reader = csv.reader(f)
-      for i in range(removeLineNumber):
+      for i in range(selectLineNumber):
           next(reader)
       row = next(reader)
-      removeLine = row[0]
+      selectLine = row[0]
 
     with open('data/sender.csv','r') as f:
       lines = f.readlines()
     with open('data/sender.csv','w') as f:
       for line in lines:
-        if line == removeLine + '\n':
+        if line == selectLine + '\n':
           f.write(credential + '\n')
         else:
           f.write(line)
