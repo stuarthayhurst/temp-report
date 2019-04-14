@@ -65,7 +65,7 @@ def writeConfig(mode):
   changes = [
     #DO NOT EDIT THESE, these are the default values when generating a new config
     ['config'],
-    ['delay', '300'], #Delay between each temperature reading
+    ['delay', '300'], #Delay between each temperature reading in seconds, must be 60+
     ['gap', '3600'], #Delay between emails
     ['threshold_max', '30'], #Max temp for emailing
     ['threshold_min', '-1'], #Min temp for emailing
