@@ -195,9 +195,6 @@ def selectLine(filePath):
         next(reader)
     row = next(reader)
     selectLineVal = str(row[0])
-    #selectLineVal = selectLineVal.replace("[", '')
-    #selectLineVal = selectLineVal.replace("]", '')
-    #selectLineVal = selectLineVal.replace("'", '')
     return str(selectLineVal)
 
 def newFile(filePath, firstLine):
