@@ -26,16 +26,12 @@ def drawGraph(x,y):
     spl = make_interp_spline(x2, y, k=3)
     y_smooth = spl(x_smooth)
 
-    mpl.rcParams['axes.spines.top'] = False
-    mpl.rcParams['axes.spines.right'] = False
-    mpl.rc('axes',edgecolor='black')
-
     plt.grid(b=True, which='major', axis='both', color='black')
-    plt.style.use('ggplot')
     plt.plot([],[])
     x_smooth_dt = mdates.num2date(x_smooth) 
     plt.plot(x_smooth_dt, y_smooth, 'red', linewidth=1)
     plt.gcf().autofmt_xdate() 
+    plt.gcf().fmt_xdate = mdates.DateFormatter('%b %d %H:%M')
     plt.xlabel('Time (Day - Hour: Minutes)')
     plt.ylabel('Temperature \u2103')
     plt.title('Room Temperature logged by Pi')
