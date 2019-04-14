@@ -68,7 +68,7 @@ def readValues(*args, **kwargs):
         for line in taildata:
             data = re.split("\[(.*?)\]", line)
             if len(data) !=3: continue #ignore lines that don't have 3 elements
-            temp = re.findall("\d+\.\d+", data[2]) 
+            temp = re.findall("[-]?\d+\.\d+", data[2]) 
             temp = float(temp[0])
             dt = datetime.datetime.strptime(data[1], log_dt_format)
             if tailmode: 
