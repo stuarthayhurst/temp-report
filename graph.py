@@ -32,7 +32,7 @@ def drawGraph(x,y):
     x_smooth_dt = mdates.num2date(x_smooth) 
     plt.plot(x_smooth_dt, y_smooth, 'red', linewidth=1)
     plt.gcf().autofmt_xdate() 
-    plt.xlabel('Time (Day - Hour: Minutes)')
+    plt.xlabel('Time (Month-Day - Hour: Minutes)')
     plt.ylabel('Temperature \u2103')
     plt.title('Room Temperature logged by Pi')
     plt.savefig('graph.png')
