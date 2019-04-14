@@ -9,7 +9,9 @@ import sys
 import re, datetime
 
 def generateGraph(reading_count):
-    x, y  = readValues(reading_count)
+    kwargs={'tailmode' : True}
+    args={reading_count}
+    x, y  = readValues(*args, **kwargs)
     if x == '':
       print('Not enough lines in logfile, aborting\n')
       return
@@ -42,16 +44,19 @@ def drawGraph(x,y):
     plt.clf()
 
 def readValues(*args, **kwargs):
-    for key, value in kwargs.items(): 
-        print ("%s == %s" %(key, value))
-    print(reading_count)
+    #for key, value in kwargs.items(): 
+    #    print ("%s == %s" %(key, value))
+    reading_count = args[0]
     log_dt_format = '%a %b %d %H:%M:%S %Y'
     dt_format = '%Y/%m/%d-%H:%M'
     x=[]
     y=[]
     x.clear()
     y.clear()
-    tailmode= kwargs.get('tailmode')
+    try:
+        tailmode = kwargs.get('tailmode')
+    except:
+        tailmode = True
     if not tailmode:
         from_date = kwargs.get('from_date')
         from_dt = datetime.datetime.strptime(from_date, dt_format)
