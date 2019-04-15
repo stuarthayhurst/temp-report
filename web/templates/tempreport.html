@@ -41,7 +41,8 @@
 
                 <p>Dropdown log</p>
                 <p>Dropdown graph</p>
-                <p>Move versions to the right</p>
+                <p>Make the other table boxes update</p>
+                <p></p>
               </div>
               <div>
                 <table id="temp-table" style="width: 400px;">
@@ -63,13 +64,9 @@
               <a style="position: fixed; bottom: 0; right: 3px; padding: 1px;">Flask Version: {{ flaskVer }} | Temp-report Web Version: {{ tempVer }}</a>
               </div>
         </div>
-        <!-- /#page-content-wrapper -->
     </div>
-    <!-- /#wrapper -->
-    <!-- Bootstrap core JavaScript -->
     <script src="{{ url_for('static', filename='vendor/jquery/jquery.min.js') }}"></script>
     <script src="{{ url_for('static', filename='vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-    <!-- Menu Toggle Script -->
     <script>
     $("#menu-toggle").click(function(e) {
         e.preventDefault();
@@ -94,7 +91,6 @@
     <script>
     setInterval(updateVals, 2500);
     function updateVals() {
-      window.alert({{ measureTemp() }})
       document.getElementById("currTempVal").textContent = {{ measureTemp() }}
     }
     </script>
