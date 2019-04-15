@@ -47,7 +47,7 @@
                 <table id="temp-table" style="width: 400px;">
                   <tr>
                       <th>Current Temperature:</th>
-                      <td>{{ measureTemp() }}</td><td>data</td>
+                      <td id="currTempVal">{{ measureTemp() }}</td><td>data</td>
                   </tr>
                   <tr>
                       <th>Highest Temperature:</th>
@@ -89,6 +89,13 @@
       el.style.animation = 'none';
       el.offsetHeight;
       el.style.animation = null;
+    }
+    </script>
+    <script>
+    setInterval(updateVals, 2500);
+    function updateVals() {
+      window.alert({{ measureTemp() }})
+      document.getElementById("currTempVal").textContent = {{ measureTemp() }}
     }
     </script>
   </body>
