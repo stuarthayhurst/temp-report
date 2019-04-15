@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Temperature Panel</title>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='icon.png') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/stylesheet.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='vendor/bootstrap/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/simple-sidebar.css') }}">
+  </head>
+  <body>
+    <div class="topbar">
+    <img href="#inner-menu-toggle" onclick="reset_animation()" id="inner-menu-toggle" class="lines"  src="{{ url_for('static', filename='lines.png') }}"/>
+    </div>
+    <div id="wrapper" style="background-color: #38373a; color: white;">
+        <!-- Sidebar -->
+        <div id="sidebar-wrapper">
+            <ul class="sidebar-nav">
+                <li class="sidebar-brand">
+                    <a href="/">
+                        Home
+                    </a>
+                </li>
+                <li>
+                    <a href="https://github.com/Dragon8oy/temp-report" target="_blank">Source</a>
+                </li>
+                <li>
+                    <a href="https://github.com/Dragon8oy/temp-report/wiki" target="_blank">Wiki</a>
+                </li>
+		            <li>
+                    <a href="https://github.com/Dragon8oy/temp-report/releases" target="_blank">Releases</a>
+                </li>
+                <li>
+                    <a href="https://github.com/Dragon8oy/temp-report/issues" target="_blank">Issues</a>
+                </li>
+            </ul>
+        </div>
+        <!-- Page Content -->
+        <div id="page-content-wrapper" class="container-fluid">
+            <div class="container-fluid" style="margin-top: 4.7%;">
+              <div>
+                <h2>Temperature display panel</h2>
+
+                <p>Fix Sidebar</p>
+                <p>Dropdown log</p>
+                <p>Dropdown graph</p>
+                <p>Move versions to the right</p>
+              </div>
+              <div>
+                <table id="temp-table" style="width: 400px;">
+                  <tr>
+                      <th>Current Temperature:</th>
+                      <td>{{ measureTemp() }}</td><td>data</td>
+                  </tr>
+                  <tr>
+                      <th>Highest Temperature:</th>
+                      <td>data</td><td>data</td>
+                  </tr>
+                  <tr>
+                      <th>Lowest Temperature:</th>
+                      <td>data</td><td>data</td>
+                  </tr>
+                </table>
+              </div>
+              <div class="footer">
+              <a style="position: fixed; bottom: 0; right: 3px; padding: 1px;">Flask Version: {{ flaskVer }} | Temp-report Web Version: {{ tempVer }}</a>
+              </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+    </div>
+    <!-- /#wrapper -->
+    <!-- Bootstrap core JavaScript -->
+    <script src="{{ url_for('static', filename='vendor/jquery/jquery.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <!-- Menu Toggle Script -->
+    <script>
+    $("#menu-toggle").click(function(e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+    });
+    </script>
+    <script>
+    $("#inner-menu-toggle").click(function(e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+    });
+    </script>
+    <script>
+    $("#wrapper").toggleClass("toggled");
+    function reset_animation() {
+      var el = document.getElementById('inner-menu-toggle');
+      el.style.animation = 'none';
+      el.offsetHeight;
+      el.style.animation = null;
+    }
+    </script>
+  </body>
+</html>
