@@ -47,21 +47,19 @@ def updateRecords():
     print('No records found')
     time.sleep(1)
 
-  currTime = datetime.datetime.now()
-
   max_temp = tempreport.readCSVLine('data/temp-records.csv', 2, 'keyword', 'max', 'float')
   max_temp_time = tempreport.readCSVLine('data/temp-records.csv', 3, 'keyword', 'max')
   if float(temp) > float(max_temp):
     print('Current temp was higher than recorded max temp, updating locally\n')
     max_temp = temp
-    max_temp_time = currTime.strftime("%H:%M:%S")
+    max_temp_time = datetime.datetime.now().strftime("%H:%M:%S")
 
   min_temp = tempreport.readCSVLine('data/temp-records.csv', 2, 'keyword', 'min', 'float')
   min_temp_time = tempreport.readCSVLine('data/temp-records.csv', 3, 'keyword', 'min')
   if float(temp) < float(min_temp):
     print('Current temp was lower than recorded min temp, updating locally\n')
     min_temp = temp
-    min_temp_time = currTime.strftime("%H:%M:%S")
+    min_temp_time = datetime.datetime.now().strftime("%H:%M:%S")
 
 
 def refreshServer():
@@ -128,12 +126,11 @@ def updateMessage(email_recipient):
 
   #Updates the message to be sent
   global msg
-  currTime = datetime.datetime.now()
   msg = MIMEMultipart('alternative')
   msg['Subject'] = 'Temperature Reply'
   msg['From'] = email_sender_name
   msg['To'] = email_recipient
-  html_wrap = '<html><body><p>Here is the data you requested:</p><p>The temperature is currently ' + str(temp) + '°C at ' + str(currTime.strftime("%H:%M:%S")) + '</p><p>The highest temperature reached recently is: ' + str(max_temp) + '°C at ' + str(max_temp_time) + '</p><p>The lowest temperature reached recently is: ' + str(min_temp) + '°C at ' + str(min_temp_time) + '</p><br><img alt="Temperature Graph" id="graph" src="cid:graph"></body></html>'
+  html_wrap = '<html><body><p>Here is the data you requested:</p><p>The temperature is currently ' + str(temp) + '°C at ' + str(datetime.datetime.now().strftime("%H:%M:%S")) + '</p><p>The highest temperature reached recently is: ' + str(max_temp) + '°C at ' + str(max_temp_time) + '</p><p>The lowest temperature reached recently is: ' + str(min_temp) + '°C at ' + str(min_temp_time) + '</p><br><img alt="Temperature Graph" id="graph" src="cid:graph"></body></html>'
   msgHtml = MIMEText(html_wrap, 'html')
 
   #Define the image's ID

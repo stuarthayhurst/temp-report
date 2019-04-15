@@ -128,12 +128,11 @@ def updateMessage():
 
   #Updates the message to be sent
   global msg
-  currTime = datetime.datetime.now()
   msg = MIMEMultipart('alternative')
   msg['Subject'] = 'Temperature Alert'
   msg['From'] = email_sender_name
   msg['To'] = 'Whomever it may concern'
-  html_wrap = '<html><body><p>The temperature is no longer between ' + str(threshold_max) + '°C and ' + str(threshold_min) + '°C. </p><p>The temperature is currently ' + str(temp) + '°C at ' + str(currTime.strftime("%H:%M:%S")) + '</p><p>The highest temperature reached recently is: ' + str(max_temp) + '°C at ' + str(max_temp_time) + '</p><p>The lowest temperature reached recently is: ' + str(min_temp) + '°C at ' + str(min_temp_time) + '</p><br><img alt="Temperature Graph" id="graph" src="cid:graph"></body></html>'
+  html_wrap = '<html><body><p>The temperature is no longer between ' + str(threshold_max) + '°C and ' + str(threshold_min) + '°C. </p><p>The temperature is currently ' + str(temp) + '°C at ' + str(datetime.datetime.now().strftime("%H:%M:%S")) + '</p><p>The highest temperature reached recently is: ' + str(max_temp) + '°C at ' + str(max_temp_time) + '</p><p>The lowest temperature reached recently is: ' + str(min_temp) + '°C at ' + str(min_temp_time) + '</p><br><img alt="Temperature Graph" id="graph" src="cid:graph"></body></html>'
   msgHtml = MIMEText(html_wrap, 'html')
 
   #Define the image's ID
@@ -150,8 +149,7 @@ def sendMessage():
   #Sends the message
   #Gets current time and works out time since the last email sent
   global last_email_time
-  currTime = datetime.datetime.now()
-  email_time_diff = (time.mktime(currTime.timetuple()) - time.mktime(last_email_time.timetuple()))
+  email_time_diff = (time.mktime(datetime.datetime.now().timetuple()) - time.mktime(last_email_time.timetuple()))
   #Sends the message if the time is ok
   if email_time_diff >= gap:
     #Sends an email to the addresses in the array
@@ -168,7 +166,7 @@ def sendMessage():
         error == 0
     print('Sent email to ' + str(len(email_recipients)) + ' addresses')
     print('Email was last sent ' + str(email_time_diff) + ' seconds ago')
-    last_email_time = currTime
+    last_email_time = datetime.datetime.now()
   else:
     print('Email was last sent ' + str(email_time_diff) + ' seconds ago')
     print('Email not sent\n')
@@ -192,21 +190,19 @@ def readRecords():
     print('No records found')
     time.sleep(1)
 
-  currTime = datetime.datetime.now()
-
   max_temp = tempreport.readCSVLine('data/temp-records.csv', 2, 'keyword', 'max', 'float')
   max_temp_time = tempreport.readCSVLine('data/temp-records.csv', 3, 'keyword', 'max')
   if float(temp) > float(max_temp):
     print('Current temp was higher than recorded max temp, updating locally\n')
     max_temp = temp
-    max_temp_time = currTime.strftime("%H:%M:%S")
+    max_temp_time = datetime.datetime.now().strftime("%H:%M:%S")
 
   min_temp = tempreport.readCSVLine('data/temp-records.csv', 2, 'keyword', 'min', 'float')
   min_temp_time = tempreport.readCSVLine('data/temp-records.csv', 3, 'keyword', 'min')
   if float(temp) < float(min_temp):
     print('Current temp was lower than recorded min temp, updating locally\n')
     min_temp = temp
-    min_temp_time = currTime.strftime("%H:%M:%S")
+    min_temp_time = datetime.datetime.now().strftime("%H:%M:%S")
 
 sys.argv.append(0)
 if sys.argv[1] == '-h' or sys.argv[1] == '--help':

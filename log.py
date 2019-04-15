@@ -42,8 +42,7 @@ def logTemp():
       writer.writerows(changes)
     print('Report file created\n')
 
-  currTime = datetime.datetime.now()
-  time_diff = (time.mktime(currTime.timetuple()) - time.mktime(record_reset_time.timetuple()))
+  time_diff = (time.mktime(datetime.datetime.now().timetuple()) - time.mktime(record_reset_time.timetuple()))
   if time_diff >= record_reset:
     record_reset_time = datetime.datetime.now()
     print(str(record_reset) + ' Hours have passed since last record reset, resetting record values')
@@ -54,7 +53,7 @@ def logTemp():
   if float(temp) > float(max_temp):
     print('Set new max temperature\n')
     max_temp = temp
-    max_temp_time = currTime.strftime("%H:%M:%S")
+    max_temp_time = datetime.datetime.now().strftime("%H:%M:%S")
   else:
     max_temp = tempreport.readCSVLine('data/temp-records.csv', 2, 'keyword', 'max', 'float')
     max_temp_time = tempreport.readCSVLine('data/temp-records.csv', 3, 'keyword', 'max')
@@ -62,7 +61,7 @@ def logTemp():
   if float(temp) < float(min_temp):
     print('Set new min temperature\n')
     min_temp = temp
-    min_temp_time = currTime.strftime("%H:%M:%S")
+    min_temp_time = datetime.datetime.now().strftime("%H:%M:%S")
   else:
     min_temp = tempreport.readCSVLine('data/temp-records.csv', 2, 'keyword', 'min', 'float')
     min_temp_time = tempreport.readCSVLine('data/temp-records.csv', 3, 'keyword', 'min')
@@ -89,7 +88,7 @@ def logTemp():
       writer.writerows(changes)
     print('Log created\n')
   
-  logLine = '[' + str(currTime.strftime("%c")) + '] Temperature: ' + str(temp) + '°C'
+  logLine = '[' + str(datetime.datetime.now().strftime("%c")) + '] Temperature: ' + str(temp) + '°C'
   changes = [
     [logLine],                                      
     ]
