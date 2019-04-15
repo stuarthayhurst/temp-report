@@ -9,7 +9,7 @@ tempVer= '0.0.7'
 @app.route('/')
 def main(flaskVer= flask.__version__, tempVer= tempVer):
     def measureTemp():
-        return sensor.get_temperature() + '°C'
+        return str(sensor.get_temperature()) + '°C'
     return render_template('tempreport.html', flaskVer=flaskVer, tempVer=tempVer, measureTemp=measureTemp)
 
 if __name__ == "__main__":
