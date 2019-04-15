@@ -1,7 +1,6 @@
 import smtplib, datetime, time, csv, sys, os
 import tempreport
 import graph
-from w1thermsensor import W1ThermSensor
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.image import MIMEImage
@@ -17,7 +16,6 @@ max_temp = -100.0
 min_temp = 999.9
 max_temp_time = 0
 min_temp_time = 0
-sensor = W1ThermSensor()
 
 #See data/config.csv for a config file. Use python3 temp.py -c to generate a new one
 
@@ -189,14 +187,6 @@ def sendMessage():
   if error == 0:
     print('\nLogged out\n')
 
-def measureTemp():
-  #Measures the temperature
-  global temp
-  print('Reading temperature:')
-  temp = float(sensor.get_temperature())
-  currTime = datetime.datetime.now()
-  print('The temperature is ' + str(temp) + '°C at ' + str(currTime.strftime("%H:%M:%S")) + '\n')
-
 def readRecords():
   global temp
   global max_temp
@@ -260,7 +250,7 @@ while True:
   tempreport.writeConfig('s')
   updateConfig()
   #Measure the temperature
-  measureTemp()
+  temp = tempreport.measureTemp()
   readRecords()
   #Update addresses and credentials
   if temp >= threshold_max or temp <= threshold_min:

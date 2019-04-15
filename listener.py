@@ -1,7 +1,6 @@
 import imaplib, smtplib, datetime, time, sys, os, csv, re
 import tempreport
 import graph
-from w1thermsensor import W1ThermSensor
 from email.parser import HeaderParser
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
@@ -13,7 +12,6 @@ max_temp = 0
 min_temp = 0
 max_temp_time = 0
 min_temp_time = 0
-sensor = W1ThermSensor()
 
 def updateConfig():
   while str(os.path.isfile('data/config.csv')) == 'False':
@@ -127,11 +125,6 @@ def checkKeywords(email_subject, email_recipient):
     updateMessage(email_recipient)
     sendMessage(email_recipient)
 
-def updateTemperature():
-  global temp
-  print('Reading current temperature\n')
-  temp = float(sensor.get_temperature())
-
 def updateMessage(email_recipient):
   #Reads the image
   with open('graph.png', 'rb') as fp:
@@ -178,7 +171,7 @@ while True:
     connectToServer()
   except:
     print('There was an error while connecting to the email server')
-  updateTemperature()
+  temp = tempreport.measureTemp()
   updateRecords()
   checkMail()
   print('--------------------------------\n')

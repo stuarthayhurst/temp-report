@@ -1,13 +1,11 @@
 import datetime, time, os, csv
 import tempreport
-from w1thermsensor import W1ThermSensor
 
 record_reset_time = datetime.datetime(1970, 1, 1, 0, 0)
 max_temp = -100.0
 min_temp = 999.9
 max_temp_time = 0
 min_temp_time = 0
-sensor = W1ThermSensor()
 
 def updateConfig():
 
@@ -101,16 +99,6 @@ def logTemp():
     writer = csv.writer(f, lineterminator="\n")
     writer.writerows(changes)
 
-
-def measureTemp():
-  #Measures the temperature
-  global temp
-  print('Reading temperature:')
-  temp = float(sensor.get_temperature())
-  currTime = datetime.datetime.now()
-  print('Temperature ' + str(temp) + '°C at ' + str(currTime.strftime("%H:%M:%S")) + '\n' + 'Added to log\n')
-
-
 while str(os.path.isfile('data/config.csv')) == 'False':
   time.sleep(1)
 
@@ -118,7 +106,7 @@ while True:
   #Load the config
   updateConfig()
   #Measure the temperature
-  measureTemp()
+  temp = tempreport.measureTemp()
   logTemp()
   print('--------------------------------\n')
   time.sleep(delay)
