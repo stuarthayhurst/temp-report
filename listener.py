@@ -8,10 +8,6 @@ from email.mime.image import MIMEImage
 
 keywords = ['test', 'latest', 'last', 'temp', 'temps' 'temperature', 'temperatures']
 poll_rate = 10
-max_temp = 0
-min_temp = 0
-max_temp_time = 0
-min_temp_time = 0
 
 def updateConfig():
   while str(os.path.isfile('data/config.csv')) == 'False':

@@ -12,10 +12,6 @@ password = ''
 last_email_time = datetime.datetime(1970, 1, 1, 0, 0)
 record_reset_time = datetime.datetime(1970, 1, 1, 0, 0)
 email_time_diff = 0
-max_temp = -100.0
-min_temp = 999.9
-max_temp_time = 0
-min_temp_time = 0
 
 #See data/config.csv for a config file. Use python3 temp.py -c to generate a new one
 

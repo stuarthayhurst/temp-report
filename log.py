@@ -4,8 +4,6 @@ import tempreport
 record_reset_time = datetime.datetime(1970, 1, 1, 0, 0)
 max_temp = -100.0
 min_temp = 999.9
-max_temp_time = 0
-min_temp_time = 0
 
 def updateConfig():
 
