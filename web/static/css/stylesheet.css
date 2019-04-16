@@ -46,19 +46,6 @@ input.inputGraph:checked~ul.subGraph {
 input.inputLog:checked~ul.subLog {
   visibility: visible;
 }
-button {
-  background-color: #0e0e0f;
-  user-select: none;
-  border-radius: 20px;
-  border: none;
-  color: white;
-  padding: 10px 15px;
-  text-align: center;
-  font-size: 16px;
-}
-button:hover {
-  background-color: #1b1a1c;
-}
 .button {
   background-color: #0e0e0f;
   user-select: none;
