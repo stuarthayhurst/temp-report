@@ -10,6 +10,7 @@ All required and recommended packages are automatically installed when running t
 
 - ### Python / Pip
   * Python 3.6+
+  * flask
   * w1thermsensor
   * matplotlib
   * scipy
