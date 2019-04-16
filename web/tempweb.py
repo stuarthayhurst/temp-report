@@ -39,7 +39,7 @@ def main(flaskVer=flask.__version__, tempWebVer=tempWebVer, tempVer=tempVer, lin
 
     def maxTemp(mode):
         if mode == 'temp':
-            value = tempreport.readCSVLine(parDir + '/data/temp-records.csv', 2, 'keyword', 'max', val_type = 'str')
+            value = str(tempreport.readCSVLine(parDir + '/data/temp-records.csv', 2, 'keyword', 'max', val_type = 'str')) + '°C'
             print('Updated Max Temperature')
         elif mode == 'time':
             value = tempreport.readCSVLine(parDir + '/data/temp-records.csv', 3, 'keyword', 'max', val_type = 'str')
@@ -48,7 +48,7 @@ def main(flaskVer=flask.__version__, tempWebVer=tempWebVer, tempVer=tempVer, lin
 
     def minTemp(mode):
         if mode == 'temp':
-            value = tempreport.readCSVLine(parDir + '/data/temp-records.csv', 2, 'keyword', 'min', val_type = 'str')
+            value = str(tempreport.readCSVLine(parDir + '/data/temp-records.csv', 2, 'keyword', 'min', val_type = 'str')) + '°C'
             print('Updated Max Temperature')
         elif mode == 'time':
             value = tempreport.readCSVLine(parDir + '/data/temp-records.csv', 3, 'keyword', 'min', val_type = 'str')
