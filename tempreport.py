@@ -34,8 +34,6 @@ def readCSVLine(filename, position, mode, line, **kwargs):
   for key, value in kwargs.items():
     if key == 'var_type' or key == 'data_type' or key == 'type':
       var_type = str(value)
-    elif key == 'delimiter' or key == 'char':
-      temp_delimiter = value
   value = None
   if str(os.path.isfile(filename)) == 'False':
     return
