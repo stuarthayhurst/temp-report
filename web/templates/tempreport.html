@@ -43,7 +43,9 @@
                 <p>A frontent for temp-report</p>
                 <p>Move the log and graph text up</p>
                 <p>Make the other table boxes update</p>
+                <p>Update the graph and log every time someone starts the page or constantly</p>
                 <p>Add an arrow that rotates 90 / 270 degrees</p>
+                <button onclick="updateTemp()">Update</button>
               </div>
               <div>
                 <table id="temp-table" style="width: 400px;">
@@ -75,7 +77,7 @@
                 <label class="button" for="logCheck">Log</label>
                 <ul class="subLog">
                   <li>Log: | {{ lineCount }} lines</li>
-                  <li><textarea class="logBox" readonly>{{ logContent }} </textarea></li>
+                  <li><textarea class="logBox" readonly>{{ logContent }}</textarea></li>
                 </ul>
               </div>
               <br>
@@ -105,12 +107,6 @@
       el.style.animation = 'none';
       el.offsetHeight;
       el.style.animation = null;
-    }
-    </script>
-    <script>
-    setInterval(updateVals, 2500);
-    function updateVals() {
-      document.getElementById("currTempVal").textContent = {{ measureTemp() }}
     }
     </script>
   </body>
