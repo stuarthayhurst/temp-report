@@ -76,7 +76,6 @@ input.inputLog:checked~.titleLog {
 }
 .bannerImage {
     margin-left: 1%;
-    width: 13.82%;
     height: 100%;
 }
 .footer {
@@ -84,9 +83,10 @@ input.inputLog:checked~.titleLog {
   color: white;
   overflow: hidden;
   position: fixed;
-  z-index: 10001;
+  z-index: 0;
   bottom: 0;
-  left: 0;
+  right: 0;
+  height: 25px;
   width: 100%;
 }
 .logBox {

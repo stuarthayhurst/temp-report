@@ -41,7 +41,8 @@
                 <h2>Temperature display panel</h2>
                 <p>&nbsp</p>
                 <p>A temperature display panel frontent for temp-report</p>
-                <p>Press on the dropdown buttons to toggle content</p>
+                <p>Add the first lines of the README</p>
+                <p>Make the arrows toggle the content as well</p>
               </div>
               <div>
                 <table id="temp-table" style="width: 400px;">
@@ -63,7 +64,7 @@
               <div style="display: inline-block;">
                 <img id="graphArrow" height="35" width="35" src="{{ url_for('static', filename='collapse.png') }}">
                 <input id="graphCheck" class="inputGraph" type="checkbox" name="Graph" />
-                <label class="button" onclick="toggleGraph()" for="graphCheck">Graph</label><p class="titleGraph">  &nbsp Graph: | {{ pointCount }} points</p>
+                <label class="button" onclick="toggleGraph()" for="graphCheck">Graph</label><p class="titleGraph">  &nbsp<span style="background-color: #4ace4f"> </span>Graph: | {{ pointCount }} points</p>
                 <ul class="subGraph">
                   <li><img src="{{ url_for('static', filename='graph.png') }}" alt="Temperature Graph" height="360" width="600"></li>
                 </ul>
@@ -71,15 +72,16 @@
               <div style="display: inline-block;">
                 <img id="logArrow" height="35" width="35" src="{{ url_for('static', filename='collapse.png') }}">
                 <input id="logCheck" class="inputLog" type="checkbox" name="Log" />
-                <label class="button" onclick="toggleLog()" for="logCheck">Log</label><p class="titleLog">  &nbsp Log: | {{ lineCount }} lines</p>
+                <label class="button" onclick="toggleLog()" for="logCheck">Log</label><p class="titleLog">  &nbsp<span style="background-color: #4ace4f"> </span>Log: | {{ lineCount }} lines</p>
                 <ul class="subLog">
                   <li><textarea class="logBox" readonly>{{ logContent }}</textarea></li>
                 </ul>
               </div>
               <br>
               <div class="footer">
-              <a style="position: fixed; bottom: 0; right: 3px; padding: 1px;">Flask Version: {{ flaskVer }} | Temp-report Web Version: {{ tempWebVer }} | Temp-report Version: {{ tempVer }}</a>
+                <p> </p>
               </div>
+              <a style="position:fixed; z-index: 11; bottom: 0; right: 0; margin-right: 2px;">Flask Version: {{ flaskVer }} | Temp-report Web Version: {{ tempWebVer }} | Temp-report Version: {{ tempVer }}</a>
         </div>
     </div>
     <script src="{{ url_for('static', filename='vendor/jquery/jquery.min.js') }}"></script>

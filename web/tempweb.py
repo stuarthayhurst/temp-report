@@ -30,7 +30,7 @@ with open(currDir + '/static/temps.log', "r") as f:
 def main(flaskVer=flask.__version__, tempWebVer=tempWebVer, tempVer=tempVer, lineCount=lineCount, pointCount=graphPointCount):
     def measureTemp(mode):
         if mode == 'temp':
-            value = str(sensor.get_temperature()) + '°C'
+            value = random.randint(1,30)#str(sensor.get_temperature()) + '°C'
             print('Updated Temperature')
         elif mode == 'time':
             value = datetime.datetime.now().strftime("%H:%M:%S")
