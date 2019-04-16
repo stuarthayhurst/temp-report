@@ -15,9 +15,9 @@ def updateConfig():
     time.sleep(2)
 
   global delay
-  delay = tempreport.readCSVLine('data/config.csv', 2, 'keyword', 'delay', 'int')
+  delay = tempreport.readCSVLine('data/config.csv', 2, 'keyword', 'delay', var_type = 'int')
   global graph_point_count
-  graph_point_count = tempreport.readCSVLine('data/config.csv', 2, 'keyword', 'graph_point_count', 'int')
+  graph_point_count = tempreport.readCSVLine('data/config.csv', 2, 'keyword', 'graph_point_count', var_type = 'int')
 
   if graph_point_count == None:
     print('Errors occured while reading config values, attempting to fix config file:')
@@ -32,9 +32,9 @@ def updateSender():
   global password
   if str(os.path.isfile('data/sender.csv')) == 'False':
     changeSender('e')
-  email_sender      = tempreport.readCSVLine('data/sender.csv', 1, 'numbered', 2, 'str')
-  password          = tempreport.readCSVLine('data/sender.csv', 1, 'numbered', 3, 'str')
-  email_sender_name = tempreport.readCSVLine('data/sender.csv', 1, 'numbered', 4, 'str')
+  email_sender      = tempreport.readCSVLine('data/sender.csv', 1, 'numbered', 2, var_type = 'str')
+  password          = tempreport.readCSVLine('data/sender.csv', 1, 'numbered', 3, var_type = 'str')
+  email_sender_name = tempreport.readCSVLine('data/sender.csv', 1, 'numbered', 4, var_type = 'str')
 
 def updateRecords():
   global temp
@@ -47,14 +47,14 @@ def updateRecords():
     print('No records found')
     time.sleep(1)
 
-  max_temp = tempreport.readCSVLine('data/temp-records.csv', 2, 'keyword', 'max', 'float')
+  max_temp = tempreport.readCSVLine('data/temp-records.csv', 2, 'keyword', 'max', var_type = 'float')
   max_temp_time = tempreport.readCSVLine('data/temp-records.csv', 3, 'keyword', 'max')
   if float(temp) > float(max_temp):
     print('Current temp was higher than recorded max temp, updating locally\n')
     max_temp = temp
     max_temp_time = datetime.datetime.now().strftime("%H:%M:%S")
 
-  min_temp = tempreport.readCSVLine('data/temp-records.csv', 2, 'keyword', 'min', 'float')
+  min_temp = tempreport.readCSVLine('data/temp-records.csv', 2, 'keyword', 'min', var_type = 'float')
   min_temp_time = tempreport.readCSVLine('data/temp-records.csv', 3, 'keyword', 'min')
   if float(temp) < float(min_temp):
     print('Current temp was lower than recorded min temp, updating locally\n')

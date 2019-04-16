@@ -8,9 +8,9 @@ min_temp = 999.9
 def updateConfig():
 
   global delay
-  delay = tempreport.readCSVLine('data/config.csv', 2, 'keyword', 'delay', 'int')
+  delay = tempreport.readCSVLine('data/config.csv', 2, 'keyword', 'delay', var_type = 'int')
   global record_reset
-  record_reset = tempreport.readCSVLine('data/config.csv', 2, 'keyword', 'record_reset', 'int') * 3600
+  record_reset = tempreport.readCSVLine('data/config.csv', 2, 'keyword', 'record_reset', var_type = 'int') * 3600
 
   if delay == None:
     print('Errors occured while reading config values, attempting to fix config file:')
@@ -55,7 +55,7 @@ def logTemp():
     max_temp = temp
     max_temp_time = datetime.datetime.now().strftime("%H:%M:%S")
   else:
-    max_temp = tempreport.readCSVLine('data/temp-records.csv', 2, 'keyword', 'max', 'float')
+    max_temp = tempreport.readCSVLine('data/temp-records.csv', 2, 'keyword', 'max', var_type = 'float')
     max_temp_time = tempreport.readCSVLine('data/temp-records.csv', 3, 'keyword', 'max')
 
   if float(temp) < float(min_temp):
@@ -63,7 +63,7 @@ def logTemp():
     min_temp = temp
     min_temp_time = datetime.datetime.now().strftime("%H:%M:%S")
   else:
-    min_temp = tempreport.readCSVLine('data/temp-records.csv', 2, 'keyword', 'min', 'float')
+    min_temp = tempreport.readCSVLine('data/temp-records.csv', 2, 'keyword', 'min', var_type = 'float')
     min_temp_time = tempreport.readCSVLine('data/temp-records.csv', 3, 'keyword', 'min')
 
   changes = [

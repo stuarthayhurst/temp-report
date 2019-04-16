@@ -15,17 +15,17 @@ email_time_diff = 0
 
 def updateConfig():
   global delay
-  delay = tempreport.readCSVLine('data/config.csv', 2, 'keyword', 'delay', 'int')
+  delay = tempreport.readCSVLine('data/config.csv', 2, 'keyword', 'delay', var_type = 'int')
   global gap
-  gap = tempreport.readCSVLine('data/config.csv', 2, 'keyword', 'gap', 'int')
+  gap = tempreport.readCSVLine('data/config.csv', 2, 'keyword', 'gap', var_type = 'int')
   global threshold_max
-  threshold_max = tempreport.readCSVLine('data/config.csv', 2, 'keyword', 'threshold_max', 'float')
+  threshold_max = tempreport.readCSVLine('data/config.csv', 2, 'keyword', 'threshold_max', var_type = 'float')
   global threshold_min
-  threshold_min = tempreport.readCSVLine('data/config.csv', 2, 'keyword', 'threshold_min', 'float')
+  threshold_min = tempreport.readCSVLine('data/config.csv', 2, 'keyword', 'threshold_min', var_type = 'float')
   global graph_point_count
-  graph_point_count = tempreport.readCSVLine('data/config.csv', 2, 'keyword', 'graph_point_count', 'int')
+  graph_point_count = tempreport.readCSVLine('data/config.csv', 2, 'keyword', 'graph_point_count', var_type = 'int')
   global record_reset
-  record_reset = tempreport.readCSVLine('data/config.csv', 2, 'keyword', 'record_reset', 'int') * 3600
+  record_reset = tempreport.readCSVLine('data/config.csv', 2, 'keyword', 'record_reset', var_type = 'int') * 3600
 
   if delay == None:
     print('Errors occured while reading config values, attempting to fix config file:')
@@ -51,10 +51,10 @@ def updateRecipients():
   line_count = tempreport.getLineCount('data/addresses.csv')
   for line in range(2, line_count + 1):
     if line == 2:
-      email_recipients[0] = (tempreport.readCSVLine('data/addresses.csv', 1, 'numbered', line, 'str'))
+      email_recipients[0] = (tempreport.readCSVLine('data/addresses.csv', 1, 'numbered', line, var_type = 'str'))
       print(email_recipients[0])
     else:
-      email_recipients.append(tempreport.readCSVLine('data/addresses.csv', 1, 'numbered', line, 'str'))
+      email_recipients.append(tempreport.readCSVLine('data/addresses.csv', 1, 'numbered', line, var_type = 'str'))
       print(email_recipients[line - 2])
 
 def updateSender():
@@ -63,9 +63,9 @@ def updateSender():
   global password
   if str(os.path.isfile('data/sender.csv')) == 'False':
     changeSender('e')
-  email_sender      = tempreport.readCSVLine('data/sender.csv', 1, 'numbered', 2, 'str')
-  password          = tempreport.readCSVLine('data/sender.csv', 1, 'numbered', 3, 'str')
-  email_sender_name = tempreport.readCSVLine('data/sender.csv', 1, 'numbered', 4, 'str')
+  email_sender      = tempreport.readCSVLine('data/sender.csv', 1, 'numbered', 2, var_type = 'str')
+  password          = tempreport.readCSVLine('data/sender.csv', 1, 'numbered', 3, var_type = 'str')
+  email_sender_name = tempreport.readCSVLine('data/sender.csv', 1, 'numbered', 4, var_type = 'str')
 
 def changeSender(mode):
   if str(os.path.isfile('data/sender.csv')) == 'False':
@@ -190,14 +190,14 @@ def readRecords():
     print('No records found')
     time.sleep(1)
 
-  max_temp = tempreport.readCSVLine('data/temp-records.csv', 2, 'keyword', 'max', 'float')
+  max_temp = tempreport.readCSVLine('data/temp-records.csv', 2, 'keyword', 'max', var_type = 'float')
   max_temp_time = tempreport.readCSVLine('data/temp-records.csv', 3, 'keyword', 'max')
   if float(temp) > float(max_temp):
     print('Current temp was higher than recorded max temp, updating locally\n')
     max_temp = temp
     max_temp_time = datetime.datetime.now().strftime("%H:%M:%S")
 
-  min_temp = tempreport.readCSVLine('data/temp-records.csv', 2, 'keyword', 'min', 'float')
+  min_temp = tempreport.readCSVLine('data/temp-records.csv', 2, 'keyword', 'min', var_type = 'float')
   min_temp_time = tempreport.readCSVLine('data/temp-records.csv', 3, 'keyword', 'min')
   if float(temp) < float(min_temp):
     print('Current temp was lower than recorded min temp, updating locally\n')
