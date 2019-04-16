@@ -3,7 +3,7 @@ A small project to create a system that can handle the output from a Pi temperat
 The system maintains a mail-list and will respond to mail requests. Reports include temperature charts and are generated when the temperature moves outside of a defined range or an email is received requesting a report.
 
 Temp-report Version: 1.1.0
-Temp-web Version: 0.7.0
+Temp-web Version: 0.8.0
 
 ## Dependencies:
 All required and recommended packages are automatically installed when running the installer
