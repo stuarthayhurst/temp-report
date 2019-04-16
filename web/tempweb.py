@@ -1,9 +1,6 @@
-
 from flask import Flask, render_template, url_for
 import flask, random, os, sys, inspect
 app = Flask(__name__, static_url_path='/static')
-tempWebVer = '0.1.1'
-tempVer = 'Test'
 
 try:
     from w1thermsensor import W1ThermSensor
@@ -15,6 +12,10 @@ currDir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe()
 parDir = os.path.dirname(currDir)
 sys.path.insert(0,parDir)
 import graph, tempreport
+
+readme = parDir + '/README.md'
+tempWebVer = tempreport.readLine(readme, 'keyword', 'Temp-web', char = ': ')
+tempVer = tempreport.readLine(readme, 'keyword', 'Temp-report', char = ': ')
 
 @app.route('/')
 def main(flaskVer=flask.__version__, tempWebVer=tempWebVer, tempVer=tempVer):
