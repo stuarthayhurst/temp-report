@@ -38,11 +38,13 @@
             <div class="container-fluid" style="margin-top: 4.7%;">
               <div>
                 <h2>Temperature display panel</h2>
-
+                &nbsp
                 <p>Dropdown log</p>
                 <p>Dropdown graph</p>
                 <p>Make the other table boxes update</p>
-                <p>Fix temperature</p>
+                <p>Fix temperature updater</p>
+                <p>Level the 2 buttons</p>
+                <p>Read in graph_point_count for graph length</p>
               </div>
               <div>
                 <table id="temp-table" style="width: 400px;">
@@ -60,6 +62,22 @@
                   </tr>
                 </table>
               </div>
+              <br>
+              <div style="display: inline-block;">
+                <input id="graphCheck" class="inputGraph" type="checkbox" name="Graph" />
+                <label class="button" for="graphCheck">Graph</label>
+                <ul class="subGraph">
+                  <li><img src="{{ url_for('static', filename='graph.png') }}" alt="Temperature Graph" height="360" width="600"></li>
+                </ul>
+              </div>
+              <div style="display: inline-block;">
+                <input id="logCheck" class="inputLog" type="checkbox" name="Log" />
+                <label class="button" for="logCheck">Log</label>
+                <ul class="subLog">
+                  <li><p>Log</p></li>
+                </ul>
+              </div>
+              <br>
               <div class="footer">
               <a style="position: fixed; bottom: 0; right: 3px; padding: 1px;">Flask Version: {{ flaskVer }} | Temp-report Web Version: {{ tempWebVer }} | Temp-report Version: {{ tempVer }}</a>
               </div>
