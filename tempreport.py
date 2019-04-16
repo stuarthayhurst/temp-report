@@ -1,7 +1,10 @@
 #Contains shared functions for python scripts
 import datetime, time, csv, sys, os
-from w1thermsensor import W1ThermSensor
-sensor = W1ThermSensor()
+try:
+  from w1thermsensor import W1ThermSensor
+  sensor = W1ThermSensor()
+except:
+  print('Failed to load kernel modules, make sure you are running this on an RPI with OneWire and GPIO enabled')
 
 def getLineCount(filePath, output = False, title = 'Output:'):
   if output == True:
@@ -279,4 +282,3 @@ def dataEdit():
     elif choice == '6':
       checkAddressLine()
       exit()
-checkAddressLine()
