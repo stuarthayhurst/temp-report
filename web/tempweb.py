@@ -29,7 +29,8 @@ with open(currDir + '/static/temps.log', "r") as f:
 @app.route('/')
 def main(flaskVer=flask.__version__, tempWebVer=tempWebVer, tempVer=tempVer, lineCount=lineCount, pointCount=graphPointCount):
     def measureTemp():
-        return random.randint(1,30)#str(sensor.get_temperature()) + '°C'
+        print('Updated Temperature')
+        return str(sensor.get_temperature()) + '°C'
     with open(currDir + '/static/temps.log', "r") as f:
         logContent = f.read()
         logContent = logContent.rsplit('\n', 1)
