@@ -1,9 +1,13 @@
-html, body
-{
+html, body {
   font-family: "Lato", sans-serif;
   background-color: #38373a;
   color: white;
-  overflow-y: hidden;
+}
+::selection {
+  background: #4ace4f;
+}
+::-moz-selection {
+  background: #4ace4f;
 }
 table, th, td {
   border: 1px solid black;
@@ -12,29 +16,29 @@ table, th, td {
 th, td {
   padding: 10px;
 }
-/*hide the inputs/checkmarks*/
 input {
   display: none;
 }
-/*hide the submenu*/
+ul {
+  list-style-type: none;
+}
 ul.subGraph {
-  max-height: 300px;
+  max-height: 360px;
+  height: 360px;
   visibility: hidden;
   overflow: hidden;
 }
-/*hide the submenu*/
 ul.subLog {
-  max-height: 300px;
+  max-height: 360px;
+  height: 360px;
   visibility: hidden;
   overflow: hidden;
 }
-/*position the label*/
 label {
   position: relative;
   display: block;
   cursor: pointer;
 }
-/*show the submenu when checked*/
 input.inputGraph:checked~ul.subGraph {
   visibility: visible;
 }
@@ -42,16 +46,17 @@ input.inputLog:checked~ul.subLog {
   visibility: visible;
 }
 .button {
-    background-color: #0e0e0f;
-    border-radius: 20px;
-    border: none;
-    color: white;
-    padding: 10px 15px;
-    text-align: center;
-    font-size: 16px;
+  background-color: #0e0e0f;
+  user-select: none;
+  border-radius: 20px;
+  border: none;
+  color: white;
+  padding: 10px 15px;
+  text-align: center;
+  font-size: 16px;
 }
 .button:hover {
-    background-color: #1b1a1c;
+  background-color: #1b1a1c;
 }
 .footer {
   background-color: #262728;
@@ -64,20 +69,20 @@ input.inputLog:checked~ul.subLog {
   width: 100%;
 }
 .topbar {
-    position: fixed;
-    z-index: 1;
-    width: 100%;
-    background-color: #000;
-    overflow: hidden;
-    height: 5.5%;
+  position: fixed;
+  z-index: 1;
+  width: 100%;
+  background-color: #000;
+  overflow: hidden;
+  height: 5.5%;
 }
 .lines {
-    margin-left: 1%;
-    padding: 5px;
-    width: 2.5%;
-    -webkit-animation:spin 0.25s linear;
-    -moz-animation:spin 0.25s linear;
-    animation:spin 0.25s linear;
+  margin-left: 1%;
+  padding: 5px;
+  width: 2.5%;
+  -webkit-animation:spin 0.25s linear;
+  -moz-animation:spin 0.25s linear;
+  animation:spin 0.25s linear;
 }
 @-moz-keyframes spin { 100% { -moz-transform: rotate(180deg); } }
 @-webkit-keyframes spin { 100% { -webkit-transform: rotate(180deg); } }
