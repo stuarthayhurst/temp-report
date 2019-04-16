@@ -2,7 +2,6 @@
 <html>
   <head>
     <title>Temperature Panel</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" href="{{ url_for('static', filename='icon.png') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/stylesheet.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='vendor/bootstrap/css/bootstrap.min.css') }}">
@@ -45,7 +44,7 @@
                 <p>Make the other table boxes update</p>
                 <p>Fix temperature updater</p>
                 <p>Fade in and out graph</p>
-                <p>Add an arrow that roates 90 degrees</p>
+                <p>Add an arrow that rotates 90 degrees</p>
               </div>
               <div>
                 <table id="temp-table" style="width: 400px;">
@@ -75,7 +74,7 @@
                 <input id="logCheck" class="inputLog" type="checkbox" name="Log" />
                 <label class="button" for="logCheck">Log</label>
                 <ul class="subLog">
-                  <li><textarea class="logBox" id="logBox">Hey</textarea></li>
+                  <li><textarea class="logBox" readonly>{{ logContent }}<textarea></li>
                 </ul>
               </div>
               <br>

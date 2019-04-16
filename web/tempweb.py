@@ -18,7 +18,6 @@ tempWebVer = tempreport.readLine(readme, 'keyword', 'Temp-web', char = ': ')
 tempVer = tempreport.readLine(readme, 'keyword', 'Temp-report', char = ': ')
 
 shutil.copy2(parDir + '/temps.log', currDir + '/temps.log')
-
 graph.generateGraph(tempreport.readCSVLine(parDir + '/data/config.csv', 2, 'keyword', 'graph_point_count', var_type = 'int'))
 shutil.move(currDir + '/temps.log', currDir + '/static/temps.log')
 shutil.move(currDir + '/graph.png', currDir + '/static/graph.png')
@@ -27,7 +26,9 @@ shutil.move(currDir + '/graph.png', currDir + '/static/graph.png')
 def main(flaskVer=flask.__version__, tempWebVer=tempWebVer, tempVer=tempVer):
     def measureTemp():
         return random.randint(1,30)#str(sensor.get_temperature()) + '°C'
-    return render_template('tempreport.html', flaskVer=flaskVer, tempWebVer=tempWebVer, tempVer=tempVer, measureTemp=measureTemp)
+    with open(currDir + '/static/temps.log', "r") as f:
+        logContent = f.read()
+    return render_template('tempreport.html', flaskVer=flaskVer, tempWebVer=tempWebVer, tempVer=tempVer, measureTemp=measureTemp, logContent=logContent)
 
 if __name__ == "__main__":
     app.run(host= '0.0.0.0', port= 5000)

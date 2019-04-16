@@ -68,6 +68,11 @@ input.inputLog:checked~ul.subLog {
   left: 0;
   width: 100%;
 }
+.logBox {
+    white-space: pre-wrap;
+    font-size: 14px;
+    color: black;
+}
 .topbar {
   position: fixed;
   z-index: 1;
