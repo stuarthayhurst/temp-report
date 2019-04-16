@@ -25,7 +25,7 @@ shutil.move(currDir + '/graph.png', currDir + '/static/graph.png')
 
 with open(currDir + '/static/temps.log', "r") as f:
     lineCount = len(f.readlines())
-    
+
 @app.route('/')
 def main(flaskVer=flask.__version__, tempWebVer=tempWebVer, tempVer=tempVer, lineCount=lineCount, pointCount=graphPointCount):
     def measureTemp():
@@ -42,7 +42,7 @@ def main(flaskVer=flask.__version__, tempWebVer=tempWebVer, tempVer=tempVer, lin
         logContent = f.read()
         logContent = logContent.rsplit('\n', 1)
         logContent = ''.join(logContent)
-    return render_template('tempreport.html', flaskVer=flaskVer, tempWebVer=tempWebVer, tempVer=tempVer, measureTemp=measureTemp, logContent=logContent, lineCount=lineCount, pointCount=pointCount)
+    return render_template('tempreport.html', flaskVer=flaskVer, tempWebVer=tempWebVer, tempVer=tempVer, measureTemp=measureTemp, updateFiles=updateFiles, logContent=logContent, lineCount=lineCount, pointCount=pointCount)
 
 if __name__ == "__main__":
     app.run(host= '0.0.0.0', port= 5000)
