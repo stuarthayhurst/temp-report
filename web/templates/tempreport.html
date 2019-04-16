@@ -40,8 +40,8 @@
                 <h2>Temperature display panel</h2>
                 <p>&nbsp</p>
                 <p>A frontent for temp-report</p>
-                <p>Dropdown log</p>
-                <p>Dropdown graph</p>
+                <p>Start at bottom and give a total line count</p>
+                <p>Move the log and graph text up</p>
                 <p>Make the other table boxes update</p>
                 <p>Fade in and out graph</p>
                 <p>Add an arrow that rotates 90 degrees</p>
@@ -67,6 +67,7 @@
                 <input id="graphCheck" class="inputGraph" type="checkbox" name="Graph" />
                 <label class="button" for="graphCheck">Graph</label>
                 <ul class="subGraph">
+                  <li>Graph: | {{ pointCount }} points</li>
                   <li><img src="{{ url_for('static', filename='graph.png') }}" alt="Temperature Graph" height="360" width="600"></li>
                 </ul>
               </div>
@@ -74,7 +75,8 @@
                 <input id="logCheck" class="inputLog" type="checkbox" name="Log" />
                 <label class="button" for="logCheck">Log</label>
                 <ul class="subLog">
-                  <li><textarea class="logBox" readonly> {{ logContent }}</textarea></li>
+                  <li>Log: | {{ lineCount }} lines</li>
+                  <li><textarea class="logBox" readonly>{{ logContent }} </textarea></li>
                 </ul>
               </div>
               <br>
