@@ -40,8 +40,8 @@
               <div>
                 <h2>Temperature display panel</h2>
                 <p>&nbsp</p>
-                <p>A frontent for temp-report</p>
-                <p>Add an arrow that rotates 90 / 270 degrees</p>
+                <p>A temperature display panel frontent for temp-report</p>
+                <p>Press on the dropdown buttons to toggle content</p>
               </div>
               <div>
                 <table id="temp-table" style="width: 400px;">
@@ -61,15 +61,17 @@
               </div>
               <br>
               <div style="display: inline-block;">
+                <img id="graphArrow" height="35" width="35" src="{{ url_for('static', filename='collapse.png') }}">
                 <input id="graphCheck" class="inputGraph" type="checkbox" name="Graph" />
-                <label class="button" for="graphCheck">Graph</label><p class="titleGraph">   Graph: | {{ pointCount }} points</p>
+                <label class="button" onclick="toggleGraph()" for="graphCheck">Graph</label><p class="titleGraph">  &nbsp Graph: | {{ pointCount }} points</p>
                 <ul class="subGraph">
                   <li><img src="{{ url_for('static', filename='graph.png') }}" alt="Temperature Graph" height="360" width="600"></li>
                 </ul>
               </div>
               <div style="display: inline-block;">
+                <img id="logArrow" height="35" width="35" src="{{ url_for('static', filename='collapse.png') }}">
                 <input id="logCheck" class="inputLog" type="checkbox" name="Log" />
-                <label class="button" for="logCheck">Log</label><p class="titleLog">   Log: | {{ lineCount }} lines</p>
+                <label class="button" onclick="toggleLog()" for="logCheck">Log</label><p class="titleLog">  &nbsp Log: | {{ lineCount }} lines</p>
                 <ul class="subLog">
                   <li><textarea class="logBox" readonly>{{ logContent }}</textarea></li>
                 </ul>
@@ -101,6 +103,28 @@
       el.style.animation = 'none';
       el.offsetHeight;
       el.style.animation = null;
+    }
+    </script>
+    <script>
+    graphState = 'collapse'
+    function toggleGraph() {
+      if (graphState == 'collapse') {
+        document.getElementById("graphArrow").src="{{ url_for('static', filename='expand.png') }}";
+        graphState = 'expand'
+      } else {
+        document.getElementById("graphArrow").src="{{ url_for('static', filename='collapse.png') }}";
+        graphState = 'collapse'
+      }
+    }
+    logState = 'collapse'
+    function toggleLog() {
+      if (logState == 'collapse') {
+        document.getElementById("logArrow").src="{{ url_for('static', filename='expand.png') }}";
+        logState = 'expand'
+      } else {
+        document.getElementById("logArrow").src="{{ url_for('static', filename='collapse.png') }}";
+        logState = 'collapse'
+      }
     }
     </script>
   </body>

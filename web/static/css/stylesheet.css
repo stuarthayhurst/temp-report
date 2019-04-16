@@ -64,10 +64,10 @@ input.inputLog:checked~.titleLog {
 .button {
   background-color: #0e0e0f;
   user-select: none;
-  border-radius: 20px;
+  border-radius: 10px;
   border: none;
   color: white;
-  padding: 10px 15px;
+  padding: 10px 20px;
   text-align: center;
   font-size: 16px;
 }
@@ -95,6 +95,12 @@ input.inputLog:checked~.titleLog {
   color: black;
   width: 600px;
   height: 360px;
+}
+#expand {
+  content:url("../expand.png");
+}
+.collapse {
+  content:url("../collapse.png");
 }
 .topbar {
   position: fixed;
