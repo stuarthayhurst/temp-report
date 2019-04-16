@@ -31,18 +31,17 @@ def main(flaskVer=flask.__version__, tempWebVer=tempWebVer, tempVer=tempVer, lin
     def measureTemp():
         print('Updated Temperature')
         return str(sensor.get_temperature()) + '°C'
-    def updateFiles():
-        shutil.copy2(parDir + '/temps.log', currDir + '/temps.log')
-        graphPointCount = tempreport.readCSVLine(parDir + '/data/config.csv', 2, 'keyword', 'graph_point_count', var_type = 'int')
-        graph.generateGraph(graphPointCount)
-        shutil.move(currDir + '/temps.log', currDir + '/static/temps.log')
-        shutil.move(currDir + '/graph.png', currDir + '/static/graph.png')
-        print('Updated files')
+    shutil.copy2(parDir + '/temps.log', currDir + '/temps.log')
+    graphPointCount = tempreport.readCSVLine(parDir + '/data/config.csv', 2, 'keyword', 'graph_point_count', var_type = 'int')
+    graph.generateGraph(graphPointCount)
+    shutil.move(currDir + '/temps.log', currDir + '/static/temps.log')
+    shutil.move(currDir + '/graph.png', currDir + '/static/graph.png')
+    print('Updated Files')
     with open(currDir + '/static/temps.log', "r") as f:
         logContent = f.read()
         logContent = logContent.rsplit('\n', 1)
         logContent = ''.join(logContent)
-    return render_template('tempreport.html', flaskVer=flaskVer, tempWebVer=tempWebVer, tempVer=tempVer, measureTemp=measureTemp, updateFiles=updateFiles, logContent=logContent, lineCount=lineCount, pointCount=pointCount)
+    return render_template('tempreport.html', flaskVer=flaskVer, tempWebVer=tempWebVer, tempVer=tempVer, measureTemp=measureTemp, logContent=logContent, lineCount=lineCount, pointCount=pointCount)
 
 if __name__ == "__main__":
     app.run(host= '0.0.0.0', port= 5000)

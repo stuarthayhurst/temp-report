@@ -43,7 +43,6 @@
                 <p>A frontent for temp-report</p>
                 <p>Move the log and graph text up</p>
                 <p>Make the other table boxes update</p>
-                <p>Update the graph and log every time someone starts the page or constantly</p>
                 <p>Add an arrow that rotates 90 / 270 degrees</p>
               </div>
               <div>
@@ -106,12 +105,6 @@
       el.style.animation = 'none';
       el.offsetHeight;
       el.style.animation = null;
-    }
-    </script>
-    <script>
-    function updateVals() {
-      temp = {{ measureTemp() }}
-      files = {{ updateFiles() }}
     }
     </script>
   </body>
