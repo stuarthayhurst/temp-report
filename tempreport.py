@@ -40,19 +40,21 @@ def readLine(filename, mode, line, **kwargs):
       var_type = str(value)
   if str(os.path.isfile(filename)) == 'False':
     return
-
   if mode == 'numbered':
     with open(filename, 'r') as f:
       reader = f.readlines()
       value = reader[line - 1]
   elif mode == 'keyword':
-    with open(filename) as f:
+    with open(filename, 'r') as f:
       reader = f.readlines()
       for row in range(len(reader)):
         if reader[row].find(str(line)) == 0:
           value = reader[row]
   else:
     return
+  if char != '':
+    search = str(char) + '(.*)'
+    value = re.split(search, value)
   if var_type == 'str':
     return str(value)
   elif var_type == 'int':
