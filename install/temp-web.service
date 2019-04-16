@@ -1,0 +1,15 @@
+[Unit]
+Description=temp-report web frontend
+After=network.target
+StartLimitIntervalSec=5
+
+[Service]
+Type=forking
+Restart=always
+RestartSec=1
+User=pi
+ExecStart=
+RemainAfterExit=true
+
+[Install]
+WantedBy=multi-user.target

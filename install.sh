@@ -45,6 +45,7 @@ generatejobs() {
   sed 's|.*ExecStart=.*|ExecStart=/bin/bash '$DIR'/autostart.sh -t|' install/temp-report.service > install/temp-report-temp.service
   sed 's|.*ExecStart=.*|ExecStart=/bin/bash '$DIR'/autostart.sh -r|' install/temp-listener.service > install/temp-listener-temp.service
   sed 's|.*ExecStart=.*|ExecStart=/bin/bash '$DIR'/autostart.sh -l|' install/temp-log.service > install/temp-log-temp.service
+  sed 's|.*ExecStart=.*|ExecStart=/bin/bash '$DIR'/autostart.sh -w|' install/temp-web.service > install/temp-web-temp.service
   echo "Done"
 }
 
@@ -57,9 +58,12 @@ installjobs() {
   sudo rm install/temp-listener-temp.service
   sudo cp install/temp-log-temp.service /etc/systemd/system/temp-log.service
   sudo rm install/temp-log-temp.service
+  sudo cp install/temp-web-temp.service /etc/systemd/system/temp-web.service
+  sudo rm install/temp-web-temp.service
   sudo systemctl enable temp-report
   sudo systemctl enable temp-listener
   sudo systemctl enable temp-log
+  sudo systemctl enable temp-web
   echo "Done"
 }
 
