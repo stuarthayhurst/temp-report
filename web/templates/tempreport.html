@@ -49,15 +49,15 @@
                 <table id="temp-table" style="width: 400px;">
                   <tr>
                       <th>Current Temperature:</th>
-                      <td id="currTempVal">{{ measureTemp() }}</td><td>Time</td>
+                      <td id="currTempVal">{{ measureTemp('temp') }}</td><td>{{ measureTemp('time') }}</td>
                   </tr>
                   <tr>
                       <th>Highest Temperature:</th>
-                      <td>Temp</td><td>Time</td>
+                      <td>{{ maxTemp('temp') }}</td><td>{{ maxTemp('time') }}</td>
                   </tr>
                   <tr>
                       <th>Lowest Temperature:</th>
-                      <td>Temp</td><td>Time</td>
+                      <td>{{ minTemp('temp') }}</td><td>{{ minTemp('time') }}</td>
                   </tr>
                 </table>
               </div>
