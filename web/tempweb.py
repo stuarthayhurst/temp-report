@@ -18,7 +18,8 @@ tempWebVer = tempreport.readLine(readme, 'keyword', 'Temp-web', char = ': ')
 tempVer = tempreport.readLine(readme, 'keyword', 'Temp-report', char = ': ')
 
 shutil.copy2(parDir + '/temps.log', currDir + '/temps.log')
-graph.generateGraph(12)
+
+graph.generateGraph(tempreport.readCSVLine(parDir + '/data/config.csv', 2, 'keyword', 'graph_point_count', var_type = 'int'))
 shutil.move(currDir + '/temps.log', currDir + '/static/temps.log')
 shutil.move(currDir + '/graph.png', currDir + '/static/graph.png')
 
