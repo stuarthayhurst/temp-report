@@ -25,10 +25,8 @@ ul {
 ul.subGraph {
   max-height: 360px;
   height: 360px;
-  /*visibility: hidden;*/
   overflow: hidden;
   opacity: 0;
-  /*transition: opacity 1s linear;*/
 }
 ul.subLog {
   max-height: 360px;
@@ -60,6 +58,11 @@ input.inputLog:checked~ul.subLog {
 }
 .button:hover {
   background-color: #1b1a1c;
+}
+.bannerImage {
+    margin-left: 1%;
+    width: 13.82%;
+    height: 100%;
 }
 .footer {
   background-color: #262728;
