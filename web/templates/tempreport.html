@@ -41,15 +41,13 @@
                 <h2>Temperature display panel</h2>
                 <p>&nbsp</p>
                 <p>A frontent for temp-report</p>
-                <p>Move the log and graph text up</p>
-                <p>Make the other table boxes update</p>
                 <p>Add an arrow that rotates 90 / 270 degrees</p>
               </div>
               <div>
                 <table id="temp-table" style="width: 400px;">
                   <tr>
                       <th>Current Temperature:</th>
-                      <td id="currTempVal">{{ measureTemp('temp') }}</td><td>{{ measureTemp('time') }}</td>
+                      <td>{{ measureTemp('temp') }}</td><td>{{ measureTemp('time') }}</td>
                   </tr>
                   <tr>
                       <th>Highest Temperature:</th>
@@ -64,17 +62,15 @@
               <br>
               <div style="display: inline-block;">
                 <input id="graphCheck" class="inputGraph" type="checkbox" name="Graph" />
-                <label class="button" for="graphCheck">Graph</label>
+                <label class="button" for="graphCheck">Graph</label><p class="titleGraph">   Graph: | {{ pointCount }} points</p>
                 <ul class="subGraph">
-                  <li>Graph: | {{ pointCount }} points</li>
                   <li><img src="{{ url_for('static', filename='graph.png') }}" alt="Temperature Graph" height="360" width="600"></li>
                 </ul>
               </div>
               <div style="display: inline-block;">
                 <input id="logCheck" class="inputLog" type="checkbox" name="Log" />
-                <label class="button" for="logCheck">Log</label>
+                <label class="button" for="logCheck">Log</label><p class="titleLog">   Log: | {{ lineCount }} lines</p>
                 <ul class="subLog">
-                  <li>Log: | {{ lineCount }} lines</li>
                   <li><textarea class="logBox" readonly>{{ logContent }}</textarea></li>
                 </ul>
               </div>

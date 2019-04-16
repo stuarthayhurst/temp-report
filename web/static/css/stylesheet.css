@@ -31,8 +31,14 @@ ul.subGraph {
 ul.subLog {
   max-height: 360px;
   height: 360px;
-  visibility: hidden;
+  opacity: 0;
   overflow: hidden;
+}
+.titleGraph {
+  opacity: 0;
+}
+.titleLog{
+  opacity: 0;
 }
 label {
   position: relative;
@@ -44,7 +50,16 @@ input.inputGraph:checked~ul.subGraph {
   transition: opacity 1s linear;
 }
 input.inputLog:checked~ul.subLog {
-  visibility: visible;
+  opacity: 1;
+  transition: opacity 1s linear;
+}
+input.inputGraph:checked~.titleGraph {
+  opacity: 1;
+  transition: opacity 1s linear;
+}
+input.inputLog:checked~.titleLog {
+  opacity: 1;
+  transition: opacity 1s linear;
 }
 .button {
   background-color: #0e0e0f;
