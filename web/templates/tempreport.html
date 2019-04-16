@@ -45,7 +45,6 @@
                 <p>Make the other table boxes update</p>
                 <p>Update the graph and log every time someone starts the page or constantly</p>
                 <p>Add an arrow that rotates 90 / 270 degrees</p>
-                <button onclick="updateTemp()">Update</button>
               </div>
               <div>
                 <table id="temp-table" style="width: 400px;">
@@ -112,6 +111,7 @@
     <script>
     function updateVals() {
       temp = {{ measureTemp() }}
+      files = {{ updateFiles() }}
     }
     </script>
   </body>

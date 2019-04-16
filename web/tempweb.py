@@ -25,12 +25,19 @@ shutil.move(currDir + '/graph.png', currDir + '/static/graph.png')
 
 with open(currDir + '/static/temps.log', "r") as f:
     lineCount = len(f.readlines())
-
+    
 @app.route('/')
 def main(flaskVer=flask.__version__, tempWebVer=tempWebVer, tempVer=tempVer, lineCount=lineCount, pointCount=graphPointCount):
     def measureTemp():
         print('Updated Temperature')
         return str(sensor.get_temperature()) + '°C'
+    def updateFiles():
+        shutil.copy2(parDir + '/temps.log', currDir + '/temps.log')
+        graphPointCount = tempreport.readCSVLine(parDir + '/data/config.csv', 2, 'keyword', 'graph_point_count', var_type = 'int')
+        graph.generateGraph(graphPointCount)
+        shutil.move(currDir + '/temps.log', currDir + '/static/temps.log')
+        shutil.move(currDir + '/graph.png', currDir + '/static/graph.png')
+        print('Updated files')
     with open(currDir + '/static/temps.log', "r") as f:
         logContent = f.read()
         logContent = logContent.rsplit('\n', 1)
