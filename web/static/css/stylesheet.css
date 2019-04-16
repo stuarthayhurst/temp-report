@@ -72,6 +72,8 @@ input.inputLog:checked~ul.subLog {
     white-space: pre-wrap;
     font-size: 14px;
     color: black;
+    width: 600px;
+    height: 360px;
 }
 .topbar {
   position: fixed;
