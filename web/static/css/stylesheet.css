@@ -12,6 +12,47 @@ table, th, td {
 th, td {
   padding: 10px;
 }
+/*hide the inputs/checkmarks*/
+input {
+  display: none;
+}
+/*hide the submenu*/
+ul.subGraph {
+  max-height: 300px;
+  visibility: hidden;
+  overflow: hidden;
+}
+/*hide the submenu*/
+ul.subLog {
+  max-height: 300px;
+  visibility: hidden;
+  overflow: hidden;
+}
+/*position the label*/
+label {
+  position: relative;
+  display: block;
+  cursor: pointer;
+}
+/*show the submenu when checked*/
+input.inputGraph:checked~ul.subGraph {
+  visibility: visible;
+}
+input.inputLog:checked~ul.subLog {
+  visibility: visible;
+}
+.button {
+    background-color: #0e0e0f;
+    border-radius: 20px;
+    border: none;
+    color: white;
+    padding: 10px 15px;
+    text-align: center;
+    font-size: 16px;
+}
+.button:hover {
+    background-color: #1b1a1c;
+}
 .footer {
   background-color: #262728;
   color: white;
