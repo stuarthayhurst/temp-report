@@ -1,5 +1,5 @@
 from flask import Flask, render_template, url_for
-import flask, random, os, sys, inspect
+import flask, random, os, sys, inspect, shutil, time
 app = Flask(__name__, static_url_path='/static')
 
 try:
@@ -16,6 +16,11 @@ import graph, tempreport
 readme = parDir + '/README.md'
 tempWebVer = tempreport.readLine(readme, 'keyword', 'Temp-web', char = ': ')
 tempVer = tempreport.readLine(readme, 'keyword', 'Temp-report', char = ': ')
+
+shutil.copy2(parDir + '/temps.log', currDir + '/temps.log')
+graph.generateGraph(12)
+shutil.move(currDir + '/temps.log', currDir + '/static/temps.log')
+shutil.move(currDir + '/graph.png', currDir + '/static/graph.png')
 
 @app.route('/')
 def main(flaskVer=flask.__version__, tempWebVer=tempWebVer, tempVer=tempVer):
