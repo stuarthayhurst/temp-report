@@ -53,8 +53,9 @@ def readLine(filename, mode, line, **kwargs):
   else:
     return
   if char != '':
-    search = str(char) + '(.*)'
-    value = re.split(search, value)
+    value = value.strip()
+    value = re.split(str(char), value)
+    value = value[len(value) - 1]
   if var_type == 'str':
     return str(value)
   elif var_type == 'int':
