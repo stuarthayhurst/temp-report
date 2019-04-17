@@ -2,9 +2,6 @@ from flask import Flask, render_template, url_for
 import flask, random, os, sys, inspect, shutil, time, datetime, gpiozero
 app = Flask(__name__, static_url_path='/static')
 
-class cpu:
-  temperature = 5
-
 try:
     from w1thermsensor import W1ThermSensor
     from gpiozero import CPUTemperature
@@ -32,7 +29,7 @@ shutil.move(currDir + '/graph.png', currDir + '/static/graph.png')
 def main(flaskVer=flask.__version__, tempWebVer=tempWebVer, tempVer=tempVer, pointCount=graphPointCount, cpu=cpu):
     def measureTemp(mode):
         if mode == 'temp':
-            value = 30.0#str(sensor.get_temperature()) + '°C'
+            value = str(sensor.get_temperature()) + '°C'
             print('Updated Temperature')
         elif mode == 'time':
             value = datetime.datetime.now().strftime("%H:%M:%S")
