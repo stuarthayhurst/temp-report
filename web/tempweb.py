@@ -23,11 +23,8 @@ graph.generateGraph(graphPointCount)
 shutil.move(currDir + '/temps.log', currDir + '/static/temps.log')
 shutil.move(currDir + '/graph.png', currDir + '/static/graph.png')
 
-with open(currDir + '/static/temps.log', "r") as f:
-    lineCount = len(f.readlines())
-
 @app.route('/')
-def main(flaskVer=flask.__version__, tempWebVer=tempWebVer, tempVer=tempVer, lineCount=lineCount, pointCount=graphPointCount):
+def main(flaskVer=flask.__version__, tempWebVer=tempWebVer, tempVer=tempVer, pointCount=graphPointCount):
     def measureTemp(mode):
         if mode == 'temp':
             value = 30.0#str(sensor.get_temperature()) + '°C'
@@ -66,6 +63,10 @@ def main(flaskVer=flask.__version__, tempWebVer=tempWebVer, tempVer=tempVer, lin
         logContent = f.read()
         logContent = logContent.rsplit('\n', 1)
         logContent = ''.join(logContent)
+
+    with open(currDir + '/static/temps.log', "r") as f:
+        lineCount = len(f.readlines())
+        print('Found ' + str(lineCount) + ' lines')
 
     return render_template('tempreport.html', flaskVer=flaskVer, tempWebVer=tempWebVer, tempVer=tempVer, measureTemp=measureTemp, maxTemp=maxTemp, minTemp=minTemp, logContent=logContent, lineCount=lineCount, pointCount=pointCount)
 
