@@ -62,7 +62,7 @@
               </div>
               <br>
               <div style="display: inline-block;">
-                <img id="graphArrow" height="35" width="35" src="{{ url_for('static', filename='collapse.png') }}">
+                <img id="graphArrow" onclick="toggleGraphArrow()" height="35" width="35" src="{{ url_for('static', filename='collapse.png') }}">
                 <input id="graphCheck" class="inputGraph" type="checkbox" name="Graph" />
                 <label class="button" onclick="toggleGraph()" for="graphCheck">Graph</label><p class="titleGraph">  &nbsp<span style="background-color: #4ace4f"> </span>Graph: | {{ pointCount }} points</p>
                 <ul class="subGraph">
@@ -70,7 +70,7 @@
                 </ul>
               </div>
               <div style="display: inline-block;">
-                <img id="logArrow" height="35" width="35" src="{{ url_for('static', filename='collapse.png') }}">
+                <img id="logArrow" onclick="toggleLogArrow()" height="35" width="35" src="{{ url_for('static', filename='collapse.png') }}">
                 <input id="logCheck" class="inputLog" type="checkbox" name="Log" />
                 <label class="button" onclick="toggleLog()" for="logCheck">Log</label><p class="titleLog">  &nbsp<span style="background-color: #4ace4f"> </span>Log: | {{ lineCount }} lines</p>
                 <ul class="subLog">
@@ -118,12 +118,34 @@
         graphState = 'collapse'
       }
     }
+    function toggleGraphArrow() {
+      if (graphState == 'collapse') {
+        document.getElementById('graphCheck').checked = true;
+        document.getElementById("graphArrow").src="{{ url_for('static', filename='expand.png') }}";
+        graphState = 'expand'
+      } else {
+        document.getElementById('graphCheck').checked = false;
+        document.getElementById("graphArrow").src="{{ url_for('static', filename='collapse.png') }}";
+        graphState = 'collapse'
+      }
+    }
     logState = 'collapse'
     function toggleLog() {
       if (logState == 'collapse') {
         document.getElementById("logArrow").src="{{ url_for('static', filename='expand.png') }}";
         logState = 'expand'
       } else {
+        document.getElementById("logArrow").src="{{ url_for('static', filename='collapse.png') }}";
+        logState = 'collapse'
+      }
+    }
+    function toggleLogArrow() {
+      if (logState == 'collapse') {
+        document.getElementById('logCheck').checked = true;
+        document.getElementById("logArrow").src="{{ url_for('static', filename='expand.png') }}";
+        logState = 'expand'
+      } else {
+        document.getElementById('logCheck').checked = false;
         document.getElementById("logArrow").src="{{ url_for('static', filename='collapse.png') }}";
         logState = 'collapse'
       }
