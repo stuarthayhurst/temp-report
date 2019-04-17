@@ -10,6 +10,10 @@ html, body {
   background: #4ace4f;
 }
 table, th, td {
+  /*border: 1px solid black;
+  border-collapse: collapse;*/
+}
+.tableborder {
   border: 1px solid black;
   border-collapse: collapse;
 }

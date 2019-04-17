@@ -45,18 +45,23 @@
                 <p>Make the arrows toggle the content as well</p>
               </div>
               <div>
-                <table id="temp-table" style="width: 400px;">
+                <table id="temp-table" style="width: 400px; empty-cells: hide;">
                   <tr>
-                      <th>Current Temperature:</th>
-                      <td>{{ measureTemp('temp') }}</td><td>{{ measureTemp('time') }}</td>
+                      <th></th>
+                      <th class="tableborder">Temp:</th>
+                      <th class="tableborder">Time:</th>
                   </tr>
                   <tr>
-                      <th>Highest Temperature:</th>
-                      <td>{{ maxTemp('temp') }}</td><td>{{ maxTemp('time') }}</td>
+                      <th class="tableborder">Current Temperature:</th>
+                      <td class="tableborder">{{ measureTemp('temp') }}</td><td class="tableborder">{{ measureTemp('time') }}</td>
                   </tr>
                   <tr>
-                      <th>Lowest Temperature:</th>
-                      <td>{{ minTemp('temp') }}</td><td>{{ minTemp('time') }}</td>
+                      <th class="tableborder">Highest Temperature:</th>
+                      <td class="tableborder">{{ maxTemp('temp') }}</td><td class="tableborder">{{ maxTemp('time') }}</td>
+                  </tr>
+                  <tr>
+                      <th class="tableborder">Lowest Temperature:</th>
+                      <td class="tableborder">{{ minTemp('temp') }}</td><td class="tableborder">{{ minTemp('time') }}</td>
                   </tr>
                 </table>
               </div>
