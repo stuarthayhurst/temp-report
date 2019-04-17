@@ -38,11 +38,9 @@
         <div id="page-content-wrapper" class="container-fluid">
             <div class="container-fluid" style="margin-top: 4.7%;">
               <div>
-                <h2>Temperature display panel</h2>
-                <p>&nbsp</p>
-                <p>A temperature display panel frontent for temp-report</p>
+                <h2>Temperature display panel</h2>&nbsp
+                <p>A temperature display panel frontend for temp-report</p>
                 <p>Temp-report is a small project to create a system that can handle the output from a Pi temperature logger.</p>
-                <p>Make the arrows toggle the content as well</p>
               </div>
               <div>
                 <table id="temp-table" style="width: 400px; empty-cells: hide;">
@@ -86,7 +84,7 @@
               <div class="footer">
                 <p> </p>
               </div>
-              <a style="position:fixed; z-index: 11; bottom: 0; right: 0; margin-right: 2px;">Flask Version: {{ flaskVer }} | Temp-report Web Version: {{ tempWebVer }} | Temp-report Version: {{ tempVer }}</a>
+              <a style="position:fixed; z-index: 11; bottom: 0; right: 0; margin-right: 2px;">Flask Version: {{ flaskVer }} | Temp-report Web Version: {{ tempWebVer }} | Temp-report Version: {{ tempVer }} &nbsp | &nbsp CPU Temperature: {{ cpuTemp }} </a>
         </div>
     </div>
     <script src="{{ url_for('static', filename='vendor/jquery/jquery.min.js') }}"></script>
