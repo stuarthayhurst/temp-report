@@ -5,8 +5,7 @@ import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 from scipy.interpolate import make_interp_spline, BSpline
 import numpy as np
-import sys
-import re, datetime
+import sys, argparse, re, datetime
 
 def generateGraph(reading_count):
     kwargs={'tailmode' : True}
@@ -82,21 +81,36 @@ def readValues(*args, **kwargs):
 
         return x,y
 
-if __name__ == '__main__':
-    try:
-        reading_count = int(sys.argv[1])
-    except IndexError:
-        print('python3 graph.py [int] :Optional integer number of readings to plot\n')
-        reading_count = int(0)
-    except ValueError:
-        print('Needs to be an integer')
-        sys.exit(1)
+def cmd_args(args=None):
+    parser = argparse.ArgumentParser("Graph.py charts range of times from a temperature log")
 
-    if reading_count == 0:
-         kwargs={'tailmode': False, 'from_date' : '2019/03/29-00:00', 'to_date' : '2019/03/30-00:00' }
-    else:
-        kwargs={'tailmode' : True}
+    parser.add_argument('-l', '--lines',  type=int, dest='reading_count', default=12,
+                    help='Number of tailing log lines to plot')
+    parser.add_argument('-s', '--start',  dest='start', 
+                    help='Start date YYYY/MM/DD-HH:MM') 
 
-    args={reading_count}
+    opt = parser.parse_args(args)
+
+    return opt
+
+def main(args=None):
+    opt = cmd_args(args)
+    #print("opt",opt)
+    #print("args",args)
+
+    #Start
+    #kwargs={'tailmode': False, 'from_date' : '2019/03/29-00:00', 'to_date' : '2019/03/30-00:00' }
+    
+    #lines
+    args = {opt.reading_count}
+    kwargs={'tailmode': True}
     x, y  = readValues(*args, **kwargs) 
     drawGraph(x,y)
+    sys.exit(1)
+
+if __name__ == '__main__':
+    try:
+        main(sys.argv[1:])
+    except ValueError:
+        print("Give me something to do")
+        sys.exit(1)
