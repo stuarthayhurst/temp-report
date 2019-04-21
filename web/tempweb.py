@@ -1,9 +1,11 @@
 from flask import Flask, render_template, url_for
-import flask, random, os, sys, inspect, shutil, time, datetime
+import flask, random, os, sys, inspect, shutil, time, datetime, gpiozero
 app = Flask(__name__, static_url_path='/static')
 
 try:
     from w1thermsensor import W1ThermSensor
+    from gpiozero import CPUTemperature
+    cpu = CPUTemperature()
     sensor = W1ThermSensor()
 except:
     print('Failed to load kernel modules, make sure you are running this on an RPI with OneWire and GPIO enabled')
@@ -23,11 +25,8 @@ graph.generateGraph(graphPointCount)
 shutil.move(currDir + '/temps.log', currDir + '/static/temps.log')
 shutil.move(currDir + '/graph.png', currDir + '/static/graph.png')
 
-with open(currDir + '/static/temps.log', "r") as f:
-    lineCount = len(f.readlines())
-
 @app.route('/')
-def main(flaskVer=flask.__version__, tempWebVer=tempWebVer, tempVer=tempVer, lineCount=lineCount, pointCount=graphPointCount):
+def main(flaskVer=flask.__version__, tempWebVer=tempWebVer, tempVer=tempVer, pointCount=graphPointCount, cpu=cpu):
     def measureTemp(mode):
         if mode == 'temp':
             value = str(sensor.get_temperature()) + '°C'
@@ -67,7 +66,11 @@ def main(flaskVer=flask.__version__, tempWebVer=tempWebVer, tempVer=tempVer, lin
         logContent = logContent.rsplit('\n', 1)
         logContent = ''.join(logContent)
 
-    return render_template('tempreport.html', flaskVer=flaskVer, tempWebVer=tempWebVer, tempVer=tempVer, measureTemp=measureTemp, maxTemp=maxTemp, minTemp=minTemp, logContent=logContent, lineCount=lineCount, pointCount=pointCount)
+    with open(currDir + '/static/temps.log', "r") as f:
+        lineCount = len(f.readlines())
+        print('Found ' + str(lineCount) + ' lines')
+
+    return render_template('tempreport.html', flaskVer=flaskVer, tempWebVer=tempWebVer, tempVer=tempVer, measureTemp=measureTemp, maxTemp=maxTemp, minTemp=minTemp, logContent=logContent, lineCount=lineCount, pointCount=pointCount, cpuTemp=str(cpu.temperature) + '°C')
 
 if __name__ == "__main__":
     app.run(host= '0.0.0.0', port= 5000)

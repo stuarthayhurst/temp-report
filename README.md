@@ -3,7 +3,7 @@ A small project to create a system that can handle the output from a Pi temperat
 The system maintains a mail-list and will respond to mail requests. Reports include temperature charts and are generated when the temperature moves outside of a defined range or an email is received requesting a report.
 
 Temp-report Version: 1.1.0
-Temp-web Version: 0.9.5
+Temp-web Version: 0.9.8
 
 ## Dependencies:
 All required and recommended packages are automatically installed when running the installer
@@ -41,6 +41,7 @@ All required and recommended packages are automatically installed when running t
 - Use `tmux att -t temp_report` to view the program
 - Use `tmux att -t temp_listener` to view the email reply bot
 - Use `tmux att -t temp_log` to view the automatic temperature log
+- Use `tmux att -t temp_web` to view the web frontend log
 - Run `./install.sh -s` to allow the program to start on boot
 - After an update, run `python3 temp.py -cs` to update the config with any new lines
 - You can use `./import.sh -h` to import and export csv files

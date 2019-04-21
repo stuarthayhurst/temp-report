@@ -38,31 +38,34 @@
         <div id="page-content-wrapper" class="container-fluid">
             <div class="container-fluid" style="margin-top: 4.7%;">
               <div>
-                <h2>Temperature display panel</h2>
-                <p>&nbsp</p>
-                <p>A temperature display panel frontent for temp-report</p>
+                <h2>Temperature display panel</h2>&nbsp
+                <p>A temperature display panel frontend for temp-report</p>
                 <p>Temp-report is a small project to create a system that can handle the output from a Pi temperature logger.</p>
-                <p>Make the arrows toggle the content as well</p>
               </div>
               <div>
-                <table id="temp-table" style="width: 400px;">
+                <table id="temp-table" style="width: 400px; empty-cells: hide;">
                   <tr>
-                      <th>Current Temperature:</th>
-                      <td>{{ measureTemp('temp') }}</td><td>{{ measureTemp('time') }}</td>
+                      <th></th>
+                      <th class="tableborder">Temp:</th>
+                      <th class="tableborder">Time:</th>
                   </tr>
                   <tr>
-                      <th>Highest Temperature:</th>
-                      <td>{{ maxTemp('temp') }}</td><td>{{ maxTemp('time') }}</td>
+                      <th class="tableborder">Current Temperature:</th>
+                      <td class="tableborder">{{ measureTemp('temp') }}</td><td class="tableborder">{{ measureTemp('time') }}</td>
                   </tr>
                   <tr>
-                      <th>Lowest Temperature:</th>
-                      <td>{{ minTemp('temp') }}</td><td>{{ minTemp('time') }}</td>
+                      <th class="tableborder">Highest Temperature:</th>
+                      <td class="tableborder">{{ maxTemp('temp') }}</td><td class="tableborder">{{ maxTemp('time') }}</td>
+                  </tr>
+                  <tr>
+                      <th class="tableborder">Lowest Temperature:</th>
+                      <td class="tableborder">{{ minTemp('temp') }}</td><td class="tableborder">{{ minTemp('time') }}</td>
                   </tr>
                 </table>
               </div>
               <br>
               <div style="display: inline-block;">
-                <img id="graphArrow" height="35" width="35" src="{{ url_for('static', filename='collapse.png') }}">
+                <img id="graphArrow" onclick="toggleGraphArrow()" height="35" width="35" src="{{ url_for('static', filename='collapse.png') }}">
                 <input id="graphCheck" class="inputGraph" type="checkbox" name="Graph" />
                 <label class="button" onclick="toggleGraph()" for="graphCheck">Graph</label><p class="titleGraph">  &nbsp<span style="background-color: #4ace4f"> </span>Graph: | {{ pointCount }} points</p>
                 <ul class="subGraph">
@@ -70,7 +73,7 @@
                 </ul>
               </div>
               <div style="display: inline-block;">
-                <img id="logArrow" height="35" width="35" src="{{ url_for('static', filename='collapse.png') }}">
+                <img id="logArrow" onclick="toggleLogArrow()" height="35" width="35" src="{{ url_for('static', filename='collapse.png') }}">
                 <input id="logCheck" class="inputLog" type="checkbox" name="Log" />
                 <label class="button" onclick="toggleLog()" for="logCheck">Log</label><p class="titleLog">  &nbsp<span style="background-color: #4ace4f"> </span>Log: | {{ lineCount }} lines</p>
                 <ul class="subLog">
@@ -81,7 +84,7 @@
               <div class="footer">
                 <p> </p>
               </div>
-              <a style="position:fixed; z-index: 11; bottom: 0; right: 0; margin-right: 2px;">Flask Version: {{ flaskVer }} | Temp-report Web Version: {{ tempWebVer }} | Temp-report Version: {{ tempVer }}</a>
+              <a style="position:fixed; z-index: 11; bottom: 0; right: 0; margin-right: 2px;">Flask Version: {{ flaskVer }} | Temp-report Web Version: {{ tempWebVer }} | Temp-report Version: {{ tempVer }} &nbsp | &nbsp CPU Temperature: {{ cpuTemp }} </a>
         </div>
     </div>
     <script src="{{ url_for('static', filename='vendor/jquery/jquery.min.js') }}"></script>
@@ -118,12 +121,34 @@
         graphState = 'collapse'
       }
     }
+    function toggleGraphArrow() {
+      if (graphState == 'collapse') {
+        document.getElementById('graphCheck').checked = true;
+        document.getElementById("graphArrow").src="{{ url_for('static', filename='expand.png') }}";
+        graphState = 'expand'
+      } else {
+        document.getElementById('graphCheck').checked = false;
+        document.getElementById("graphArrow").src="{{ url_for('static', filename='collapse.png') }}";
+        graphState = 'collapse'
+      }
+    }
     logState = 'collapse'
     function toggleLog() {
       if (logState == 'collapse') {
         document.getElementById("logArrow").src="{{ url_for('static', filename='expand.png') }}";
         logState = 'expand'
       } else {
+        document.getElementById("logArrow").src="{{ url_for('static', filename='collapse.png') }}";
+        logState = 'collapse'
+      }
+    }
+    function toggleLogArrow() {
+      if (logState == 'collapse') {
+        document.getElementById('logCheck').checked = true;
+        document.getElementById("logArrow").src="{{ url_for('static', filename='expand.png') }}";
+        logState = 'expand'
+      } else {
+        document.getElementById('logCheck').checked = false;
         document.getElementById("logArrow").src="{{ url_for('static', filename='collapse.png') }}";
         logState = 'collapse'
       }
