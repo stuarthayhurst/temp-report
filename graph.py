@@ -83,11 +83,17 @@ def readValues(*args, **kwargs):
 
 def cmd_args(args=None):
     parser = argparse.ArgumentParser("Graph.py charts range of times from a temperature log")
+    group = parser.add_mutually_exclusive_group()
 
-    parser.add_argument('-l', '--lines',  type=int, dest='reading_count', default=12,
+
+    parser.add_argument('-l', '--lines',  type=int, dest='lines', default=12,
                     help='Number of tailing log lines to plot')
     parser.add_argument('-s', '--start',  dest='start', 
                     help='Start date YYYY/MM/DD-HH:MM') 
+    group.add_argument('-e', '--end',  dest='end', 
+                    help='End   date YYYY/MM/DD-HH:MM') 
+    group.add_argument('-d', '--dur',  dest='dur', choices=['H', 'D', 'W', 'M'],
+                    help='Duration: Hours, Days, Weeks, Months') 
 
     opt = parser.parse_args(args)
 
@@ -102,8 +108,10 @@ def main(args=None):
     #kwargs={'tailmode': False, 'from_date' : '2019/03/29-00:00', 'to_date' : '2019/03/30-00:00' }
     
     #lines
-    args = {opt.reading_count}
-    kwargs={'tailmode': True}
+    if opt.lines:
+        args = {opt.lines}
+        kwargs={'tailmode': True}
+
     x, y  = readValues(*args, **kwargs) 
     drawGraph(x,y)
     sys.exit(1)
