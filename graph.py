@@ -107,11 +107,12 @@ def main(args=None):
     opt = cmd_args(args)
     #print("opt",opt)
     #print("args",args)
-
+    kwargs={}
     #Start
     if opt.start:
         #check and set start dt
-        kwargs={'tailmode': False, 'from_date' : '2019/03/29-00:00', 'to_date' : '2019/03/30-00:00' }
+        kwargs={'tailmode': False, 'from_date': opt.start }
+        kwargs={'to_date': opt.end, **kwargs}
     
     #lines
     elif opt.lines:
