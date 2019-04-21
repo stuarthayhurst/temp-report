@@ -39,8 +39,8 @@ def drawGraph(x,y):
     plt.clf()
 
 def readValues(*args, **kwargs):
-    #for key, value in kwargs.items(): 
-    #    print ("%s == %s" %(key, value))
+    for key, value in kwargs.items(): 
+        print ("%s == %s" %(key, value))
     reading_count = args[0]
     log_dt_format = '%a %b %d %H:%M:%S %Y'
     dt_format = '%Y/%m/%d-%H:%M'
@@ -92,12 +92,16 @@ def cmd_args(args=None):
                     help='Start date YYYY/MM/DD-HH:MM') 
     group.add_argument('-e', '--end',  dest='end', 
                     help='End   date YYYY/MM/DD-HH:MM') 
-    group.add_argument('-d', '--dur',  dest='dur', choices=['H', 'D', 'W', 'M'],
-                    help='Duration: Hours, Days, Weeks, Months') 
+    group.add_argument('-d', '--dur',  dest='dur', 
+                    help='Duration: Hours, Days, Weeks, Months e.g. 2W for 2 weeks') 
 
     opt = parser.parse_args(args)
 
     return opt
+
+def parse_duration(duration):
+    pass
+    return end_date
 
 def main(args=None):
     opt = cmd_args(args)
@@ -105,10 +109,12 @@ def main(args=None):
     #print("args",args)
 
     #Start
-    #kwargs={'tailmode': False, 'from_date' : '2019/03/29-00:00', 'to_date' : '2019/03/30-00:00' }
+    if opt.start:
+        #check and set start dt
+        kwargs={'tailmode': False, 'from_date' : '2019/03/29-00:00', 'to_date' : '2019/03/30-00:00' }
     
     #lines
-    if opt.lines:
+    elif opt.lines:
         args = {opt.lines}
         kwargs={'tailmode': True}
 
