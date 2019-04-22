@@ -6,7 +6,7 @@ from email.mime.text import MIMEText
 from email.mime.image import MIMEImage
 
 #Variables for email and the sensor
-email_recipients = []
+email_recipients = ['']
 last_email_time = datetime.datetime(1970, 1, 1, 0, 0)
 record_reset_time = datetime.datetime(1970, 1, 1, 0, 0)
 email_time_diff = 0
@@ -44,6 +44,7 @@ def connectToServer():
   print('Logged in successfully as ' + email_sender + '\n')
 
 def updateRecipients():
+  global email_recipients
   if str(os.path.isfile('data/addresses.csv')) == 'False':
     print('\nNo address file found, starting address editor: \n')
     tempreport.dataEdit()
