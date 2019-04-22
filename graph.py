@@ -83,16 +83,14 @@ def readValues(*args, **kwargs):
 
 def cmd_args(args=None):
     parser = argparse.ArgumentParser("Graph.py charts range of times from a temperature log")
-    group = parser.add_mutually_exclusive_group()
-
 
     parser.add_argument('-l', '--lines',  type=int, dest='lines', default=12,
                     help='Number of tailing log lines to plot')
     parser.add_argument('-s', '--start',  dest='start', 
                     help='Start date YYYY/MM/DD-HH:MM') 
-    group.add_argument('-e', '--end',  dest='end', 
+    parser.add_argument('-e', '--end',  dest='end', 
                     help='End   date YYYY/MM/DD-HH:MM') 
-    group.add_argument('-d', '--dur',  dest='dur', 
+    parser.add_argument('-d', '--dur',  dest='dur', 
                     help='Duration: Hours, Days, Weeks, Months e.g. 2W for 2 weeks') 
 
     opt = parser.parse_args(args)
@@ -105,19 +103,21 @@ def parse_duration(duration):
 
 def main(args=None):
     opt = cmd_args(args)
-    #print("opt",opt)
-    #print("args",args)
-    kwargs={}
-    #Start
-    if opt.start:
-        #check and set start dt
-        kwargs={'tailmode': False, 'from_date': opt.start }
-        kwargs={'to_date': opt.end, **kwargs}
-    
-    #lines
-    elif opt.lines:
+    kwargs = {'tailmode':False}
+    #--lines set tailmode and pass number of lines
+    if  opt.lines:
+        kwargs = {'tailmode': True, **kwargs}
         args = {opt.lines}
-        kwargs={'tailmode': True}
+
+    if opt.dur and opt.start and opt.end: print("all three madness")
+    if opt.dur and opt.start and not opt.end: print("Start & duration")
+    if opt.dur and not opt.start and opt.end: print("End and Duration")
+    if opt.dur and not opt.start and not opt.end: #print("Duration only")
+       print("call from end back to duratiion") 
+    if not opt.dur and opt.start and opt.end: #print("normal start and end")
+        kwargs={'from_date': opt.start, 'to_date': opt.end, **kwargs}
+    if not opt.dur and not opt.start and not opt.end:   # print("tailmode I presume")
+        pass
 
     x, y  = readValues(*args, **kwargs) 
     drawGraph(x,y)
