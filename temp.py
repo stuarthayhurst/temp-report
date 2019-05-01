@@ -50,6 +50,7 @@ def updateRecipients():
     tempreport.dataEdit()
   print('Addresses:')
   line_count = tempreport.getLineCount('data/addresses.csv')
+  email_recipients = []
   for line in range(2, line_count + 1):
     if line == 2:
       email_recipients[0] = (tempreport.readCSVLine('data/addresses.csv', 1, 'numbered', line, var_type = 'str'))
