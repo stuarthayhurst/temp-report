@@ -128,6 +128,8 @@ def writeConfig(mode):
     print('Generated new config\n')
     return
   elif mode == 's':
+    if str(os.path.isfile('data/config.csv')) == 'False':
+      writeConfig('f')
     add_count = 0
     remove_count = 0
     for count in range(1, len(changes)):
