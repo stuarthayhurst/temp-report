@@ -62,8 +62,7 @@ def readValues(*args, **kwargs):
         from_dt = datetime.datetime.strptime(from_date, dt_format)
         to_date = kwargs.get('to_date')
         to_dt = datetime.datetime.strptime(to_date, dt_format)
-        from_dt = datetime.datetime.strptime(from_date, dt_format)
-        to_dt = datetime.datetime.strptime(to_date, dt_format)
+        
     with open('temps.log', 'r') as f:
         if tailmode:
             taildata = f.readlines() [-reading_count:]
@@ -103,8 +102,9 @@ def cmd_args(args=None):
     return opt
 
 def parse_duration(duration):
-    pass
-    return end_date
+    print("Duration == ",duration)
+    duration_delta = datetime.datetime.timedelta(days=7)
+    return duration_delta.datetime.datetime.strftime("%d/%m/%Y")
 
 def main(args=None):
     opt = cmd_args(args)
@@ -114,7 +114,10 @@ def main(args=None):
     if opt.dur and opt.start and opt.end: #Assume Start and range ignore end
         print("all three madness")
     if opt.dur and opt.start and not opt.end: #Start and range
-        print("Start & duration")
+        print("Start & Duration")
+        #opt.end = opt.start+parse_duration(opt.dur)
+        #kwargs={'tailmode': False, 'from_date': opt.start, 'to_date': opt.end, **kwargs}
+        
     if opt.dur and not opt.start and opt.end: #Range before enddate 
         print("End and Duration")
     if opt.dur and not opt.start and not opt.end: #tailmode with range
