@@ -15,6 +15,9 @@ parDir = os.path.dirname(currDir)
 sys.path.insert(0,parDir)
 import graph, tempreport
 
+while str(os.path.isfile(parDir + '/data/config.csv')) == 'False':
+  time.sleep(1)
+
 readme = parDir + '/README.md'
 tempWebVer = tempreport.readLine(readme, 'keyword', 'Temp-web', char = ': ')
 tempVer = tempreport.readLine(readme, 'keyword', 'Temp-report', char = ': ')
