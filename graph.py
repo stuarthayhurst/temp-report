@@ -106,24 +106,23 @@ def parse_duration(duration):
 
 def main(args=None):
     opt = cmd_args(args)
-    #kwargs = {'tailmode': False}
     kwargs = {}
-    #--lines set tailmode and pass number of lines
-    #if  opt.lines:
-    #    kwargs = {'tailmode': True, **kwargs}
-    #    args = {opt.lines}
-    #    print("Original Linemode")
+ 
 
-    if opt.dur and opt.start and opt.end: print("all three madness")
-    if opt.dur and opt.start and not opt.end: print("Start & duration")
-    if opt.dur and not opt.start and opt.end: print("End and Duration")
-    if opt.dur and not opt.start and not opt.end: #print("Duration only")
-        print("call from end back to duratiion") 
-    if not opt.dur and opt.start and opt.end: #print("normal start and end")
+    if opt.dur and opt.start and opt.end: #Assume Start and range ignore end
+        print("all three madness")
+    if opt.dur and opt.start and not opt.end: #Start and range
+        print("Start & duration")
+    if opt.dur and not opt.start and opt.end: #Range before enddate 
+        print("End and Duration")
+    if opt.dur and not opt.start and not opt.end: #tailmode with range
+        print("call from end back to duratiion")
+        
+    if not opt.dur and opt.start and opt.end: #Date range
         kwargs={'tailmode': False, 'from_date': opt.start, 'to_date': opt.end, **kwargs}
-    if not opt.dur and not opt.start and not opt.end:    #print("tailmode I presume")
+        
+    if not opt.dur and not opt.start and not opt.end: #tailmode with lines
         kwargs={'tailmode': True, 'lines': opt.lines, **kwargs}
-        #args = {opt.lines}
 
     x, y  = readValues(*args, **kwargs) 
     drawGraph(x,y)
