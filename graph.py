@@ -117,7 +117,10 @@ def main(args=None):
 
     if opt.dur and opt.start and opt.end: #Assume Start and range ignore end //TODO//
         print("all three madness") #Debug
-        
+        opt.end_dt = date_to_dt(opt.start, DT_FORMAT)+datetime.timedelta(days=7)
+        opt.end = opt.end_dt.strftime(DT_FORMAT)
+        kwargs={'tailmode': False, 'from_date': opt.start, 'to_date': opt.end, **kwargs}
+
     if opt.dur and opt.start and not opt.end: #Start and range //TODO- parseduration call//
         print("Start & Duration") #Debug
         opt.end_dt = date_to_dt(opt.start, DT_FORMAT)+datetime.timedelta(days=7)
