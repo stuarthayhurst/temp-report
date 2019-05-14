@@ -7,7 +7,11 @@ from scipy.interpolate import make_interp_spline, BSpline
 import numpy as np
 import sys, argparse, re, datetime
 
+DT_FORMAT           = '%Y/%m/%d-%H:%M'
+LOG_DT_FORMAT   = '%a %b %d %H:%M:%S %Y' 
+
 def generateGraph(reading_count):
+    '''Wrapper for drawgraph called from '''
     kwargs={'tailmode' : True}
     args = {reading_count}
     x, y  = readValues(*args, **kwargs)
@@ -39,16 +43,16 @@ def drawGraph(x,y):
     plt.clf()
 
 def readValues(*args, **kwargs):
-    for key, value in kwargs.items(): 
-        print ("%s == %s" %(key, value))
+    for key, value in kwargs.items():     #Debug
+        print ("%s == %s" %(key, value)) #Debug
+        
     if kwargs.get('lines') != None:
         reading_count = kwargs.get('lines')
     else:
         reading_count = args[0]
-        
-        
+                
     log_dt_format = '%a %b %d %H:%M:%S %Y'
-    dt_format = '%Y/%m/%d-%H:%M'
+
     x=[]
     y=[]
     x.clear()
@@ -58,10 +62,8 @@ def readValues(*args, **kwargs):
     except:
         tailmode = True
     if not tailmode:
-        from_date = kwargs.get('from_date')
-        from_dt = datetime.datetime.strptime(from_date, dt_format)
-        to_date = kwargs.get('to_date')
-        to_dt = datetime.datetime.strptime(to_date, dt_format)
+        from_dt = date_to_dt(kwargs.get('from_date'),DT_FORMAT)
+        to_dt = date_to_dt(kwargs.get('to_date'),DT_FORMAT)
         
     with open('temps.log', 'r') as f:
         if tailmode:
@@ -73,7 +75,7 @@ def readValues(*args, **kwargs):
             if len(data) !=3: continue #ignore lines that don't have 3 elements
             temp = re.findall("[-]?\d+\.\d+", data[2]) 
             temp = float(temp[0])
-            dt = datetime.datetime.strptime(data[1], log_dt_format)
+            dt = date_to_dt(data[1], LOG_DT_FORMAT)
             if tailmode: 
                 x.append(dt)
                 y.append(temp)
@@ -81,7 +83,6 @@ def readValues(*args, **kwargs):
                 if (dt >= from_dt) and (dt <= to_dt):
                     x.append(dt)
                     y.append(temp)
-
 
         return x,y
 
@@ -106,11 +107,14 @@ def parse_duration(duration):
     duration_delta = datetime.datetime.timedelta(days=7)
     return duration_delta.datetime.datetime.strftime("%d/%m/%Y")
 
+def date_to_dt(datestring, FORMAT):
+    dateasdt = datetime.datetime.strptime(datestring, FORMAT)
+    return dateasdt
+
 def main(args=None):
     opt = cmd_args(args)
     kwargs = {}
  
-
     if opt.dur and opt.start and opt.end: #Assume Start and range ignore end
         print("all three madness")
     if opt.dur and opt.start and not opt.end: #Start and range
