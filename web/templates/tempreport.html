@@ -77,7 +77,7 @@
                 <input id="logCheck" class="inputLog" type="checkbox" name="Log" />
                 <label class="button" onclick="toggleLog()" for="logCheck">Log</label><p class="titleLog">  &nbsp<span style="background-color: #4ace4f"> </span>Log: | {{ lineCount }} lines</p>
                 <ul class="subLog">
-                  <li><textarea class="logBox" readonly>{{ logContent }}</textarea></li>
+                  <li><textarea class="logBox" id="logBox" readonly>{{ logContent }}</textarea></li>
                 </ul>
               </div>
               <br>
@@ -89,6 +89,7 @@
     </div>
     <script src="{{ url_for('static', filename='vendor/jquery/jquery.min.js') }}"></script>
     <script src="{{ url_for('static', filename='vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <script>document.getElementById('logBox').scrollTop = document.getElementById('logBox').scrollHeight;</script>
     <script>
     $("#menu-toggle").click(function(e) {
         e.preventDefault();
