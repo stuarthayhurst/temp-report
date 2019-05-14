@@ -9,6 +9,11 @@ try:
     sensor = W1ThermSensor()
 except:
     print('Failed to load kernel modules, make sure you are running this on an RPI with OneWire and GPIO enabled')
+    class cpu:
+        temperature = 'Error'
+    class sensor:
+        def get_temperature():
+            return 'Error'
 
 currDir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parDir = os.path.dirname(currDir)
