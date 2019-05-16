@@ -104,6 +104,11 @@
     });
     </script>
     <script>
+    if ('{{ outdated }}' == 'True') {
+      window.alert('Program is outdated, please update')
+    }
+    </script>
+    <script>
     $("#wrapper").toggleClass("toggled");
     function reset_animation() {
       var el = document.getElementById('inner-menu-toggle');

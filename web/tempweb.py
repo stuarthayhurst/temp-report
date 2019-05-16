@@ -1,5 +1,5 @@
 from flask import Flask, render_template, url_for
-import flask, random, os, sys, inspect, shutil, time, datetime, gpiozero
+import flask, random, os, sys, inspect, shutil, time, datetime, gpiozero, subprocess, re
 app = Flask(__name__, static_url_path='/static')
 
 try:
@@ -14,7 +14,6 @@ except:
     class sensor:
         def get_temperature():
             return 'Error'
-
 currDir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parDir = os.path.dirname(currDir)
 sys.path.insert(0,parDir)
@@ -77,8 +76,23 @@ def main(flaskVer=flask.__version__, tempWebVer=tempWebVer, tempVer=tempVer, poi
     with open(currDir + '/static/temps.log', "r") as f:
         lineCount = len(f.readlines())
         print('Found ' + str(lineCount) + ' lines')
+    try:
+        tempVerRaw = tempVer[:-2]
+        latestTempVer = subprocess.check_output(["bash", "version.sh"])
+        latestTempVer = re.findall('\d+.\d+', str(latestTempVer))[0]
+        print(latestTempVer)
+        print(tempVerRaw)
 
-    return render_template('tempreport.html', flaskVer=flaskVer, tempWebVer=tempWebVer, tempVer=tempVer, measureTemp=measureTemp, maxTemp=maxTemp, minTemp=minTemp, logContent=logContent, lineCount=lineCount, pointCount=pointCount, cpuTemp=str(cpu.temperature) + '°C')
+        if latestTempVer > tempVerRaw:
+            outdated = 'True'
+            print('Program outdated')
+        else:
+            outdated = 'False'
+            print('Program not outdated')
+    except:
+        outdated = 'False'
+
+    return render_template('tempreport.html', flaskVer=flaskVer, tempWebVer=tempWebVer, tempVer=tempVer, measureTemp=measureTemp, maxTemp=maxTemp, minTemp=minTemp, logContent=logContent, lineCount=lineCount, pointCount=pointCount, cpuTemp=str(cpu.temperature) + '°C', outdated=outdated)
 
 if __name__ == "__main__":
     app.run(host= '0.0.0.0', port= 5000)
