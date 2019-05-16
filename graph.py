@@ -92,7 +92,7 @@ def readValues(*args, **kwargs):
 def cmd_args(args=None):
     parser = argparse.ArgumentParser("Graph.py charts range of times from a temperature log")
 
-    parser.add_argument('-l', '--lines',  type=int, dest='lines', default=12,
+    parser.add_argument('-l', '--lines',  type=int, dest='lines',
                     help='Number of tailing log lines to plot')
     parser.add_argument('-s', '--start',  dest='start',
                     help='Start date YYYY/MM/DD-HH:MM')
@@ -142,7 +142,6 @@ def main(args=None):
         duration = parse_duration(opt.dur)
         opt.end_dt = date_to_dt(opt.start, DT_FORMAT)+duration
         opt.end = opt.end_dt.strftime(DT_FORMAT)
-        kwargs={'tailmode': False, 'from_date': opt.start, 'to_date': opt.end, **kwargs}
 
     if opt.dur and opt.start and not opt.end: #Start and range 
         print("Start date and duration") #Debug
@@ -150,14 +149,12 @@ def main(args=None):
         duration = parse_duration(opt.dur)
         opt.end_dt = date_to_dt(opt.start, DT_FORMAT)+duration
         opt.end = opt.end_dt.strftime(DT_FORMAT)
-        kwargs={'tailmode': False, 'from_date': opt.start, 'to_date': opt.end, **kwargs}
 
     if opt.dur and not opt.start and opt.end: #Range before enddate
         print("End date and duration") #Debug
         duration = parse_duration(opt.dur)
         opt.start_dt = date_to_dt(opt.end, DT_FORMAT)-duration
         opt.start = opt.start_dt.strftime(DT_FORMAT)
-        kwargs={'tailmode': False, 'from_date': opt.start, 'to_date': opt.end, **kwargs}
         
     if opt.dur and not opt.start and not opt.end: #tailmode with range
         print("End of log back by duratiion") #Debug
@@ -166,27 +163,33 @@ def main(args=None):
         opt.end = dt_to_date (opt.end_dt, DT_FORMAT)
         opt.start_dt = date_to_dt(opt.end, DT_FORMAT)-duration
         opt.start = opt.start_dt.strftime(DT_FORMAT)
-        kwargs={'tailmode': False, 'from_date': opt.start, 'to_date': opt.end, **kwargs}
 
     if not opt.dur and opt.start and opt.end: #Date range
         print("Start date and end date") #Debug
-        kwargs={'tailmode': False, 'from_date': opt.start, 'to_date': opt.end, **kwargs}
+        if date_to_dt(opt.start, DT_FORMAT) >date_to_dt(opt.end, DT_FORMAT): # End before start so swap
+            opt.start, opt.end = opt.end, opt.start
 
     if not opt.dur and opt.start and not opt.end: #Start Date only - from start date to end
         print("Start Date to end of log ") #Debug
         opt.end_dt = datetime.datetime.now()
         opt.end = opt.end_dt.strftime(DT_FORMAT)
-        kwargs={'tailmode': False, 'from_date': opt.start, 'to_date': opt.end, **kwargs}
 
     if not opt.dur and not opt.start and opt.end: #End Date only - from end date to start
         print("End date back to the dawn of time (or the log at least) ") #Debug
         opt.start_dt = datetime.date(1970, 1, 1)
         opt.start = opt.start_dt.strftime(DT_FORMAT)
-        kwargs={'tailmode': False, 'from_date': opt.start, 'to_date': opt.end, **kwargs}
 
-    if not opt.dur and not opt.start and not opt.end: #tailmode with lines
+    if opt.lines != None: #tailmode with lines
         print("tail back number of lines") #Debug
         kwargs={'tailmode': True, 'lines': opt.lines, **kwargs}
+
+    if not opt.lines and not opt.dur and not opt.start and not opt.end: #tailmode with lines (none set so using 12)
+        kwargs={'tailmode': True, 'lines': 12}
+
+    if not opt.lines:
+        print("Not Tailmode")
+        kwargs={'tailmode': False, 'from_date': opt.start, 'to_date': opt.end, **kwargs}
+
 
     x, y  = readValues(*args, **kwargs)
     drawGraph(x,y)
