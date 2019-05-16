@@ -168,7 +168,15 @@ def main(args=None):
         opt.start = opt.start_dt.strftime(DT_FORMAT)
         kwargs={'tailmode': False, 'from_date': opt.start, 'to_date': opt.end, **kwargs}
 
-    if not opt.dur and opt.start and opt.end: #Date range
+    if not opt.dur and opt.start and opt.end: #Date range 
+        kwargs={'tailmode': False, 'from_date': opt.start, 'to_date': opt.end, **kwargs}
+
+    if not opt.dur and opt.start and not opt.end: #Start Date only - from start date to end //TODO //
+        print("Start Date to end of log ") #Debug
+        kwargs={'tailmode': False, 'from_date': opt.start, 'to_date': opt.end, **kwargs}
+
+    if not opt.dur and not opt.start and opt.end: #End Date only - from end date to start //TODO//
+        print("From the end of log back to the dawn of time (or the log at least) ") #Debug
         kwargs={'tailmode': False, 'from_date': opt.start, 'to_date': opt.end, **kwargs}
 
     if not opt.dur and not opt.start and not opt.end: #tailmode with lines
