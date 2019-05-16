@@ -43,8 +43,11 @@ def drawGraph(x,y):
     plt.clf()
 
 def readValues(*args, **kwargs):
-    for key, value in kwargs.items():     #Debug
+    '''for key, value in kwargs.items():     #Debug
         print ("%s == %s" %(key, value)) #Debug
+    '''
+    print("From: ",kwargs.get('from_date'))
+    print("To: ",kwargs.get('to_date')) 
 
     if kwargs.get('lines') != None:
         reading_count = kwargs.get('lines')
@@ -89,55 +92,104 @@ def readValues(*args, **kwargs):
 def cmd_args(args=None):
     parser = argparse.ArgumentParser("Graph.py charts range of times from a temperature log")
 
-    parser.add_argument('-l', '--lines',  type=int, dest='lines', default=12,
+    parser.add_argument('-l', '--lines',  type=int, dest='lines',
                     help='Number of tailing log lines to plot')
     parser.add_argument('-s', '--start',  dest='start',
                     help='Start date YYYY/MM/DD-HH:MM')
     parser.add_argument('-e', '--end',  dest='end',
                     help='End   date YYYY/MM/DD-HH:MM')
     parser.add_argument('-d', '--dur',  dest='dur',
-                    help='Duration: Hours, Days, Weeks, Months e.g. 2W for 2 weeks')
+                    help='Duration: Hours, Days, Weeks,  e.g. 2W for 2 weeks')
 
     opt = parser.parse_args(args)
 
     return opt
 
 def parse_duration(duration):
-    print("Duration == ",duration)
-    #duration_delta = datetime.datetime.timedelta(days=7)
-    return duration_delta.datetime.datetime.strftime("%d/%m/%Y")
+    #print("Duration == ",duration)
+    hours = datetime.timedelta(hours = 1)
+    days = datetime.timedelta(days = 1)
+    weeks = datetime.timedelta(weeks = 1)
+    fields = re.split('(\d+)',duration)
+    #print(fields[1],"--",fields[2])
+    duration = int(fields[1])
+    if fields[2][:1].upper() == 'H':
+        duration_td = duration * hours
+    elif fields[2][:1].upper() == 'D':
+        duration_td = duration * days
+    elif fields[2][:1].upper() == 'W':
+        duration_td = duration * weeks
+    else:
+        raise ValueError
+    
+    return duration_td
 
 def date_to_dt(datestring, FORMAT):
     dateasdt = datetime.datetime.strptime(datestring, FORMAT)
     return dateasdt
 
+def dt_to_date(dateasdt, FORMAT):
+    datestring = datetime.datetime.strftime(dateasdt, FORMAT)
+    return datestring
+
 def main(args=None):
     opt = cmd_args(args)
     kwargs = {}
 
-    if opt.dur and opt.start and opt.end: #Assume Start and range ignore end //TODO//
-        print("all three madness") #Debug
-        opt.end_dt = date_to_dt(opt.start, DT_FORMAT)+datetime.timedelta(days=7)
+    if opt.dur and opt.start and opt.end: #Assume start and range ignore end
+        print("All three madness") #Debug
+        print("Duration",opt.dur)
+        duration = parse_duration(opt.dur)
+        opt.end_dt = date_to_dt(opt.start, DT_FORMAT)+duration
         opt.end = opt.end_dt.strftime(DT_FORMAT)
-        kwargs={'tailmode': False, 'from_date': opt.start, 'to_date': opt.end, **kwargs}
 
-    if opt.dur and opt.start and not opt.end: #Start and range //TODO- parseduration call//
-        print("Start & Duration") #Debug
-        opt.end_dt = date_to_dt(opt.start, DT_FORMAT)+datetime.timedelta(days=7)
+    if opt.dur and opt.start and not opt.end: #Start and range 
+        print("Start date and duration") #Debug
+        print("Duration",opt.dur)
+        duration = parse_duration(opt.dur)
+        opt.end_dt = date_to_dt(opt.start, DT_FORMAT)+duration
         opt.end = opt.end_dt.strftime(DT_FORMAT)
-        kwargs={'tailmode': False, 'from_date': opt.start, 'to_date': opt.end, **kwargs}
 
-    if opt.dur and not opt.start and opt.end: #Range before enddate //TODO//
-        print("End and Duration") #Debug
+    if opt.dur and not opt.start and opt.end: #Range before enddate
+        print("End date and duration") #Debug
+        duration = parse_duration(opt.dur)
+        opt.start_dt = date_to_dt(opt.end, DT_FORMAT)-duration
+        opt.start = opt.start_dt.strftime(DT_FORMAT)
         
-    if opt.dur and not opt.start and not opt.end: #tailmode with range //TODO//
-        print("call from end back to duratiion") #Debug
+    if opt.dur and not opt.start and not opt.end: #tailmode with range
+        print("End of log back by duratiion") #Debug
+        duration = parse_duration(opt.dur)
+        opt.end_dt = datetime.datetime.now()
+        opt.end = dt_to_date (opt.end_dt, DT_FORMAT)
+        opt.start_dt = date_to_dt(opt.end, DT_FORMAT)-duration
+        opt.start = opt.start_dt.strftime(DT_FORMAT)
 
     if not opt.dur and opt.start and opt.end: #Date range
+        print("Start date and end date") #Debug
+        if date_to_dt(opt.start, DT_FORMAT) >date_to_dt(opt.end, DT_FORMAT): # End before start so swap
+            opt.start, opt.end = opt.end, opt.start
+
+    if not opt.dur and opt.start and not opt.end: #Start Date only - from start date to end
+        print("Start Date to end of log ") #Debug
+        opt.end_dt = datetime.datetime.now()
+        opt.end = opt.end_dt.strftime(DT_FORMAT)
+
+    if not opt.dur and not opt.start and opt.end: #End Date only - from end date to start
+        print("End date back to the dawn of time (or the log at least) ") #Debug
+        opt.start_dt = datetime.date(1970, 1, 1)
+        opt.start = opt.start_dt.strftime(DT_FORMAT)
+
+    if opt.lines != None: #tailmode with lines
+        print("tail back number of lines") #Debug
+        kwargs={'tailmode': True, 'lines': opt.lines, **kwargs}
+
+    if not opt.lines and not opt.dur and not opt.start and not opt.end: #tailmode with lines (none set so using 12)
+        kwargs={'tailmode': True, 'lines': 12}
+
+    if not opt.lines:
+        print("Not Tailmode")
         kwargs={'tailmode': False, 'from_date': opt.start, 'to_date': opt.end, **kwargs}
 
-    if not opt.dur and not opt.start and not opt.end: #tailmode with lines
-        kwargs={'tailmode': True, 'lines': opt.lines, **kwargs}
 
     x, y  = readValues(*args, **kwargs)
     drawGraph(x,y)
