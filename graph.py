@@ -113,11 +113,11 @@ def parse_duration(duration):
     fields = re.split('(\d+)',duration)
     #print(fields[1],"--",fields[2])
     duration = int(fields[1])
-    if fields[2].upper() == 'H':
+    if fields[2][:1].upper() == 'H':
         duration_td = duration * hours
-    elif fields[2].upper() == 'D':
+    elif fields[2][:1].upper() == 'D':
         duration_td = duration * days
-    elif fields[2].upper() == 'W':
+    elif fields[2][:1].upper() == 'W':
         duration_td = duration * weeks
     else:
         raise ValueError
