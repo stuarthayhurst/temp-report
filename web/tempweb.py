@@ -80,19 +80,16 @@ def main(flaskVer=flask.__version__, tempWebVer=tempWebVer, tempVer=tempVer, poi
         tempVerRaw = tempVer[:-2]
         latestTempVer = subprocess.check_output(["bash", "version.sh"])
         latestTempVer = re.findall('\d+.\d+', str(latestTempVer))[0]
-        print(latestTempVer)
-        print(tempVerRaw)
 
         if latestTempVer > tempVerRaw:
             outdated = 'True'
             print('Program outdated')
         else:
             outdated = 'False'
-            print('Program not outdated')
     except:
         outdated = 'False'
 
     return render_template('tempreport.html', flaskVer=flaskVer, tempWebVer=tempWebVer, tempVer=tempVer, measureTemp=measureTemp, maxTemp=maxTemp, minTemp=minTemp, logContent=logContent, lineCount=lineCount, pointCount=pointCount, cpuTemp=str(cpu.temperature) + '°C', outdated=outdated)
 
 if __name__ == "__main__":
-    app.run(host= '0.0.0.0', port= 5000)
+    app.run(host= '0.0.0.0', port= 80)
