@@ -136,8 +136,8 @@ def main(args=None):
     opt = cmd_args(args)
     kwargs = {}
 
-    if opt.dur and opt.start and opt.end: #Assume Start and range ignore end
-        print("all three madness") #Debug
+    if opt.dur and opt.start and opt.end: #Assume start and range ignore end
+        print("All three madness") #Debug
         print("Duration",opt.dur)
         duration = parse_duration(opt.dur)
         opt.end_dt = date_to_dt(opt.start, DT_FORMAT)+duration
@@ -145,7 +145,7 @@ def main(args=None):
         kwargs={'tailmode': False, 'from_date': opt.start, 'to_date': opt.end, **kwargs}
 
     if opt.dur and opt.start and not opt.end: #Start and range 
-        print("Start & Duration") #Debug
+        print("Start date and duration") #Debug
         print("Duration",opt.dur)
         duration = parse_duration(opt.dur)
         opt.end_dt = date_to_dt(opt.start, DT_FORMAT)+duration
@@ -153,33 +153,39 @@ def main(args=None):
         kwargs={'tailmode': False, 'from_date': opt.start, 'to_date': opt.end, **kwargs}
 
     if opt.dur and not opt.start and opt.end: #Range before enddate
-        print("End and Duration") #Debug
+        print("End date and duration") #Debug
         duration = parse_duration(opt.dur)
         opt.start_dt = date_to_dt(opt.end, DT_FORMAT)-duration
         opt.start = opt.start_dt.strftime(DT_FORMAT)
         kwargs={'tailmode': False, 'from_date': opt.start, 'to_date': opt.end, **kwargs}
         
     if opt.dur and not opt.start and not opt.end: #tailmode with range
-        print("call from end back to duratiion") #Debug
+        print("End of log back by duratiion") #Debug
+        duration = parse_duration(opt.dur)
         opt.end_dt = datetime.datetime.now()
         opt.end = dt_to_date (opt.end_dt, DT_FORMAT)
-        duration = parse_duration(opt.dur)
         opt.start_dt = date_to_dt(opt.end, DT_FORMAT)-duration
         opt.start = opt.start_dt.strftime(DT_FORMAT)
         kwargs={'tailmode': False, 'from_date': opt.start, 'to_date': opt.end, **kwargs}
 
-    if not opt.dur and opt.start and opt.end: #Date range 
+    if not opt.dur and opt.start and opt.end: #Date range
+        print("Start date and end date") #Debug
         kwargs={'tailmode': False, 'from_date': opt.start, 'to_date': opt.end, **kwargs}
 
-    if not opt.dur and opt.start and not opt.end: #Start Date only - from start date to end //TODO //
+    if not opt.dur and opt.start and not opt.end: #Start Date only - from start date to end
         print("Start Date to end of log ") #Debug
+        opt.end_dt = datetime.datetime.now()
+        opt.end = opt.end_dt.strftime(DT_FORMAT)
         kwargs={'tailmode': False, 'from_date': opt.start, 'to_date': opt.end, **kwargs}
 
-    if not opt.dur and not opt.start and opt.end: #End Date only - from end date to start //TODO//
-        print("From the end of log back to the dawn of time (or the log at least) ") #Debug
+    if not opt.dur and not opt.start and opt.end: #End Date only - from end date to start
+        print("End date back to the dawn of time (or the log at least) ") #Debug
+        opt.start_dt = datetime.date(1970, 1, 1)
+        opt.start = opt.start_dt.strftime(DT_FORMAT)
         kwargs={'tailmode': False, 'from_date': opt.start, 'to_date': opt.end, **kwargs}
 
     if not opt.dur and not opt.start and not opt.end: #tailmode with lines
+        print("tail back number of lines") #Debug
         kwargs={'tailmode': True, 'lines': opt.lines, **kwargs}
 
     x, y  = readValues(*args, **kwargs)
