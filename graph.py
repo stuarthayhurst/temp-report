@@ -128,6 +128,10 @@ def date_to_dt(datestring, FORMAT):
     dateasdt = datetime.datetime.strptime(datestring, FORMAT)
     return dateasdt
 
+def dt_to_date(dateasdt, FORMAT):
+    datestring = datetime.datetime.strftime(dateasdt, FORMAT)
+    return datestring
+
 def main(args=None):
     opt = cmd_args(args)
     kwargs = {}
@@ -155,8 +159,14 @@ def main(args=None):
         opt.start = opt.start_dt.strftime(DT_FORMAT)
         kwargs={'tailmode': False, 'from_date': opt.start, 'to_date': opt.end, **kwargs}
         
-    if opt.dur and not opt.start and not opt.end: #tailmode with range //TODO//
+    if opt.dur and not opt.start and not opt.end: #tailmode with range
         print("call from end back to duratiion") #Debug
+        opt.end_dt = datetime.datetime.now()
+        opt.end = dt_to_date (opt.end_dt, DT_FORMAT)
+        duration = parse_duration(opt.dur)
+        opt.start_dt = date_to_dt(opt.end, DT_FORMAT)-duration
+        opt.start = opt.start_dt.strftime(DT_FORMAT)
+        kwargs={'tailmode': False, 'from_date': opt.start, 'to_date': opt.end, **kwargs}
 
     if not opt.dur and opt.start and opt.end: #Date range
         kwargs={'tailmode': False, 'from_date': opt.start, 'to_date': opt.end, **kwargs}
