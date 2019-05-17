@@ -45,6 +45,7 @@ All required and recommended packages are automatically installed when running t
 - Run `./install.sh -s` to allow the program to start on boot
 - After an update, run `python3 temp.py -cs` to update the config with any new lines
 - You can use `./import.sh -h` to import and export csv files
+- **A Pi 3 or better is strongly recommended**
 - See wiki for more information
 
 ## Wiring diagram:
