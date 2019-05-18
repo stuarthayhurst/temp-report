@@ -50,14 +50,29 @@ ul.subGraph {
 ul.subLog {
   max-height: 360px;
   height: 360px;
-  opacity: 0;
   overflow: hidden;
+  visibility: hidden;
 }
 .titleGraph {
   opacity: 0;
 }
-.titleLog{
-  opacity: 0;
+.titleLog {
+  visibility: hidden;
+}
+.searchLog {
+  display: inline-block;
+}
+.searchButton {
+  display: inline-block;
+  border-radius: 10px;
+  background: black;
+  padding: 3px;
+  padding-right: 10px;
+  padding-left: 10px;
+  user-select: none;
+}
+.searchButton:hover {
+  background-color: #1b1a1c;
 }
 label {
   position: relative;
@@ -69,16 +84,14 @@ input.inputGraph:checked~ul.subGraph {
   transition: opacity 1s linear;
 }
 input.inputLog:checked~ul.subLog {
-  opacity: 1;
-  transition: opacity 1s linear;
+  visibility: visible;
 }
 input.inputGraph:checked~.titleGraph {
   opacity: 1;
   transition: opacity 1s linear;
 }
 input.inputLog:checked~.titleLog {
-  opacity: 1;
-  transition: opacity 1s linear;
+  visibility: visible;
 }
 .button {
   background-color: #0e0e0f;
@@ -115,7 +128,7 @@ input.inputLog:checked~.titleLog {
   width: 600px;
   height: 360px;
 }
-#expand {
+.expand {
   content:url("../expand.png");
 }
 .collapse {
