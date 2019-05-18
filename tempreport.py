@@ -5,6 +5,9 @@ try:
   sensor = W1ThermSensor()
 except:
   print('Failed to load kernel modules, make sure you are running this on an RPI with OneWire and GPIO enabled')
+  class sensor:
+    def get_temperature():
+      return 0
 
 def getLineCount(filePath, output = False, title = 'Output:'):
   if output == True:
@@ -188,7 +191,7 @@ def writeConfig(mode):
 
 def measureTemp(mode = 'V'):
   print('Reading temperature:')
-  temp = float(sensor.get_temperature())
+  temp = round(float(sensor.get_temperature()), 2)
   if mode == 'V':
     print('The temperature is ' + str(temp) + '°C at ' + str(datetime.datetime.now().strftime("%H:%M:%S")) + '\n')
   return temp
