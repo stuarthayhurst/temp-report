@@ -31,7 +31,7 @@ shutil.move(currDir + '/graph.png', currDir + '/static/graph.png')
 def main(flaskVer=flask.__version__, tempWebVer=tempWebVer, tempVer=tempVer, pointCount=graphPointCount, cpu=cpu):
     def measureTemp(mode):
         if mode == 'temp':
-            value = tempreport.measureTemp() + '°C'
+            value = str(tempreport.measureTemp()) + '°C'
             print('Updated Temperature')
         elif mode == 'time':
             value = datetime.datetime.now().strftime("%H:%M:%S")
