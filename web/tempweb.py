@@ -71,6 +71,7 @@ def main(flaskVer=flask.__version__, tempWebVer=tempWebVer, tempVer=tempVer, poi
     with open(currDir + '/static/temps.log', "r") as f:
         lineCount = len(f.readlines())
         print('Found ' + str(lineCount) + ' lines')
+
     try:
         tempVerRaw = tempVer[:-2]
         latestTempVer = subprocess.check_output(["bash", "version.sh"])
@@ -83,7 +84,6 @@ def main(flaskVer=flask.__version__, tempWebVer=tempWebVer, tempVer=tempVer, poi
             outdated = 'False'
     except:
         outdated = 'False'
-
     return render_template('tempreport.html', flaskVer=flaskVer, tempWebVer=tempWebVer, tempVer=tempVer, measureTemp=measureTemp, maxTemp=maxTemp, minTemp=minTemp, logContent=logContent, lineCount=lineCount, pointCount=pointCount, cpuTemp=str(cpu.temperature) + '°C', outdated=outdated)
 
 if __name__ == "__main__":
