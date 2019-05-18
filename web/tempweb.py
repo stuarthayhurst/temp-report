@@ -1,19 +1,14 @@
 from flask import Flask, render_template, url_for
-import flask, random, os, sys, inspect, shutil, time, datetime, gpiozero, subprocess, re
+import flask, os, sys, inspect, shutil, time, datetime, gpiozero, subprocess, re
 app = Flask(__name__, static_url_path='/static')
 
 try:
-    from w1thermsensor import W1ThermSensor
     from gpiozero import CPUTemperature
     cpu = CPUTemperature()
-    sensor = W1ThermSensor()
 except:
-    print('Failed to load kernel modules, make sure you are running this on an RPI with OneWire and GPIO enabled')
     class cpu:
         temperature = 'Error'
-    class sensor:
-        def get_temperature():
-            return 'Error'
+
 currDir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parDir = os.path.dirname(currDir)
 sys.path.insert(0,parDir)
@@ -36,7 +31,7 @@ shutil.move(currDir + '/graph.png', currDir + '/static/graph.png')
 def main(flaskVer=flask.__version__, tempWebVer=tempWebVer, tempVer=tempVer, pointCount=graphPointCount, cpu=cpu):
     def measureTemp(mode):
         if mode == 'temp':
-            value = str(sensor.get_temperature()) + '°C'
+            value = tempreport.measureTemp() + '°C'
             print('Updated Temperature')
         elif mode == 'time':
             value = datetime.datetime.now().strftime("%H:%M:%S")
