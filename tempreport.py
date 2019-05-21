@@ -11,7 +11,6 @@ except:
       return 0
 
 def getLineCount(filePath, output = False, title = 'Output:'):
-  print(output)
   if output == True:
     output_count = getLineCount(filePath)
     print(title)
@@ -238,7 +237,7 @@ def editLine(filePath):
   with open(filePath, 'w') as f:
     for line in lines:
       if line == replaceLine + '\n' or line == replaceLine:
-        f.write(newLine)
+        f.write(newLine + '\n')
       else:
         f.write(line)
 
