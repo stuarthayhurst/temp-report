@@ -11,24 +11,25 @@ except:
       return 0
 
 def getLineCount(filePath, output = False, title = 'Output:'):
+  print(output)
   if output == True:
-    output_count = getLineCount(currDir + filePath)
+    output_count = getLineCount(filePath)
     print(title)
     for i in range(1, output_count + 1):
-      line_output = readCSVLine(currDir + filePath, 1, 'numbered', i, var_type = 'str')
+      line_output = readCSVLine(filePath, 1, 'numbered', i, var_type = 'str')
       print(f'  [{i}] - {line_output}')
     print()
 
-  if str(os.path.isfile(currDir + filePath)) == 'False':
+  if str(os.path.isfile(filePath)) == 'False':
     return False
   else:
-    lineCount = len(open(currDir + filePath).readlines(  ))
+    lineCount = len(open(filePath).readlines(  ))
     return lineCount
 
 def checkLineCount(filePath, lineCount):
-  if str(os.path.isfile(currDir + filePath)) == 'False':
+  if str(os.path.isfile(filePath)) == 'False':
     return False
-  if lineCount >= len(open(currDir + filePath).readlines(  )):
+  if lineCount >= len(open(filePath).readlines(  )):
     return True
   else:
     return False
@@ -124,22 +125,22 @@ def writeConfig(mode):
 
   if mode == 'f':
     print('Generating config')
-    f = open(currDir + 'data/config.csv','w+')
+    f = open('data/config.csv','w+')
     f.close()
-    with open(currDir + 'data/config.csv', 'a') as f:
+    with open('data/config.csv', 'a') as f:
       writer = csv.writer(f, lineterminator="\n")
       writer.writerows(changes)
     print('Generated new config\n')
     return
   elif mode == 's':
-    if str(os.path.isfile(currDir + 'data/config.csv')) == 'False':
+    if str(os.path.isfile('data/config.csv')) == 'False':
       writeConfig('f')
     add_count = 0
     remove_count = 0
     for count in range(1, len(changes)):
       searchLine = changes[count][0]
       success = 0
-      with open(currDir + 'data/config.csv') as f:
+      with open('data/config.csv') as f:
         reader = csv.reader(f, delimiter=',')
         for row in reader:
           if row[0] == 'config':
@@ -150,14 +151,14 @@ def writeConfig(mode):
           print(searchLine + ' was not found')
           print(changes[count][1])
           remove_count += 1
-          with open(currDir + 'data/config.csv', 'a') as f:
+          with open('data/config.csv', 'a') as f:
             writer = csv.writer(f, lineterminator="\n")
             config_add=[searchLine, changes[count][1]]
             writer.writerow(config_add)
         else:
           success = 0
 
-    with open(currDir + 'data/config.csv') as f:
+    with open('data/config.csv') as f:
       reader = csv.reader(f, delimiter=',')
       line_count = 0
       for row in reader:
@@ -176,9 +177,9 @@ def writeConfig(mode):
                 removeLine = removeLine.replace("]", '')
                 removeLine = removeLine.replace("'", '')
                 removeLine = removeLine.replace(", ", ',')
-                with open(currDir + 'data/config.csv','r') as f:
+                with open('data/config.csv','r') as f:
                   lines = f.readlines()
-                with open(currDir + 'data/config.csv','w') as f:
+                with open('data/config.csv','w') as f:
                   for line in lines:
                     if line != removeLine + '\n':
                       f.write(line)
@@ -198,20 +199,20 @@ def measureTemp(mode = 'V'):
   return temp
 
 def checkAddresses():
-  if str(os.path.isfile(currDir + 'data/addresses.csv')) == 'False':
+  if str(os.path.isfile('data/addresses.csv')) == 'False':
     newDatabase()
 
 def appendLine(filePath, data):
   changes = [
     [data],
     ]
-  if str(os.path.isfile(currDir + filePath)) == 'False':
-    with open(currDir + filePath, 'w+') as f:
+  if str(os.path.isfile(filePath)) == 'False':
+    with open(filePath, 'w+') as f:
       writer = csv.writer(f, lineterminator="\n")
       writer.writerow(changes[0])
       return
   else:
-    with open(currDir + filePath, 'a') as f:
+    with open(filePath, 'a') as f:
       writer = csv.writer(f, lineterminator="\n")
       writer.writerow(changes[0])
       return
@@ -219,9 +220,9 @@ def appendLine(filePath, data):
 def removeLine(filePath):
   replaceLine = selectLine(filePath)
   print()
-  with open(currDir + filePath, 'r') as f:
+  with open(filePath, 'r') as f:
     lines = f.readlines()
-  with open(currDir + filePath, 'w') as f:
+  with open(filePath, 'w') as f:
     for line in lines:
       if line == replaceLine + '\n' or line == replaceLine:
         print('Removing line')
@@ -232,9 +233,9 @@ def editLine(filePath):
   replaceLine = selectLine(filePath)
   newLine = str(input('Please enter the changed line: '))
   print()
-  with open(currDir + filePath, 'r') as f:
+  with open(filePath, 'r') as f:
     lines = f.readlines()
-  with open(currDir + filePath, 'w') as f:
+  with open(filePath, 'w') as f:
     for line in lines:
       if line == replaceLine + '\n' or line == replaceLine:
         f.write(newLine)
@@ -247,7 +248,7 @@ def selectLine(filePath):
   finalLine = getLineCount(filePath)
   while selectLineNumber > finalLine:
     selectLineNumber = int(input('That line did not exist, please enter the line number to select: '))
-  with open(currDir + filePath, 'r') as f:
+  with open(filePath, 'r') as f:
     reader = csv.reader(f)
     for i in range(selectLineNumber):
         next(reader)
@@ -259,13 +260,13 @@ def newFile(filePath, firstLine):
   changes = [
     [firstLine],
     ]
-  if str(os.path.isfile(currDir + filePath)) == 'True':
+  if str(os.path.isfile(filePath)) == 'True':
     confirmDelete = str(input('Are you sure you want to erase the existing list and make a fresh one? (Y/N): '))
   else:
     confirmDelete = 'Y'
   if confirmDelete == 'Y':
     print("\nMaking new file:\n")
-    with open(currDir + filePath,'w+') as f:
+    with open(filePath,'w+') as f:
       writer = csv.writer(f, lineterminator="\n")
       writer.writerow(changes[0])
     print('Completed\n')
@@ -274,11 +275,11 @@ def newFile(filePath, firstLine):
   print("--------------------------------\n")
 
 def checkAddressLine():
-  if readCSVLine(currDir + 'data/addresses.csv', 1, 'keyword', 'addresses') == None:
-    replaceLine = readCSVLine(currDir + 'data/addresses.csv', 1, 'numbered', '1')
-    with open(currDir + 'data/addresses.csv', 'r') as f:
+  if readCSVLine('data/addresses.csv', 1, 'keyword', 'addresses') == None:
+    replaceLine = readCSVLine('data/addresses.csv', 1, 'numbered', '1')
+    with open('data/addresses.csv', 'r') as f:
       lines = f.readlines()
-    with open(currDir + 'data/addresses.csv', 'w') as f:
+    with open('data/addresses.csv', 'w') as f:
       for line in lines:
         if line == replaceLine + '\n' or line == replaceLine:
           f.write('addresses\n')
