@@ -8,7 +8,6 @@ from email.mime.image import MIMEImage
 #Variables for email and the sensor
 email_recipients = ['']
 last_email_time = datetime.datetime(1970, 1, 1, 0, 0)
-record_reset_time = datetime.datetime(1970, 1, 1, 0, 0)
 email_time_diff = 0
 
 #See data/config.csv for a config file. Use python3 temp.py -c to generate a new one
@@ -24,8 +23,6 @@ def updateConfig():
   threshold_min = tempreport.readCSVLine('data/config.csv', 2, 'keyword', 'threshold_min', var_type = 'float')
   global graph_point_count
   graph_point_count = tempreport.readCSVLine('data/config.csv', 2, 'keyword', 'graph_point_count', var_type = 'int')
-  global record_reset
-  record_reset = tempreport.readCSVLine('data/config.csv', 2, 'keyword', 'record_reset', var_type = 'int') * 3600
 
   if delay == None:
     print('Errors occured while reading config values, attempting to fix config file:')
