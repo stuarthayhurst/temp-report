@@ -124,7 +124,7 @@ def writeConfig(mode):
     ['gap', '3600'], #Delay between emails
     ['threshold_max', '30'], #Max temp for emailing
     ['threshold_min', '-1'], #Min temp for emailing
-    ['graph_point_count', '12'], #Amount of points on graphs
+    ['graph_point_count', '12'], #Amount of points on graphs, calculate desired value with graph_point_count = (Length of time on graph in mins) / (delay / 60)
     ['area_name', 'Room'] #Name of room or area that temperatures are being recorded for
     ]
 
