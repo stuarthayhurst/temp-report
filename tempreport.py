@@ -172,10 +172,7 @@ def writeConfig(mode):
                 remove_count += 1
                 print(str(row[0]))
                 removeLine = str(row)
-                removeLine = removeLine.replace("[", '')
-                removeLine = removeLine.replace("]", '')
-                removeLine = removeLine.replace("'", '')
-                removeLine = removeLine.replace(", ", ',')
+                removeLine = removeLine.replace("[", '').replace("]", '').replace("'", '').replace(", ", ',')
                 with open('data/config.csv','r') as f:
                   lines = f.readlines()
                 with open('data/config.csv','w') as f:
