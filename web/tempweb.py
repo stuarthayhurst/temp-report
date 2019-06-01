@@ -23,7 +23,8 @@ tempVer = tempreport.readLine(readme, 'keyword', 'Temp-report', char = ': ')
 
 shutil.copy2(parDir + '/temps.log', currDir + '/temps.log')
 graphPointCount = tempreport.readCSVLine(parDir + '/data/config.csv', 2, 'keyword', 'graph_point_count', var_type = 'int')
-graph.generateGraph(graphPointCount)
+area_name = tempreport.readCSVLine(parDir + '/data/config.csv', 2, 'keyword', 'area_name', var_type = 'str')
+graph.generateGraph(graphPointCount, area_name)
 shutil.move(currDir + '/temps.log', currDir + '/static/temps.log')
 shutil.move(currDir + '/graph.png', currDir + '/static/graph.png')
 
