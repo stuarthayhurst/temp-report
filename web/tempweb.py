@@ -59,7 +59,7 @@ def main(flaskVer=flask.__version__, tempWebVer=tempWebVer, tempVer=tempVer, poi
 
     shutil.copy2(parDir + '/temps.log', currDir + '/temps.log')
     graphPointCount = tempreport.readCSVLine(parDir + '/data/config.csv', 2, 'keyword', 'graph_point_count', var_type = 'int')
-    graph.generateGraph(graphPointCount)
+    graph.generateGraph(graphPointCount, area_name)
     shutil.move(currDir + '/temps.log', currDir + '/static/temps.log')
     shutil.move(currDir + '/graph.png', currDir + '/static/graph.png')
     print('Updated Files')
