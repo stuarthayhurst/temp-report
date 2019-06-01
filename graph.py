@@ -42,6 +42,7 @@ def drawGraph(x,y, area_name):
     plt.savefig('graph.png')
     print('Created graph\n')
     plt.clf()
+    plt.close('all')
 
 def readValues(*args, **kwargs):
     '''for key, value in kwargs.items():     #Debug
