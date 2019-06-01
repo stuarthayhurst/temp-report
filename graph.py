@@ -9,8 +9,9 @@ import sys, argparse, re, datetime
 
 DT_FORMAT       = '%Y/%m/%d-%H:%M'
 LOG_DT_FORMAT   = '%a %b %d %H:%M:%S %Y'
+area_name = 'Room'
 
-def generateGraph(reading_count):
+def generateGraph(reading_count, area_name):
     '''Wrapper for drawgraph called from '''
     kwargs = {'tailmode' : True}
     args   = {reading_count}
@@ -18,9 +19,9 @@ def generateGraph(reading_count):
     if x == '':
       print('Not enough lines in logfile, aborting\n')
       return
-    drawGraph(x,y)
+    drawGraph(x,y, area_name)
 
-def drawGraph(x,y):
+def drawGraph(x,y, area_name):
     x2 = mdates.date2num(x)
     x_sm = np.array(x2)
     y_sm = np.array(y)
@@ -37,7 +38,7 @@ def drawGraph(x,y):
     plt.gcf().autofmt_xdate()
     plt.xlabel('Time (Month-Day - Hour: Minutes)')
     plt.ylabel('Temperature \u2103')
-    plt.title('Room Temperature logged by Pi')
+    plt.title(str(area_name) + ' Temperature logged by Pi')
     plt.savefig('graph.png')
     print('Created graph\n')
     plt.clf()
@@ -192,7 +193,7 @@ def main(args=None):
 
 
     x, y  = readValues(*args, **kwargs)
-    drawGraph(x,y)
+    drawGraph(x,y, area_name)
     sys.exit(1)
 
 if __name__ == '__main__':

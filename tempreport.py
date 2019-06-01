@@ -125,6 +125,7 @@ def writeConfig(mode):
     ['threshold_max', '30'], #Max temp for emailing
     ['threshold_min', '-1'], #Min temp for emailing
     ['graph_point_count', '12'], #Amount of points on graphs
+    ['area_name', 'Room'] #Name of room or area that temperatures are being recorded for
     ]
 
   if mode == 'f':

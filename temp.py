@@ -23,6 +23,8 @@ def updateConfig():
   threshold_min = tempreport.readCSVLine('data/config.csv', 2, 'keyword', 'threshold_min', var_type = 'float')
   global graph_point_count
   graph_point_count = tempreport.readCSVLine('data/config.csv', 2, 'keyword', 'graph_point_count', var_type = 'int')
+  global area_name
+  area_name = tempreport.readCSVLine('data/config.csv', 2, 'keyword', 'area_name', var_type = 'str')
 
   if delay == None:
     print('Errors occured while reading config values, attempting to fix config file:')
@@ -128,7 +130,7 @@ def updateMessage():
   #Updates the message to be sent
   global msg
   msg = MIMEMultipart('alternative')
-  msg['Subject'] = 'Temperature Alert'
+  msg['Subject'] = str(area_name) + ' Temperature Alert'
   msg['From'] = email_sender_name
   msg['To'] = 'Whomever it may concern'
   html_wrap = '<html><body><p>The temperature is no longer between ' + str(threshold_max) + '°C and ' + str(threshold_min) + '°C. </p><p>The temperature is currently ' + str(temp) + '°C at ' + str(datetime.datetime.now().strftime("%H:%M:%S")) + '</p><p>The highest temperature reached recently is: ' + str(max_temp) + '°C at ' + str(max_temp_time) + '</p><p>The lowest temperature reached recently is: ' + str(min_temp) + '°C at ' + str(min_temp_time) + '</p><br><img alt="Temperature Graph" id="graph" src="cid:graph"></body></html>'
@@ -246,7 +248,7 @@ while True:
     updateRecipients()
     updateSender()
     #Create message contents
-    graph.generateGraph(graph_point_count)
+    graph.generateGraph(graph_point_count, area_name)
     updateMessage()
     #Send the message
     try:

@@ -18,6 +18,8 @@ def updateConfig():
   delay = tempreport.readCSVLine('data/config.csv', 2, 'keyword', 'delay', var_type = 'int')
   global graph_point_count
   graph_point_count = tempreport.readCSVLine('data/config.csv', 2, 'keyword', 'graph_point_count', var_type = 'int')
+  global area_name
+  area_name = tempreport.readCSVLine('data/config.csv', 2, 'keyword', 'area_name', var_type = 'str')
 
   if graph_point_count == None:
     print('Errors occured while reading config values, attempting to fix config file:')
@@ -116,7 +118,7 @@ def checkKeywords(email_subject, email_recipient):
       hours = re.findall(r'\d+', email_subject)
       graph_point_count = int((int(hours[0]) * 60) / (delay / 60))
       print(str(hours[0]) + 'Hours, ' + str(graph_point_count) + ' points')
-    graph.generateGraph(graph_point_count)
+    graph.generateGraph(graph_point_count, area_name)
     updateMessage(email_recipient)
     sendMessage(email_recipient)
 
@@ -128,7 +130,7 @@ def updateMessage(email_recipient):
   #Updates the message to be sent
   global msg
   msg = MIMEMultipart('alternative')
-  msg['Subject'] = 'Temperature Reply'
+  msg['Subject'] = str(area_name) + ' Temperature Reply'
   msg['From'] = email_sender_name
   msg['To'] = email_recipient
   html_wrap = '<html><body><p>Here is the data you requested:</p><p>The temperature is currently ' + str(temp) + '°C at ' + str(datetime.datetime.now().strftime("%H:%M:%S")) + '</p><p>The highest temperature reached recently is: ' + str(max_temp) + '°C at ' + str(max_temp_time) + '</p><p>The lowest temperature reached recently is: ' + str(min_temp) + '°C at ' + str(min_temp_time) + '</p><br><img alt="Temperature Graph" id="graph" src="cid:graph"></body></html>'
