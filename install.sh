@@ -158,7 +158,7 @@ else
 fi
 
 #Install build and program dependencies
-sudo pip3 install --upgrade cython setuptools numpy w1thermsensor matplotlib flask gpiozero RPIO pigpio
+sudo pip3 install --upgrade cython setuptools numpy w1thermsensor matplotlib flask gpiozero RPIO pigpio pytz tzlocal
 
 #Build and install Scipy
 installscipy
