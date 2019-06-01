@@ -60,14 +60,17 @@ def readLine(filename, mode, line, **kwargs):
     value = value.strip()
     value = re.split(str(char), value)
     value = value[len(value) - 1]
-  if var_type == 'str':
-    return str(value)
-  elif var_type == 'int':
-    return int(value)
-  elif var_type == 'float':
-    return float(value)
+  if value != None:
+    if var_type == 'str':
+      return str(value)
+    elif var_type == 'int':
+      return int(value)
+    elif var_type == 'float':
+      return float(value)
+    else:
+      return value
   else:
-    return value
+    return None 
 
 def readCSVLine(filename, position, mode, line, **kwargs):
   var_type = ''
@@ -95,14 +98,17 @@ def readCSVLine(filename, position, mode, line, **kwargs):
             value = row[position - 1]
     else:
       return
-    if var_type == 'str':
-      return str(value)
-    elif var_type == 'int':
-      return int(value)
-    elif var_type == 'float':
-      return float(value)
+    if value != None:
+      if var_type == 'str':
+        return str(value)
+      elif var_type == 'int':
+        return int(value)
+      elif var_type == 'float':
+        return float(value)
+      else:
+        return value
     else:
-      return value
+      return None 
   except StopIteration:
     print("That line doesn't exist")
     return
