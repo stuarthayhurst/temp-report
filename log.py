@@ -1,4 +1,5 @@
-import datetime, time, os, csv
+import datetime, time, pytz, csv, os
+from tzlocal import get_localzone
 import tempreport
 
 record_reset_time = datetime.datetime(1970, 1, 1, 0, 0)
@@ -9,8 +10,6 @@ def updateConfig():
 
   global delay
   delay = tempreport.readCSVLine('data/config.csv', 2, 'keyword', 'delay', var_type = 'int')
-  global record_reset
-  record_reset = tempreport.readCSVLine('data/config.csv', 2, 'keyword', 'record_reset', var_type = 'int') * 3600
 
   if delay == None:
     print('Errors occured while reading config values, attempting to fix config file:')
@@ -25,8 +24,6 @@ def logTemp():
   global min_temp
   global max_temp_time
   global min_temp_time
-  global record_reset
-  global record_reset_time
 
   if str(os.path.isfile('data/temp-records.csv')) == 'False':
     print('No report file found, creating one:')
@@ -42,10 +39,14 @@ def logTemp():
       writer.writerows(changes)
     print('Report file created\n')
 
-  time_diff = (time.mktime(datetime.datetime.now().timetuple()) - time.mktime(record_reset_time.timetuple()))
-  if time_diff >= record_reset:
-    record_reset_time = datetime.datetime.now()
-    print(str(record_reset) + ' Hours have passed since last record reset, resetting record values')
+  curr_time = time.mktime(datetime.datetime.now().timetuple())
+  tz = get_localzone() 
+  midnight = datetime.datetime.combine(datetime.date.today() + datetime.timedelta(days=1), datetime.time())
+  midnight = time.mktime(midnight.timetuple())
+  print('Current time: ' + str(curr_time))
+  print('Midnight: ' + str(midnight))
+  if curr_time > midnight and curr_time < midnight + delay * 1.5:
+    print('Time is ' + str(datetime.datetime.now()) + ' (Midnight), resetting record values')
     max_temp = -100.0
     min_temp = 999.9
     print('Records reset\n')
