@@ -1,8 +1,7 @@
-import datetime, time, pytz, csv, os
+import datetime, time, pytz, csv, os, re
 from tzlocal import get_localzone
 import tempreport
 
-record_reset_time = datetime.datetime(1970, 1, 1, 0, 0)
 max_temp = -100.0
 min_temp = 999.9
 
@@ -99,6 +98,28 @@ def logTemp():
 
 while str(os.path.isfile('data/config.csv')) == 'False':
   time.sleep(1)
+
+#Load the config
+updateConfig()
+#Wait for correct time to resume logging
+if str(os.path.isfile('temps.log')) == 'True':
+  FORMAT   = '%a %b %d %H:%M:%S %Y'
+  curr_time = time.mktime(datetime.datetime.now().timetuple())
+  with open('temps.log', 'r') as f:
+    data = f.readlines() [-1:]
+    print('\nLast log entry: ' + data[0])
+    data = re.split("\[(.*?)\]", data[0])
+    last_time = time.mktime(datetime.datetime.strptime(data[1], FORMAT).timetuple())
+  if curr_time > last_time + delay:
+    print()
+  else:
+    print('Waiting for correct time to resume logging...')
+    while curr_time < last_time + delay:
+        curr_time = time.mktime(datetime.datetime.now().timetuple())
+        with open('temps.log', 'r') as f:
+          data = f.readlines() [-1:]
+          data = re.split("\[(.*?)\]", data[0])
+          last_time = time.mktime(datetime.datetime.strptime(data[1], FORMAT).timetuple())
 
 while True:
   #Load the config
