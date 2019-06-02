@@ -110,7 +110,7 @@ def checkMail():
   print('Logged out\n')
 
 def checkKeywords(email_subject, email_recipient):
-  global graph_point_count
+  #global graph_point_count
   if any(searchstr in email_subject.lower() for searchstr in (keywords)):
     print('Keyword found\n')
     if any(searchstr in email_subject.lower() for searchstr in ('hours', 'hour')):

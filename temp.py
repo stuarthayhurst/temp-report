@@ -63,64 +63,12 @@ def updateSender():
   global email_sender
   global password
   if str(os.path.isfile('data/sender.csv')) == 'False':
-    changeSender('e')
+    tempreport.changeSender('e')
   email_sender      = tempreport.readCSVLine('data/sender.csv', 1, 'numbered', 2, var_type = 'str')
   password          = tempreport.readCSVLine('data/sender.csv', 1, 'numbered', 3, var_type = 'str')
   email_sender_name = tempreport.readCSVLine('data/sender.csv', 1, 'numbered', 4, var_type = 'str')
 
-def changeSender(mode):
-  if str(os.path.isfile('data/sender.csv')) == 'False':
-    print("We didn't find a sender credentials file, creating on for you:")
-    changes = [
-      ['details'],
-      ['address'],
-      ['password'],  
-      ['name'], 
-      ]
-    f = open('data/sender.csv','w+')
-    f.close()
-    with open('data/sender.csv', 'a') as f:                                    
-      writer = csv.writer(f, lineterminator="\n")
-      writer.writerows(changes)
-    print('Done')
-    changeSender('e')
-    exit()
-
-  if mode == 's':
-    credential = input(str('Please enter the new email address: '))
-    selectLineNumber = 1
-    wFile = 1
-  elif mode == 'p':
-    credential = input(str('Please enter the new password: '))
-    selectLineNumber = 2
-    wFile = 1
-  elif mode == 'n':
-    credential = input(str('Please enter the new sender name: '))
-    selectLineNumber = 3
-    wFile = 1
-  elif mode == 'e':
-    print('\nPlease enter the sender details: \n')
-    changeSender('s')
-    changeSender('p')
-    changeSender('n')
-    wFile = 0
-
-  if wFile == 1:
-    with open('data/sender.csv', 'r') as f:
-      reader = csv.reader(f)
-      for i in range(selectLineNumber):
-          next(reader)
-      row = next(reader)
-      selectLine = row[0]
-
-    with open('data/sender.csv','r') as f:
-      lines = f.readlines()
-    with open('data/sender.csv','w') as f:
-      for line in lines:
-        if line == selectLine + '\n':
-          f.write(credential + '\n')
-        else:
-          f.write(line)
+#changeSender
 
 def updateMessage():
   #Reads the image
@@ -220,13 +168,13 @@ elif sys.argv[1] == '-a' or sys.argv[1] == '--address':
   tempreport.dataEdit()
   exit()
 elif sys.argv[1] == '-p' or sys.argv[1] == '--password':
-  changeSender('p')
+  tempreport.changeSender('p')
   exit()
 elif sys.argv[1] == '-s' or sys.argv[1] == '--sender':
-  changeSender('s')
+  tempreport.changeSender('s')
   exit()
 elif sys.argv[1] == '-n' or sys.argv[1] == '--name':
-  changeSender('n')
+  tempreport.changeSender('n')
   exit()
 elif sys.argv[1] == '-c' or sys.argv[1] == '--config':
   tempreport.writeConfig('f')
