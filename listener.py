@@ -33,7 +33,7 @@ def updateSender():
   global email_sender
   global password
   if str(os.path.isfile('data/sender.csv')) == 'False':
-    changeSender('e')
+    tempreport.changeSender('e')
   email_sender      = tempreport.readCSVLine('data/sender.csv', 1, 'numbered', 2, var_type = 'str')
   password          = tempreport.readCSVLine('data/sender.csv', 1, 'numbered', 3, var_type = 'str')
   email_sender_name = tempreport.readCSVLine('data/sender.csv', 1, 'numbered', 4, var_type = 'str')
@@ -165,10 +165,10 @@ while True:
   try:
     refreshServer()
     connectToServer()
+    temp = tempreport.measureTemp()
+    updateRecords()
+    checkMail()
   except:
-    print('There was an error while connecting to the email server')
-  temp = tempreport.measureTemp()
-  updateRecords()
-  checkMail()
+    print('\nWARNING: There was an error while connecting to the email server\n')
   print('--------------------------------\n')
   time.sleep(poll_rate)
