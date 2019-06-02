@@ -15,10 +15,14 @@ def generateGraph(reading_count, area_name):
     '''Wrapper for drawgraph called from '''
     kwargs = {'tailmode' : True}
     args   = {reading_count}
-    x, y   = readValues(*args, **kwargs)
-    if x == '':
+    if len(open('temps.log').readlines(  )) < reading_count:
       print('Not enough lines in logfile, aborting\n')
+      plt.figure()
+      plt.savefig('graph.png')
+      plt.clf()
+      plt.close('all')
       return
+    x, y   = readValues(*args, **kwargs)
     drawGraph(x,y, area_name)
 
 def drawGraph(x,y, area_name):
