@@ -110,14 +110,30 @@ def checkMail():
   print('Logged out\n')
 
 def checkKeywords(email_subject, email_recipient):
-  #global graph_point_count
+  global graph_point_count
   if any(searchstr in email_subject.lower() for searchstr in (keywords)):
     print('Keyword found\n')
     if any(searchstr in email_subject.lower() for searchstr in ('hours', 'hour')):
       print('Found request for specific time')
-      hours = re.findall(r'\d+', email_subject)
-      graph_point_count = int((int(hours[0]) * 60) / (delay / 60))
-      print(str(hours[0]) + 'Hours, ' + str(graph_point_count) + ' points')
+      requested_units = re.findall(r'\d+', email_subject)
+      if len(requested_units) == 0:
+        requested_units = ['1']
+      graph_point_count = int((int(requested_units[0]) * 60) / (delay / 60))
+      print(str(requested_units[0]) + ' Hours, ' + str(graph_point_count) + ' points')
+    if any(searchstr in email_subject.lower() for searchstr in ('days', 'day')):
+      print('Found request for specific time')
+      requested_units = re.findall(r'\d+', email_subject)
+      if len(requested_units) == 0:
+        requested_units = ['1']
+      graph_point_count = int((int(requested_units[0]) * 60) / (delay / 60) * 24)
+      print(str(requested_units[0]) + ' Days, ' + str(graph_point_count) + ' points')
+    if any(searchstr in email_subject.lower() for searchstr in ('weeks', 'week')):
+      print('Found request for specific time')
+      requested_units = re.findall(r'\d+', email_subject)
+      if len(requested_units) == 0:
+        requested_units = ['1']
+      graph_point_count = int((int(requested_units[0]) * 60) / (delay / 60) * 168)
+      print(str(requested_units[0]) + ' Weeks, ' + str(graph_point_count) + ' points')
     graph.generateGraph(graph_point_count, area_name)
     updateMessage(email_recipient)
     sendMessage(email_recipient)
@@ -162,13 +178,16 @@ def sendMessage(email_recipient):
 while True:
   updateConfig()
   updateSender()
+  failed = 0
   try:
     refreshServer()
     connectToServer()
+  except:
+    print('\nWARNING: There was an error while connecting to the mail server\n')
+    failed = 1
+  if failed == 0:
     temp = tempreport.measureTemp()
     updateRecords()
     checkMail()
-  except:
-    print('\nWARNING: There was an error while connecting to the email server\n')
   print('--------------------------------\n')
   time.sleep(poll_rate)
