@@ -44,7 +44,7 @@ def logTemp():
   midnight = time.mktime(midnight.timetuple())
   print('Current time: ' + str(curr_time))
   print('Midnight: ' + str(midnight))
-  if curr_time > midnight and curr_time < midnight + delay * 1.5:
+  if curr_time > midnight and curr_time < midnight + (delay * 1.5):
     print('Time is ' + str(datetime.datetime.now()) + ' (Midnight), resetting record values')
     max_temp = -100.0
     min_temp = 999.9
