@@ -15,7 +15,7 @@ def generateGraph(reading_count, area_name):
     '''Wrapper for drawgraph called from '''
     kwargs = {'tailmode' : True}
     args   = {reading_count}
-    if len(open('temps.log').readlines(  )) < reading_count:
+    if len(open('temps.log', encoding="utf-8").readlines(  )) < reading_count:
       print('Not enough lines in logfile, aborting\n')
       plt.figure()
       plt.savefig('graph.png')
@@ -74,7 +74,7 @@ def readValues(*args, **kwargs):
         from_dt = date_to_dt(kwargs.get('from_date'),DT_FORMAT)
         to_dt = date_to_dt(kwargs.get('to_date'),DT_FORMAT)
 
-    with open('temps.log', 'r') as f:
+    with open('temps.log', 'r', encoding="utf-8") as f:
         if tailmode:
             taildata = f.readlines() [-reading_count:]
         else:
