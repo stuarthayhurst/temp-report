@@ -1,4 +1,4 @@
-import datetime, time, pytz, csv, os, re
+import datetime, time,  csv, os, re
 from tzlocal import get_localzone
 import tempreport
 
