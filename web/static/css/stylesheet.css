@@ -79,6 +79,9 @@ label {
   display: block;
   cursor: pointer;
 }
+input.inputGraphForm {
+  display: inline-block;
+}
 input.inputGraph:checked~ul.subGraph {
   opacity: 1;
   transition: opacity 1s linear;

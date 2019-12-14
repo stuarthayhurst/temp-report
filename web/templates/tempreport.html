@@ -6,7 +6,9 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/stylesheet.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='vendor/bootstrap/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/simple-sidebar.css') }}">
-  </head>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">  </head>
   <body>
     <div class="topbar">
     <img href="#inner-menu-toggle" onclick="reset_animation()" id="inner-menu-toggle" class="lines"  src="{{ url_for('static', filename='lines.png') }}"/>
@@ -64,13 +66,21 @@
                   </tr>
                 </table>
               </div>
+	      </br>
+		<form action="./" method="POST">
+			<input class="inputGraphForm" type="radio" name="pointsrequested" value="24" checked> 2 Hour 
+			<input class="inputGraphForm" type="radio" name="pointsrequested" value="48"> 4 Hour 
+			<input class="inputGraphForm" type="radio" name="pointsrequested" value="144"> 12 Hour
+			<input class="inputGraphForm" type="radio" name="pointsrequested" value="288"> 24 Hour </br></br>
+			<input class="inputGraphForm button" type="submit" name="submit" value="Redraw">
+		</form>
               <br>
               <div style="display: inline-block;">
                 <img id="graphArrow" onclick="toggleGraphArrow()" height="35" width="35" src="{{ url_for('static', filename='collapse.png') }}">
                 <input id="graphCheck" class="inputGraph" type="checkbox" name="Graph" />
-                <label class="button" onclick="toggleGraph()" for="graphCheck">Graph</label><p class="titleGraph">  &nbsp<span style="background-color: #4ace4f"> </span>Graph: | {{ pointCount }} points</p>
+		<label class="button" onclick="toggleGraph()" for="graphCheck">Graph</label><p class="titleGraph">  &nbsp<span style="background-color: #4ace4f"> </span>Graph: | {{ pointCount }} points</p>
                 <ul class="subGraph">
-                  <li><img src="{{ url_for('static', filename='graph.png') }}" alt="Temperature Graph" height="360" width="600"></li>
+			<li><img src="data:image/png;base64, {{ graphImageData }}" alt="Temperature Graph" height="360" width="600"></li>
                 </ul>
               </div>
               <div style="display: inline-block;">

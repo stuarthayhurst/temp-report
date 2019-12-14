@@ -1,5 +1,6 @@
-from flask import Flask, render_template, url_for
-import flask, os, sys, inspect, shutil, time, datetime, gpiozero, subprocess, re
+from flask import Flask, render_template, request, url_for
+import flask, os, sys, inspect, shutil, time, datetime, gpiozero, subprocess, re, base64
+import PIL.Image
 app = Flask(__name__, static_url_path='/static')
 
 try:
@@ -28,7 +29,7 @@ graph.generateGraph(graphPointCount, area_name)
 shutil.move(currDir + '/temps.log', currDir + '/static/temps.log')
 shutil.move(currDir + '/graph.png', currDir + '/static/graph.png')
 
-@app.route('/')
+@app.route('/', methods = ['POST','GET'])
 def main(flaskVer=flask.__version__, tempWebVer=tempWebVer, tempVer=tempVer, pointCount=graphPointCount, cpu=cpu):
     def measureTemp(mode):
         if mode == 'temp':
@@ -57,12 +58,6 @@ def main(flaskVer=flask.__version__, tempWebVer=tempWebVer, tempVer=tempVer, poi
             print('Updated Max Temperature Time')
         return value
 
-    shutil.copy2(parDir + '/temps.log', currDir + '/temps.log')
-    graphPointCount = tempreport.readCSVLine(parDir + '/data/config.csv', 2, 'keyword', 'graph_point_count', var_type = 'int')
-    graph.generateGraph(graphPointCount, area_name)
-    shutil.move(currDir + '/temps.log', currDir + '/static/temps.log')
-    shutil.move(currDir + '/graph.png', currDir + '/static/graph.png')
-    print('Updated Files')
 
     with open(currDir + '/static/temps.log', "r") as f:
         logContent = f.read()
@@ -85,7 +80,29 @@ def main(flaskVer=flask.__version__, tempWebVer=tempWebVer, tempVer=tempVer, poi
             outdated = 'False'
     except:
         outdated = 'False'
-    return render_template('tempreport.html', flaskVer=flaskVer, tempWebVer=tempWebVer, tempVer=tempVer, measureTemp=measureTemp, maxTemp=maxTemp, minTemp=minTemp, logContent=logContent, lineCount=lineCount, pointCount=pointCount, cpuTemp=str(cpu.temperature) + '°C', outdated=outdated)
+
+    if request.method =='POST':
+        result = request.form
+        pointCount = result['pointsrequested']
+
+    shutil.copy2(parDir + '/temps.log', currDir + '/temps.log')
+    graphPointCount = tempreport.readCSVLine(parDir + '/data/config.csv', 2, 'keyword', 'graph_point_count', var_type = 'int')
+    graph.generateGraph(int(pointCount), area_name)
+    print("Drew graph with " + pointCount + " points")
+    shutil.move(currDir + '/temps.log', currDir + '/static/temps.log')
+    try:
+        with open(currDir + '/graph.png', 'rb') as ImageData:
+            graphImageData = base64.b64encode(ImageData.read())
+            graphImageData = graphImageData.decode('utf-8')  
+    except FileNotFoundError:
+        graphImageData = ""
+        print("File Not found")
+
+
+    print('Updated Files')
+
+
+    return render_template('tempreport.html', flaskVer=flaskVer, graphImageData=graphImageData, tempWebVer=tempWebVer, tempVer=tempVer, measureTemp=measureTemp, maxTemp=maxTemp, minTemp=minTemp, logContent=logContent, lineCount=lineCount, pointCount=pointCount, cpuTemp=str(cpu.temperature) + '°C', outdated=outdated)
 
 if __name__ == "__main__":
     app.run(host= '0.0.0.0', port= 80)
