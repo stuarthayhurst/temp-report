@@ -52,8 +52,6 @@ def readValues(*args, **kwargs):
     '''for key, value in kwargs.items():     #Debug
         print ("%s == %s" %(key, value)) #Debug
     '''
-    print("From: ",kwargs.get('from_date'))
-    print("To: ",kwargs.get('to_date')) 
 
     if kwargs.get('lines') != None:
         reading_count = kwargs.get('lines')
@@ -71,6 +69,8 @@ def readValues(*args, **kwargs):
     except:
         tailmode = True
     if not tailmode:
+        print("From: ",kwargs.get('from_date'))
+        print("To: ",kwargs.get('to_date')) 
         from_dt = date_to_dt(kwargs.get('from_date'),DT_FORMAT)
         to_dt = date_to_dt(kwargs.get('to_date'),DT_FORMAT)
 
