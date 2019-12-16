@@ -59,12 +59,12 @@ def main(flaskVer=flask.__version__, tempWebVer=tempWebVer, tempVer=tempVer, poi
         return value
 
 
-    with open(currDir + '/static/temps.log', "r") as f:
+    with open(currDir + '/static/temps.log', "r", encoding='utf-8') as f:
         logContent = f.read()
         logContent = logContent.rsplit('\n', 1)
         logContent = ''.join(logContent)
 
-    with open(currDir + '/static/temps.log', "r") as f:
+    with open(currDir + '/static/temps.log', "r", encoding='utf-8') as f:
         lineCount = len(f.readlines())
         print('Found ' + str(lineCount) + ' lines')
 
@@ -88,7 +88,7 @@ def main(flaskVer=flask.__version__, tempWebVer=tempWebVer, tempVer=tempVer, poi
     shutil.copy2(parDir + '/temps.log', currDir + '/temps.log')
     graphPointCount = tempreport.readCSVLine(parDir + '/data/config.csv', 2, 'keyword', 'graph_point_count', var_type = 'int')
     graph.generateGraph(int(pointCount), area_name)
-    print("Drew graph with " + pointCount + " points")
+    print(f"Drew graph with {pointCount} points")
     shutil.move(currDir + '/temps.log', currDir + '/static/temps.log')
     try:
         with open(currDir + '/graph.png', 'rb') as ImageData:
