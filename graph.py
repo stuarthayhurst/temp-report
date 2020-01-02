@@ -28,7 +28,6 @@ def generateGraph(reading_count, area_name):
 def drawGraph(x,y, area_name):
     x2 = mdates.date2num(x)
     x_sm = np.array(x2)
-    y_sm = np.array(y)
     x_smooth = np.linspace(x_sm.min(), x_sm.max(), 200)
     spl = make_interp_spline(x2, y, k=3)
     y_smooth = spl(x_smooth)
