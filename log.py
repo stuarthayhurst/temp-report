@@ -88,9 +88,12 @@ def logTemp():
       writer.writerows(changes)
     print('Log created\n')
   
-  logLine = '[' + str(datetime.datetime.now().strftime("%c")) + '] Temperature: ' + str(temp) + '°C'
+  #logLine = '[' + str(datetime.datetime.now().strftime("%c")) + '] Temperature: ' + str(temp) + '°C'
+  LOG_DT_FORMAT = '%Y-%m-%d %H:%M:%S'
+  date = datetime.datetime.now().strftime(LOG_DT_FORMAT)
+  logline = f'[{date}] {temp}'
   changes = [
-    [logLine],                                      
+    [logline],                                      
     ]
   with open('temps.log', 'a') as f:                                    
     writer = csv.writer(f, lineterminator="\n")
@@ -103,7 +106,7 @@ while str(os.path.isfile('data/config.csv')) == 'False':
 updateConfig()
 #Wait for correct time to resume logging
 if str(os.path.isfile('temps.log')) == 'True':
-  FORMAT   = '%a %b %d %H:%M:%S %Y'
+  FORMAT  = '%Y-%m-%d %H:%M:%S'
   curr_time = time.mktime(datetime.datetime.now().timetuple())
   with open('temps.log', 'r') as f:
     data = f.readlines() [-1:]

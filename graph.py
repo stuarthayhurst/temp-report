@@ -8,7 +8,7 @@ import numpy as np
 import sys, argparse, re, datetime
 
 DT_FORMAT       = '%Y/%m/%d-%H:%M'
-LOG_DT_FORMAT   = '%a %b %d %H:%M:%S %Y'
+LOG_DT_FORMAT   = '%Y-%m-%d %H:%M:%S'
 area_name = 'Room'
 
 def generateGraph(reading_count, area_name):
@@ -57,7 +57,7 @@ def readValues(*args, **kwargs):
     else:
         reading_count = args[0]
 
-    log_dt_format = '%a %b %d %H:%M:%S %Y'
+    log_dt_format   = '%Y-%m-%d %H:%M:%S'
 
     x=[]
     y=[]
