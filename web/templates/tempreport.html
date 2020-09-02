@@ -87,8 +87,6 @@
                 <img id="logArrow" onclick="toggleLogArrow()" height="35" width="35" src="{{ url_for('static', filename='collapse.png') }}">
                 <input id="logCheck" class="inputLog" type="checkbox" name="Log" />
                 <label class="button" onclick="toggleLog()" for="logCheck">Log</label>
-                <input class="searchLog" id="searchBar" type="text" placeholder="YYYY/MM/DD-HH:MM" />&nbsp
-                <p class="searchButton" onclick="searchDate()">Search<p>
                 <p class="titleLog">  &nbsp<span style="background-color: #4ace4f"> </span>Log: | {{ lineCount }} lines</p>
                 <ul class="subLog">
                   <li><textarea class="logBox" id="logBox" readonly>{{ logContent }}</textarea></li>
@@ -123,22 +121,6 @@
       el.style.animation = 'none';
       el.offsetHeight;
       el.style.animation = null;
-    }
-    </script>
-    <script>
-    function searchDate() {
-      var rawDate = document.getElementById('searchBar').value
-      var year = rawDate.split('/', 1)[0]
-      var month = rawDate.split('/', 2)[1]
-      var day = rawDate.split('/', 3)[2].split('-', 1)[0]
-      var hour = rawDate.split('-', 2)[1].split(':', 1)[0]
-      var min = rawDate.split('-', 2)[1].split(':', 2)[1]
-      var searchStr = day + ' ' + hour + ':' + min
-      //window.alert('Search: '+ searchStr)
-      window.find(searchStr)
-      //var searchScrollHeight = document.getElementById('logBox').selectionStart
-      //window.alert(searchScrollHeight)
-      //document.getElementById('logBox').scrollTop = 'searchScrollHeight'
     }
     </script>
     <script>
