@@ -184,10 +184,26 @@ elif sys.argv[1] == '-cs' or sys.argv[1] == '--config-save':
   exit()
 
 print('--------------------------------')
+
+#Load the config
+tempreport.writeConfig('s')
+updateConfig()
+
+try:
+  connectToServer()
+except:
+  print('There was an error while connecting to the email server')
+  exit()
+
+def trySendMessage():
+  try:
+    sendMessage()
+  except:
+    print('There was an error attempting to send the email, retrying in 3 minutes')
+    time.sleep(180)
+    trySendMessage()
+
 while True:
-  #Load the config
-  tempreport.writeConfig('s')
-  updateConfig()
   #Measure the temperature
   temp = tempreport.measureTemp()
   readRecords()
@@ -199,10 +215,6 @@ while True:
     graph.generateGraph(graph_point_count, area_name)
     updateMessage()
     #Send the message
-    try:
-      connectToServer()
-    except:
-      print('There was an error while connecting to the email server')
-    sendMessage()
+    trySendMessage()
   print('--------------------------------\n')
   time.sleep(delay)
