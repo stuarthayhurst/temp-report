@@ -98,7 +98,7 @@
               <div class="footer">
                 <p> </p>
               </div>
-              <a style="position:fixed; z-index: 11; bottom: 0; right: 0; margin-right: 2px;">Flask Version: {{ flaskVer }} | Temp-report Web Version: {{ tempWebVer }} | Temp-report Version: {{ tempVer }} &nbsp | &nbsp CPU Temperature: {{ cpuTemp }} </a>
+              <a style="position:fixed; z-index: 11; bottom: 0; right: 0; margin-right: 2px;">CPU Temperature: {{ cpuTemp }} </a>
         </div>
     </div>
     <script src="{{ url_for('static', filename='vendor/jquery/jquery.min.js') }}"></script>
@@ -115,11 +115,6 @@
         e.preventDefault();
         $("#wrapper").toggleClass("toggled");
     });
-    </script>
-    <script>
-    if ('{{ outdated }}' == 'True') {
-      window.alert('Program is outdated, please update')
-    }
     </script>
     <script>
     $("#wrapper").toggleClass("toggled");

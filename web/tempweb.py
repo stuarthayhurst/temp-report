@@ -68,19 +68,6 @@ def main(flaskVer=flask.__version__, tempWebVer=tempWebVer, tempVer=tempVer, poi
         lineCount = len(f.readlines())
         print('Found ' + str(lineCount) + ' lines')
 
-    try:
-        tempVerRaw = tempVer[:-2]
-        latestTempVer = subprocess.check_output(["bash", "version.sh"])
-        latestTempVer = re.findall('\d+.\d+', str(latestTempVer))[0]
-
-        if latestTempVer > tempVerRaw:
-            outdated = 'True'
-            print('Program outdated')
-        else:
-            outdated = 'False'
-    except:
-        outdated = 'False'
-
     if request.method =='POST':
         result = request.form
         pointCount = result['pointsrequested']
@@ -102,7 +89,7 @@ def main(flaskVer=flask.__version__, tempWebVer=tempWebVer, tempVer=tempVer, poi
     print('Updated Files')
 
 
-    return render_template('tempreport.html', flaskVer=flaskVer, graphImageData=graphImageData, tempWebVer=tempWebVer, tempVer=tempVer, measureTemp=measureTemp, maxTemp=maxTemp, minTemp=minTemp, logContent=logContent, lineCount=lineCount, pointCount=pointCount, cpuTemp=str(cpu.temperature) + '°C', outdated=outdated)
+    return render_template('tempreport.html', graphImageData=graphImageData, measureTemp=measureTemp, maxTemp=maxTemp, minTemp=minTemp, logContent=logContent, lineCount=lineCount, pointCount=pointCount, cpuTemp=str(cpu.temperature) + '°C')
 
 if __name__ == "__main__":
     app.run(host= '0.0.0.0', port= 80)
