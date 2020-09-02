@@ -23,17 +23,13 @@ All required and recommended packages are automatically installed when running t
   * libopenblas-dev && libopenblas-base
   * gcc && g++
   * build-essential && gfortran
--   #### Recommended:
-    * Htop
 
 
 ## Installation:
-
-- Make sure the wiring for the sensor is complete first
-- `git clone https://github.com/Dragon8oy/temp-report.git`
-- `./install.sh`
-
- - See wiki for manual installation instructions
+  - Make sure the wiring for the sensor is complete first
+  - `git clone https://github.com/Dragon8oy/temp-report.git`
+  - Install scipy, Python and pip3
+  - Install program and other dependencies: `./install.sh`
 
 ## Commands and notes:
 
