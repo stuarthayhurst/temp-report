@@ -256,7 +256,7 @@ def measureTemp(mode = 'V'):
 
 def checkAddresses():
   if str(os.path.isfile('data/addresses.csv')) == 'False':
-    newDatabase()
+    newFile('data/addresses.csv', 'addresses')
 
 def appendLine(filePath, data):
   changes = [
