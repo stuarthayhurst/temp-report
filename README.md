@@ -3,7 +3,7 @@
  - Handles logging, graphing, mailing a list, replying to requests for data and displaying a webpage
 
 ## Dependencies:
- - All required and recommended packages are automatically installed when running the installer
+ - All required and recommended packages are automatically installed when running the installer, except `scipy`, which needs to be installed manually
 - ### Python / Pip
   * Python 3.6+
   * flask
@@ -28,7 +28,6 @@
   - Install program and other dependencies: `./install.sh`
 
 ## Commands and notes:
-
 - Use `python3 temp.py -h` to view help
 - Use `tmux att -t temp_report` to view the program
 - Use `tmux att -t temp_listener` to view the email reply bot
@@ -41,6 +40,5 @@
 - See wiki for more information
 
 ## Wiring diagram:
-
 ![alt text](https://farm5.staticflickr.com/4215/35139160190_cea3435a09_b_d.jpg)
 - Diagram credit: [Les Pounder](https://bigl.es/author/les/ "Les Pounder")
