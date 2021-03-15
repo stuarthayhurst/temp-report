@@ -112,9 +112,10 @@ def sendMessage():
     print('Email not sent\n')
 
 def readRecords():
+  print('Waiting for record file...', end="", flush="True")
   while str(os.path.isfile('data/temp-records.csv')) == 'False':
-    print('No records found')
     time.sleep(1)
+  print(" done")
 
   temp.max.value = tempreport.readCSVLine('data/temp-records.csv', 2, 'keyword', 'max', var_type = 'float')
   temp.max.time = tempreport.readCSVLine('data/temp-records.csv', 3, 'keyword', 'max')
