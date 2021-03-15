@@ -16,7 +16,7 @@
 
 - ### Source / Package Manager
   * Tmux
-  * libopenblas-dev && libopenblas-base
+  * libopenblas-dev && libopenblas-base && libatlas-base-dev
   * gcc && g++
   * build-essential && gfortran
 
