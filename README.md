@@ -1,10 +1,9 @@
 # temp-report
-A small project to create a system that can handle the output from a Pi temperature logger.
-The system maintains a mail-list and will respond to mail requests. Reports include temperature charts and are generated when the temperature moves outside of a defined range or an email is received requesting a report.
+ - A project to report the temperature of an area to a mailing list when it falls out of a threshold, from a Raspberry Pi
+ - Handles logging, graphing, mailing a list, replying to requests for data and displaying a webpage
 
 ## Dependencies:
-All required and recommended packages are automatically installed when running the installer
-
+ - All required and recommended packages are automatically installed when running the installer
 - ### Python / Pip
   * Python 3.6+
   * flask
