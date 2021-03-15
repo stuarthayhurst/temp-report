@@ -7,11 +7,9 @@ from email.mime.image import MIMEImage
 
 #Variables for email and the sensor
 email_recipients = ['']
-last_email_time = datetime.datetime(1970, 1, 1, 0, 0)
-email_time_diff = 0
+lastEmailTime = datetime.datetime(1970, 1, 1, 0, 0)
 
 #See data/config.csv for a config file. Use python3 temp.py -c to generate a new one
-
 def updateConfig():
   global delay
   delay = tempreport.readCSVLine('data/config.csv', 2, 'keyword', 'delay', var_type = 'int')
@@ -86,36 +84,40 @@ def updateMessage():
   msg.attach(msgImg)
 
 def sendMessage():
-  #Sends the message
-  #Gets current time and works out time since the last email sent
-  global last_email_time
-  email_time_diff = (time.mktime(datetime.datetime.now().timetuple()) - time.mktime(last_email_time.timetuple()))
-  #Sends the message if the time is ok
-  if email_time_diff >= gap:
-    #Sends an email to the addresses in the array
-    for x in range(0, len(email_recipients)):
+  global lastEmailTime
+  #Figure out time since last email
+  emailTimeDiff = (datetime.datetime.now() - lastEmailTime).total_seconds()
+
+  #If it's been long enough since the last email, attempt to send it
+  if emailTimeDiff >= gap:
+    failedRecipients = 0
+    #Loop through each recipient on the list and attempt to semd an email
+    for recipient in email_recipients:
+      error = 0
       try:
-        error = 0
-        server.sendmail(email_sender, email_recipients[x], msg.as_string())
+        server.sendmail(email_sender, recipient, msg.as_string())
       except:
-        print('There was an error while sending the message to ' + email_recipients[x])
+        print('There was an error while sending the message to ' + recipient[x])
         error = 1
-      if error == 0:
-        print('Email sent to ' + str(email_recipients[x]))
-      else:
-        error == 0
-    print('Sent email to ' + str(len(email_recipients)) + ' addresses')
-    print('Email was last sent ' + str(email_time_diff) + ' seconds ago')
-    last_email_time = datetime.datetime.now()
+        if error == 0:
+          print('Email sent to ' + str(recipient))
+        else:
+          failedRecipients+=1
+    #Output number of emails successfully sent
+    print('Sent email to ' + str(len(email_recipients) - failedRecipients) + ' addresses')
+    lastEmailTime = datetime.datetime.now()
   else:
-    print('Email was last sent ' + str(email_time_diff) + ' seconds ago')
     print('Email not sent\n')
+
+  #Only annouce when the last email was sent if it wasn't the first email
+  if emailTimeDiff > gap * 100:
+    print('Email was last sent ' + str(emailTimeDiff) + ' seconds ago')
 
 def readRecords():
   print('Waiting for record file...', end="", flush="True")
   while str(os.path.isfile('data/temp-records.csv')) == 'False':
     time.sleep(1)
-  print(" done")
+  print(" done\n")
 
   temp.max.value = tempreport.readCSVLine('data/temp-records.csv', 2, 'keyword', 'max', var_type = 'float')
   temp.max.time = tempreport.readCSVLine('data/temp-records.csv', 3, 'keyword', 'max')
