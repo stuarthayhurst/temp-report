@@ -72,7 +72,7 @@ def updateMessage():
   msg['Subject'] = str(area_name) + ' Temperature Alert'
   msg['From'] = email_sender_name
   msg['To'] = 'Whomever it may concern'
-  html_wrap = '<html><body><p>The temperature is no longer between ' + str(threshold_max) + '°C and ' + str(threshold_min) + '°C. </p><p>The temperature is currently ' + str(temp) + '°C at ' + str(datetime.datetime.now().strftime("%H:%M:%S")) + '</p><p>The highest temperature reached recently is: ' + str(max_temp) + '°C at ' + str(max_temp_time) + '</p><p>The lowest temperature reached recently is: ' + str(min_temp) + '°C at ' + str(min_temp_time) + '</p><br><img alt="Temperature Graph" id="graph" src="cid:graph"></body></html>'
+  html_wrap = '<html><body><p>The temperature is no longer between ' + str(threshold_max) + '°C and ' + str(threshold_min) + '°C. </p><p>The temperature is currently ' + str(temp.current.value) + '°C at ' + str(datetime.datetime.now().strftime("%H:%M:%S")) + '</p><p>The highest temperature reached recently is: ' + str(temp.max.value) + '°C at ' + str(temp.max.time) + '</p><p>The lowest temperature reached recently is: ' + str(temp.min.value) + '°C at ' + str(temp.min.time) + '</p><br><img alt="Temperature Graph" id="graph" src="cid:graph"></body></html>'
   msgHtml = MIMEText(html_wrap, 'html')
 
   #Define the image's ID
@@ -112,29 +112,23 @@ def sendMessage():
     print('Email not sent\n')
 
 def readRecords():
-  global temp
-  global max_temp
-  global min_temp
-  global max_temp_time
-  global min_temp_time
-
   while str(os.path.isfile('data/temp-records.csv')) == 'False':
     print('No records found')
     time.sleep(1)
 
-  max_temp = tempreport.readCSVLine('data/temp-records.csv', 2, 'keyword', 'max', var_type = 'float')
-  max_temp_time = tempreport.readCSVLine('data/temp-records.csv', 3, 'keyword', 'max')
-  if float(temp) > float(max_temp):
+  temp.max.value = tempreport.readCSVLine('data/temp-records.csv', 2, 'keyword', 'max', var_type = 'float')
+  temp.max.time = tempreport.readCSVLine('data/temp-records.csv', 3, 'keyword', 'max')
+  if float(temp.current.value) > float(temp.max.value):
     print('Current temp was higher than recorded max temp, updating locally\n')
-    max_temp = temp
-    max_temp_time = datetime.datetime.now().strftime("%H:%M:%S")
+    temp.max.value = temp.current.value
+    temp.max.time = datetime.datetime.now().strftime("%H:%M:%S")
 
-  min_temp = tempreport.readCSVLine('data/temp-records.csv', 2, 'keyword', 'min', var_type = 'float')
-  min_temp_time = tempreport.readCSVLine('data/temp-records.csv', 3, 'keyword', 'min')
-  if float(temp) < float(min_temp):
+  temp.min.temp = tempreport.readCSVLine('data/temp-records.csv', 2, 'keyword', 'min', var_type = 'float')
+  temp.min.time = tempreport.readCSVLine('data/temp-records.csv', 3, 'keyword', 'min')
+  if float(temp.current.value) < float(temp.min.value):
     print('Current temp was lower than recorded min temp, updating locally\n')
-    min_temp = temp
-    min_temp_time = datetime.datetime.now().strftime("%H:%M:%S")
+    temp.min.value = temp.current.value
+    temp.min.time = datetime.datetime.now().strftime("%H:%M:%S")
 
 def connectToServer():
   #Connects to gmail's servers
@@ -185,6 +179,16 @@ elif sys.argv[1] == '-cs' or sys.argv[1] == '--config-save':
 
 print('--------------------------------')
 
+class temp:
+  class current:
+    value=0.0
+  class max:
+    value=0.0
+    time=0
+  class min:
+    value=0.0
+    time=0
+
 #Load the config
 tempreport.writeConfig('s')
 updateConfig()
@@ -199,10 +203,10 @@ except:
 try:
   while True:
     #Measure the temperature
-    temp = tempreport.measureTemp()
+    temp.current.value = tempreport.measureTemp()
     readRecords()
     #Update addresses and credentials
-    if temp >= threshold_max or temp <= threshold_min:
+    if temp.current.value >= threshold_max or temp.current.value <= threshold_min:
       updateRecipients()
       updateSender()
       #Create message contents
