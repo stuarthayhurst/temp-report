@@ -33,15 +33,6 @@ def updateConfig():
     updateConfig()
   print('Read config values')
 
-def connectToServer():
-  #Connects to gmail's servers
-  global server
-  server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
-  server.connect('smtp.gmail.com', 465)
-  print('Connected to server')
-  server.login(email_sender, password)
-  print('Logged in successfully as ' + email_sender + '\n')
-
 def updateRecipients():
   global email_recipients
   if str(os.path.isfile('data/addresses.csv')) == 'False':
@@ -119,14 +110,6 @@ def sendMessage():
   else:
     print('Email was last sent ' + str(email_time_diff) + ' seconds ago')
     print('Email not sent\n')
-  try:
-    server.quit()
-    error = 0
-  except:
-    print('Failed to logout')
-    error = 1
-  if error == 0:
-    print('\nLogged out\n')
 
 def readRecords():
   global temp
@@ -152,6 +135,23 @@ def readRecords():
     print('Current temp was lower than recorded min temp, updating locally\n')
     min_temp = temp
     min_temp_time = datetime.datetime.now().strftime("%H:%M:%S")
+
+def connectToServer():
+  #Connects to gmail's servers
+  global server
+  server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
+  server.connect('smtp.gmail.com', 465)
+  print('Connected to server')
+  server.login(email_sender, password)
+  print('Logged in successfully as ' + email_sender + '\n')
+
+def trySendMessage():
+  try:
+    sendMessage()
+  except:
+    print('There was an error attempting to send the email, retrying in 3 minutes')
+    time.sleep(180)
+    trySendMessage()
 
 sys.argv.append(0)
 if sys.argv[1] == '-h' or sys.argv[1] == '--help':
@@ -189,32 +189,29 @@ print('--------------------------------')
 tempreport.writeConfig('s')
 updateConfig()
 
+updateSender()
 try:
   connectToServer()
 except:
   print('There was an error while connecting to the email server')
   exit()
 
-def trySendMessage():
-  try:
-    sendMessage()
-  except:
-    print('There was an error attempting to send the email, retrying in 3 minutes')
-    time.sleep(180)
-    trySendMessage()
-
-while True:
-  #Measure the temperature
-  temp = tempreport.measureTemp()
-  readRecords()
-  #Update addresses and credentials
-  if temp >= threshold_max or temp <= threshold_min:
-    updateRecipients()
-    updateSender()
-    #Create message contents
-    graph.generateGraph(graph_point_count, area_name)
-    updateMessage()
-    #Send the message
-    trySendMessage()
-  print('--------------------------------\n')
-  time.sleep(delay)
+try:
+  while True:
+    #Measure the temperature
+    temp = tempreport.measureTemp()
+    readRecords()
+    #Update addresses and credentials
+    if temp >= threshold_max or temp <= threshold_min:
+      updateRecipients()
+      updateSender()
+      #Create message contents
+      graph.generateGraph(graph_point_count, area_name)
+      updateMessage()
+      #Send the message
+      trySendMessage()
+    print('--------------------------------\n')
+    time.sleep(delay)
+except KeyboardInterrupt:
+  print(" Ctrl+C detected, logging out")
+  server.quit()
