@@ -22,7 +22,7 @@ installDeps() {
   sudo pip3 install --upgrade cython setuptools numpy w1thermsensor matplotlib flask gpiozero RPIO pigpio pytz tzlocal
 }
 
-sudo apt-get install tmux bc -y
+sudo apt-get install tmux -y
 
 #Check for arguments
 while [[ "$#" -gt 0 ]]; do case $1 in
