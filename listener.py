@@ -39,51 +39,51 @@ def updateSender():
   email_sender_name = tempreport.readCSVLine('data/sender.csv', 1, 'numbered', 4, var_type = 'str')
 
 def updateRecords():
-  global temp
-  global max_temp
-  global min_temp
-  global max_temp_time
-  global min_temp_time
-
   while str(os.path.isfile('data/temp-records.csv')) == 'False':
     print('No records found')
     time.sleep(1)
 
-  max_temp = tempreport.readCSVLine('data/temp-records.csv', 2, 'keyword', 'max', var_type = 'float')
-  max_temp_time = tempreport.readCSVLine('data/temp-records.csv', 3, 'keyword', 'max')
-  if float(temp) > float(max_temp):
+  temp.max.value = tempreport.readCSVLine('data/temp-records.csv', 2, 'keyword', 'max', var_type = 'float')
+  temp.max.time = tempreport.readCSVLine('data/temp-records.csv', 3, 'keyword', 'max')
+  if float(temp.current.value) > float(temp.max.value):
     print('Current temp was higher than recorded max temp, updating locally\n')
-    max_temp = temp
-    max_temp_time = datetime.datetime.now().strftime("%H:%M:%S")
+    temp.max.value = temp.current.value
+    temp.max.time = datetime.datetime.now().strftime("%H:%M:%S")
 
-  min_temp = tempreport.readCSVLine('data/temp-records.csv', 2, 'keyword', 'min', var_type = 'float')
-  min_temp_time = tempreport.readCSVLine('data/temp-records.csv', 3, 'keyword', 'min')
-  if float(temp) < float(min_temp):
+  temp.min.value = tempreport.readCSVLine('data/temp-records.csv', 2, 'keyword', 'min', var_type = 'float')
+  temp.min.time = tempreport.readCSVLine('data/temp-records.csv', 3, 'keyword', 'min')
+  if float(temp.current.value) < float(temp.min.value):
     print('Current temp was lower than recorded min temp, updating locally\n')
-    min_temp = temp
-    min_temp_time = datetime.datetime.now().strftime("%H:%M:%S")
+    temp.min.value = temp.current.value
+    temp.min.time = datetime.datetime.now().strftime("%H:%M:%S")
 
+def connectToServer():
+  global servers
 
-def refreshServer():
-  global data
-  global server
-  server = imaplib.IMAP4_SSL('imap.gmail.com')
-  server.login(email_sender, password)
+  #Dictionary to store mail server connections
+  servers = {
+    "smtp": smtplib.SMTP_SSL('smtp.gmail.com', 465),
+    "imap": imaplib.IMAP4_SSL('imap.gmail.com')
+  }
+
+  #Connect to smtp server
+  servers["smtp"].connect('smtp.gmail.com', 465)
+  print('Connected to SMTP server')
+
+  #Login to servers
+  for protocol in ["smtp", "imap"]:
+    servers[protocol].login(email_sender, password)
+    print('Logged in successfully as ' + email_sender + '\n')
+
+def checkMail():
+  global servers
+
+  #Retrieve emails from mailserver
+  server = servers["imap"]
   server.select('INBOX')
   server.search(None, 'ALL')
   data = server.fetch('1', '(BODY[HEADER])')
-  print('Logged in\n')
 
-def connectToServer():
-  #Connects to gmail's servers
-  global sendServer
-  sendServer = smtplib.SMTP_SSL('smtp.gmail.com', 465)
-  sendServer.connect('smtp.gmail.com', 465)
-  print('Connected to server')
-  sendServer.login(email_sender, password)
-  print('Logged in successfully as ' + email_sender + '\n')
-
-def checkMail():
   if data[1] != [None]:
       #Get any available emails
       print('An email was found, saving sender address')
@@ -102,12 +102,6 @@ def checkMail():
       server.expunge()
   else:
       print('No emails')
-  try:
-    server.close()
-    server.logout()
-  except:
-    print('Failed to log out')
-  print('Logged out\n')
 
 def checkKeywords(email_subject, email_recipient):
   global graph_point_count
@@ -149,7 +143,7 @@ def updateMessage(email_recipient):
   msg['Subject'] = str(area_name) + ' Temperature Reply'
   msg['From'] = email_sender_name
   msg['To'] = email_recipient
-  html_wrap = '<html><body><p>Here is the data you requested:</p><p>The temperature is currently ' + str(temp) + '°C at ' + str(datetime.datetime.now().strftime("%H:%M:%S")) + '</p><p>The highest temperature reached recently is: ' + str(max_temp) + '°C at ' + str(max_temp_time) + '</p><p>The lowest temperature reached recently is: ' + str(min_temp) + '°C at ' + str(min_temp_time) + '</p><br><img alt="Temperature Graph" id="graph" src="cid:graph"></body></html>'
+  html_wrap = '<html><body><p>Here is the data you requested:</p><p>The temperature is currently ' + str(temp.current.value) + '°C at ' + str(datetime.datetime.now().strftime("%H:%M:%S")) + '</p><p>The highest temperature reached recently is: ' + str(temp.max.value) + '°C at ' + str(temp.max.time) + '</p><p>The lowest temperature reached recently is: ' + str(temp.min.value) + '°C at ' + str(temp.min.time) + '</p><br><img alt="Temperature Graph" id="graph" src="cid:graph"></body></html>'
   msgHtml = MIMEText(html_wrap, 'html')
 
   #Define the image's ID
@@ -163,6 +157,8 @@ def updateMessage(email_recipient):
   msg.attach(msgImg)
 
 def sendMessage(email_recipient):
+  global servers
+  sendServer = servers["smtp"]
   print('Sending message')
   try:
     error = 0
@@ -175,19 +171,35 @@ def sendMessage(email_recipient):
   else:
     error == 0
 
-while True:
-  updateConfig()
-  updateSender()
-  failed = 0
-  try:
-    refreshServer()
-    connectToServer()
-  except:
-    print('\nWARNING: There was an error while connecting to the mail server\n')
-    failed = 1
-  if failed == 0:
-    temp = tempreport.measureTemp()
+class temp:
+  class current:
+    value=0.0
+  class max:
+    value=0.0
+    time=0
+  class min:
+    value=0.0
+    time=0
+
+#Attempt to connect to the servers
+updateSender()
+try:
+  connectToServer()
+except Exception as err:
+  print('There was an error while connecting to the email server')
+  print(err)
+  exit(1)
+
+try:
+  while True:
+    updateConfig()
+    temp.current.value = tempreport.measureTemp()
     updateRecords()
     checkMail()
-  print('--------------------------------\n')
-  time.sleep(poll_rate)
+    print('--------------------------------\n')
+    time.sleep(poll_rate)
+except KeyboardInterrupt:
+  print(" Ctrl+C detected, logging out")
+  servers["smtp"].quit()
+  servers["imap"].close()
+  servers["imap"].logout()

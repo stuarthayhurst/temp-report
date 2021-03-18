@@ -196,6 +196,7 @@ class temp:
 tempreport.writeConfig('s')
 updateConfig()
 
+#Attempt to connect to the servers
 updateSender()
 try:
   connectToServer()
