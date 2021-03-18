@@ -199,9 +199,10 @@ updateConfig()
 updateSender()
 try:
   connectToServer()
-except:
-  print('There was an error while connecting to the email server')
-  exit()
+except Exception as err:
+  print('There was an error while connecting to the email server:')
+  print(err)
+  exit(1)
 
 try:
   while True:
