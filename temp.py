@@ -183,14 +183,15 @@ elif sys.argv[1] == '-cs' or sys.argv[1] == '--config-save':
 print('--------------------------------')
 
 class temp:
-  class current:
-    value=0.0
-  class max:
+  class template(object):
     value=0.0
     time=0
-  class min:
-    value=0.0
-    time=0
+  class current(template):
+    pass
+  class max(template):
+    pass
+  class min(template):
+    pass
 
 #Load the config
 tempreport.writeConfig('s')

@@ -172,14 +172,15 @@ def sendMessage(email_recipient):
     error == 0
 
 class temp:
-  class current:
-    value=0.0
-  class max:
+  class template(object):
     value=0.0
     time=0
-  class min:
-    value=0.0
-    time=0
+  class current(template):
+    pass
+  class max(template):
+    pass
+  class min(template):
+    pass
 
 #Attempt to connect to the servers
 updateSender()
