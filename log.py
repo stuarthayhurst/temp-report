@@ -1,4 +1,4 @@
-import datetime, time,  csv, os, re
+import datetime, time, csv, os, re
 from tzlocal import get_localzone
 import tempreport
 
@@ -117,12 +117,13 @@ if str(os.path.isfile('temps.log')) == 'True':
     print()
   else:
     print('Waiting for correct time to resume logging...')
+    with open('temps.log', 'r') as f:
+      data = f.readlines() [-1:]
+      data = re.split("\[(.*?)\]", data[0])
+      last_time = time.mktime(datetime.datetime.strptime(data[1], FORMAT).timetuple())
     while curr_time < last_time + delay:
         curr_time = time.mktime(datetime.datetime.now().timetuple())
-        with open('temps.log', 'r') as f:
-          data = f.readlines() [-1:]
-          data = re.split("\[(.*?)\]", data[0])
-          last_time = time.mktime(datetime.datetime.strptime(data[1], FORMAT).timetuple())
+        time.sleep(1)
 
 while True:
   #Load the config
