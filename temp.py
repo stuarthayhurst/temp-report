@@ -115,7 +115,6 @@ if sys.argv[1] == '-h' or sys.argv[1] == '--help':
   print('	-s  | --sender         : Change the address of the sender email')
   print('	-n  | --name           : Change the name of the sender')
   print('	-c  | --config         : Generate a new config file')
-  print('	-cs | --config-save    : Add missing config entries')
   exit()
 elif sys.argv[1] == '-a' or sys.argv[1] == '--address':
   tempreport.dataEdit()
