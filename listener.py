@@ -158,18 +158,12 @@ def updateMessage(email_recipient):
 
 def sendMessage(email_recipient):
   global servers
-  sendServer = servers["smtp"]
-  print('Sending message')
+  print('Sending message...')
   try:
-    error = 0
-    sendServer.sendmail(email_sender, email_recipient, msg.as_string())
+    servers["smtp"].sendmail(email_sender, email_recipient, msg.as_string())
+    print('Message sent')
   except:
     print('There was an error while sending the message')
-    error = 1
-  if error == 0:
-    print('Message sent')
-  else:
-    error == 0
 
 class temp:
   class template(object):
