@@ -5,6 +5,7 @@ graph.png
 temp-records.csv
 addresses.csv
 config.csv
+config.py
 sender.csv
 import.zip
 
