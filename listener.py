@@ -7,7 +7,6 @@ from email.mime.text import MIMEText
 from email.mime.image import MIMEImage
 
 keywords = ['test', 'latest', 'last', 'temp', 'temps' 'temperature', 'temperatures']
-poll_rate = 10
 
 def updateSender():
   global email_sender_name
@@ -169,7 +168,7 @@ try:
     temp = tempreport.updateRecords(temp)
     checkMail()
     print('--------------------------------\n')
-    time.sleep(poll_rate)
+    time.sleep(config.poll_rate)
 except KeyboardInterrupt:
   print(" Ctrl+C detected, logging out")
   servers["smtp"].quit()
