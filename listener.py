@@ -38,25 +38,6 @@ def updateSender():
   password          = tempreport.readCSVLine('data/sender.csv', 1, 'numbered', 3, var_type = 'str')
   email_sender_name = tempreport.readCSVLine('data/sender.csv', 1, 'numbered', 4, var_type = 'str')
 
-def updateRecords():
-  while str(os.path.isfile('data/temp-records.csv')) == 'False':
-    print('No records found')
-    time.sleep(1)
-
-  temp.max.value = tempreport.readCSVLine('data/temp-records.csv', 2, 'keyword', 'max', var_type = 'float')
-  temp.max.time = tempreport.readCSVLine('data/temp-records.csv', 3, 'keyword', 'max')
-  if float(temp.current.value) > float(temp.max.value):
-    print('Current temp was higher than recorded max temp, updating locally\n')
-    temp.max.value = temp.current.value
-    temp.max.time = datetime.datetime.now().strftime("%H:%M:%S")
-
-  temp.min.value = tempreport.readCSVLine('data/temp-records.csv', 2, 'keyword', 'min', var_type = 'float')
-  temp.min.time = tempreport.readCSVLine('data/temp-records.csv', 3, 'keyword', 'min')
-  if float(temp.current.value) < float(temp.min.value):
-    print('Current temp was lower than recorded min temp, updating locally\n')
-    temp.min.value = temp.current.value
-    temp.min.time = datetime.datetime.now().strftime("%H:%M:%S")
-
 def connectToServer():
   global servers
 
@@ -176,6 +157,13 @@ class temp:
   class min(template):
     pass
 
+#Wait for records file
+if os.path.isfile('data/temp-records.csv') == False:
+  print('Waiting for record file...', end="", flush="True")
+  while os.path.isfile('data/temp-records.csv') == 'False':
+    time.sleep(1)
+  print(" done\n")
+
 #Attempt to connect to the servers
 updateSender()
 try:
@@ -188,8 +176,10 @@ except Exception as err:
 try:
   while True:
     updateConfig()
+    #Measure the temperature
     temp.current.value = tempreport.measureTemp()
-    updateRecords()
+    #Update min and max values from temp
+    temp = tempreport.updateRecords(temp)
     checkMail()
     print('--------------------------------\n')
     time.sleep(poll_rate)

@@ -113,26 +113,6 @@ def sendMessage():
   if emailTimeDiff > gap * 100:
     print('Email was last sent ' + str(emailTimeDiff) + ' seconds ago')
 
-def readRecords():
-  print('Waiting for record file...', end="", flush="True")
-  while str(os.path.isfile('data/temp-records.csv')) == 'False':
-    time.sleep(1)
-  print(" done\n")
-
-  temp.max.value = tempreport.readCSVLine('data/temp-records.csv', 2, 'keyword', 'max', var_type = 'float')
-  temp.max.time = tempreport.readCSVLine('data/temp-records.csv', 3, 'keyword', 'max')
-  if float(temp.current.value) > float(temp.max.value):
-    print('Current temp was higher than recorded max temp, updating locally\n')
-    temp.max.value = temp.current.value
-    temp.max.time = datetime.datetime.now().strftime("%H:%M:%S")
-
-  temp.min.temp = tempreport.readCSVLine('data/temp-records.csv', 2, 'keyword', 'min', var_type = 'float')
-  temp.min.time = tempreport.readCSVLine('data/temp-records.csv', 3, 'keyword', 'min')
-  if float(temp.current.value) < float(temp.min.value):
-    print('Current temp was lower than recorded min temp, updating locally\n')
-    temp.min.value = temp.current.value
-    temp.min.time = datetime.datetime.now().strftime("%H:%M:%S")
-
 def connectToServer():
   #Connects to gmail's servers
   global server
@@ -197,6 +177,13 @@ class temp:
 tempreport.writeConfig('s')
 updateConfig()
 
+#Wait for records file
+if os.path.isfile('data/temp-records.csv') == False:
+  print('Waiting for record file...', end="", flush="True")
+  while os.path.isfile('data/temp-records.csv') == 'False':
+    time.sleep(1)
+  print(" done\n")
+
 #Attempt to connect to the servers
 updateSender()
 try:
@@ -210,7 +197,8 @@ try:
   while True:
     #Measure the temperature
     temp.current.value = tempreport.measureTemp()
-    readRecords()
+    #Update min and max values from temp
+    temp = tempreport.updateRecords(temp)
     #Update addresses and credentials
     if temp.current.value >= threshold_max or temp.current.value <= threshold_min:
       updateRecipients()
