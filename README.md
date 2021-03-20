@@ -33,8 +33,7 @@
 - Use `tmux att -t temp_log` to view the automatic temperature log
 - Use `tmux att -t temp_web` to view the web frontend log
 - Run `./install.sh -s` to allow the program to start on boot
-- After an update, run `python3 temp.py -cs` to update the config with any new lines
-- You can use `./import.sh -h` to import and export csv files
+- After an update, add any missing config values from `data/config-template.py` to `data/config.py`
 - **A Pi 3 or better is strongly recommended**
 - See wiki for more information
 
