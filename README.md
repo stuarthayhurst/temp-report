@@ -20,7 +20,6 @@
   * gcc && g++
   * build-essential && gfortran
 
-
 ## Installation:
   - Make sure the wiring for the sensor is complete first
   - `git clone https://github.com/Dragon8oy/temp-report.git`
@@ -42,3 +41,6 @@
 ## Wiring diagram:
 ![alt text](https://farm5.staticflickr.com/4215/35139160190_cea3435a09_b_d.jpg)
 - Diagram credit: [Les Pounder](https://bigl.es/author/les/ "Les Pounder")
+
+## License:
+ * GNU GENERAL PUBLIC LICENSE (v3)
