@@ -9,25 +9,6 @@ from email.mime.image import MIMEImage
 keywords = ['test', 'latest', 'last', 'temp', 'temps' 'temperature', 'temperatures']
 poll_rate = 10
 
-def updateConfig():
-  while str(os.path.isfile('data/config.csv')) == 'False':
-    print('No config found')
-    time.sleep(2)
-
-  global delay
-  delay = tempreport.readCSVLine('data/config.csv', 2, 'keyword', 'delay', var_type = 'int')
-  global graph_point_count
-  graph_point_count = tempreport.readCSVLine('data/config.csv', 2, 'keyword', 'graph_point_count', var_type = 'int')
-  global area_name
-  area_name = tempreport.readCSVLine('data/config.csv', 2, 'keyword', 'area_name', var_type = 'str')
-
-  if graph_point_count == None:
-    print('Errors occured while reading config values, attempting to fix config file:')
-    tempreport.writeConfig('s')
-    print('Done')
-    updateConfig()
-  print('Read config values')
-
 def updateSender():
   global email_sender_name
   global email_sender
@@ -54,7 +35,8 @@ def connectToServer():
   #Login to servers
   for protocol in ["smtp", "imap"]:
     servers[protocol].login(email_sender, password)
-    print('Logged in successfully as ' + email_sender + '\n')
+    print('Logged in successfully as ' + email_sender)
+  print('')
 
 def checkMail():
   global servers
@@ -85,7 +67,6 @@ def checkMail():
       print('No emails')
 
 def checkKeywords(email_subject, email_recipient):
-  global graph_point_count
   if any(searchstr in email_subject.lower() for searchstr in (keywords)):
     print('Keyword found\n')
     if any(searchstr in email_subject.lower() for searchstr in ('hours', 'hour')):
@@ -93,23 +74,23 @@ def checkKeywords(email_subject, email_recipient):
       requested_units = re.findall(r'\d+', email_subject)
       if len(requested_units) == 0:
         requested_units = ['1']
-      graph_point_count = int((int(requested_units[0]) * 60) / (delay / 60))
-      print(str(requested_units[0]) + ' Hours, ' + str(graph_point_count) + ' points')
+      config.graph_point_count = int((int(requested_units[0]) * 60) / (config.delay / 60))
+      print(str(requested_units[0]) + ' Hours, ' + str(config.graph_point_count) + ' points')
     if any(searchstr in email_subject.lower() for searchstr in ('days', 'day')):
       print('Found request for specific time')
       requested_units = re.findall(r'\d+', email_subject)
       if len(requested_units) == 0:
         requested_units = ['1']
-      graph_point_count = int((int(requested_units[0]) * 60) / (delay / 60) * 24)
-      print(str(requested_units[0]) + ' Days, ' + str(graph_point_count) + ' points')
+      config.graph_point_count = int((int(requested_units[0]) * 60) / (config.delay / 60) * 24)
+      print(str(requested_units[0]) + ' Days, ' + str(config.graph_point_count) + ' points')
     if any(searchstr in email_subject.lower() for searchstr in ('weeks', 'week')):
       print('Found request for specific time')
       requested_units = re.findall(r'\d+', email_subject)
       if len(requested_units) == 0:
         requested_units = ['1']
-      graph_point_count = int((int(requested_units[0]) * 60) / (delay / 60) * 168)
-      print(str(requested_units[0]) + ' Weeks, ' + str(graph_point_count) + ' points')
-    graph.generateGraph(graph_point_count, area_name)
+      config.graph_point_count = int((int(requested_units[0]) * 60) / (config.delay / 60) * 168)
+      print(str(requested_units[0]) + ' Weeks, ' + str(config.graph_point_count) + ' points')
+    graph.generateGraph(config.graph_point_count, config.area_name)
     updateMessage(email_recipient)
     sendMessage(email_recipient)
 
@@ -121,7 +102,7 @@ def updateMessage(email_recipient):
   #Updates the message to be sent
   global msg
   msg = MIMEMultipart('alternative')
-  msg['Subject'] = str(area_name) + ' Temperature Reply'
+  msg['Subject'] = str(config.area_name) + ' Temperature Reply'
   msg['From'] = email_sender_name
   msg['To'] = email_recipient
   html_wrap = '<html><body><p>Here is the data you requested:</p><p>The temperature is currently ' + str(temp.current.value) + '°C at ' + str(datetime.datetime.now().strftime("%H:%M:%S")) + '</p><p>The highest temperature reached recently is: ' + str(temp.max.value) + '°C at ' + str(temp.max.time) + '</p><p>The lowest temperature reached recently is: ' + str(temp.min.value) + '°C at ' + str(temp.min.time) + '</p><br><img alt="Temperature Graph" id="graph" src="cid:graph"></body></html>'
@@ -157,6 +138,13 @@ class temp:
   class min(template):
     pass
 
+#Load config
+while os.path.isfile('data/config.py') == False:
+  time.sleep(1)
+sys.path.insert(1, 'data/')
+import config
+print("Loaded config")
+
 #Wait for records file
 if os.path.isfile('data/temp-records.csv') == False:
   print('Waiting for record file...', end="", flush="True")
@@ -175,7 +163,6 @@ except Exception as err:
 
 try:
   while True:
-    updateConfig()
     #Measure the temperature
     temp.current.value = tempreport.measureTemp()
     #Update min and max values from temp

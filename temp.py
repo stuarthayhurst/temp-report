@@ -1,4 +1,4 @@
-import smtplib, datetime, time, csv, sys, os
+import smtplib, datetime, time, csv, sys, os, shutil
 import tempreport
 import graph
 from email.mime.multipart import MIMEMultipart
@@ -8,28 +8,6 @@ from email.mime.image import MIMEImage
 #Variables for email and the sensor
 email_recipients = ['']
 lastEmailTime = datetime.datetime(1970, 1, 1, 0, 0)
-
-#See data/config.csv for a config file. Use python3 temp.py -c to generate a new one
-def updateConfig():
-  global delay
-  delay = tempreport.readCSVLine('data/config.csv', 2, 'keyword', 'delay', var_type = 'int')
-  global gap
-  gap = tempreport.readCSVLine('data/config.csv', 2, 'keyword', 'gap', var_type = 'int')
-  global threshold_max
-  threshold_max = tempreport.readCSVLine('data/config.csv', 2, 'keyword', 'threshold_max', var_type = 'float')
-  global threshold_min
-  threshold_min = tempreport.readCSVLine('data/config.csv', 2, 'keyword', 'threshold_min', var_type = 'float')
-  global graph_point_count
-  graph_point_count = tempreport.readCSVLine('data/config.csv', 2, 'keyword', 'graph_point_count', var_type = 'int')
-  global area_name
-  area_name = tempreport.readCSVLine('data/config.csv', 2, 'keyword', 'area_name', var_type = 'str')
-
-  if delay == None:
-    print('Errors occured while reading config values, attempting to fix config file:')
-    tempreport.writeConfig('s')
-    print('Done')
-    updateConfig()
-  print('Read config values')
 
 def updateRecipients():
   global email_recipients
@@ -57,8 +35,6 @@ def updateSender():
   password          = tempreport.readCSVLine('data/sender.csv', 1, 'numbered', 3, var_type = 'str')
   email_sender_name = tempreport.readCSVLine('data/sender.csv', 1, 'numbered', 4, var_type = 'str')
 
-#changeSender
-
 def updateMessage():
   #Reads the image
   with open('graph.png', 'rb') as fp:
@@ -67,10 +43,10 @@ def updateMessage():
   #Updates the message to be sent
   global msg
   msg = MIMEMultipart('alternative')
-  msg['Subject'] = str(area_name) + ' Temperature Alert'
+  msg['Subject'] = str(config.area_name) + ' Temperature Alert'
   msg['From'] = email_sender_name
   msg['To'] = 'Whomever it may concern'
-  html_wrap = '<html><body><p>The temperature is no longer between ' + str(threshold_max) + '°C and ' + str(threshold_min) + '°C. </p><p>The temperature is currently ' + str(temp.current.value) + '°C at ' + str(datetime.datetime.now().strftime("%H:%M:%S")) + '</p><p>The highest temperature reached recently is: ' + str(temp.max.value) + '°C at ' + str(temp.max.time) + '</p><p>The lowest temperature reached recently is: ' + str(temp.min.value) + '°C at ' + str(temp.min.time) + '</p><br><img alt="Temperature Graph" id="graph" src="cid:graph"></body></html>'
+  html_wrap = '<html><body><p>The temperature is no longer between ' + str(config.threshold.max) + '°C and ' + str(config.threshold.min) + '°C. </p><p>The temperature is currently ' + str(temp.current.value) + '°C at ' + str(datetime.datetime.now().strftime("%H:%M:%S")) + '</p><p>The highest temperature reached recently is: ' + str(temp.max.value) + '°C at ' + str(temp.max.time) + '</p><p>The lowest temperature reached recently is: ' + str(temp.min.value) + '°C at ' + str(temp.min.time) + '</p><br><img alt="Temperature Graph" id="graph" src="cid:graph"></body></html>'
   msgHtml = MIMEText(html_wrap, 'html')
 
   #Define the image's ID
@@ -89,7 +65,7 @@ def sendMessage():
   emailTimeDiff = (datetime.datetime.now() - lastEmailTime).total_seconds()
 
   #If it's been long enough since the last email, attempt to send it
-  if emailTimeDiff >= gap:
+  if emailTimeDiff >= config.gap:
     failedRecipients = 0
     #Loop through each recipient on the list and attempt to semd an email
     for recipient in email_recipients:
@@ -110,7 +86,7 @@ def sendMessage():
     print('Email not sent\n')
 
   #Only annouce when the last email was sent if it wasn't the first email
-  if emailTimeDiff > gap * 100:
+  if emailTimeDiff > config.gap * 100:
     print('Email was last sent ' + str(emailTimeDiff) + ' seconds ago')
 
 def connectToServer():
@@ -154,10 +130,7 @@ elif sys.argv[1] == '-n' or sys.argv[1] == '--name':
   tempreport.changeSender('n')
   exit()
 elif sys.argv[1] == '-c' or sys.argv[1] == '--config':
-  tempreport.writeConfig('f')
-  exit()
-elif sys.argv[1] == '-cs' or sys.argv[1] == '--config-save':
-  tempreport.writeConfig('s')
+  shutil.copy2('data/config-template.py', 'data/config.py')
   exit()
 
 print('--------------------------------')
@@ -173,9 +146,15 @@ class temp:
   class min(template):
     pass
 
+#Create config if missing
+if os.path.isfile('data/config.py') == False:
+  shutil.copy2('data/config-template.py', 'data/config.py')
+  print("Created missing config file")
+
 #Load the config
-tempreport.writeConfig('s')
-updateConfig()
+sys.path.insert(1, 'data/')
+import config
+print("Loaded config")
 
 #Wait for records file
 if os.path.isfile('data/temp-records.csv') == False:
@@ -200,16 +179,16 @@ try:
     #Update min and max values from temp
     temp = tempreport.updateRecords(temp)
     #Update addresses and credentials
-    if temp.current.value >= threshold_max or temp.current.value <= threshold_min:
+    if temp.current.value >= config.threshold.max or temp.current.value <= config.threshold.min:
       updateRecipients()
       updateSender()
       #Create message contents
-      graph.generateGraph(graph_point_count, area_name)
+      graph.generateGraph(config.graph_point_count, config.area_name)
       updateMessage()
       #Send the message
       trySendMessage()
     print('--------------------------------\n')
-    time.sleep(delay)
+    time.sleep(config.delay)
 except KeyboardInterrupt:
   print(" Ctrl+C detected, logging out")
   server.quit()

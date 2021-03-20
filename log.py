@@ -1,21 +1,9 @@
-import datetime, time, csv, os, re
+import datetime, time, csv, os, re, sys
 from tzlocal import get_localzone
 import tempreport
 
 max_temp = -100.0
 min_temp = 999.9
-
-def updateConfig():
-
-  global delay
-  delay = tempreport.readCSVLine('data/config.csv', 2, 'keyword', 'delay', var_type = 'int')
-
-  if delay == None:
-    print('Errors occured while reading config values, attempting to fix config file:')
-    tempreport.writeConfig('s')
-    print('Done')
-    updateConfig()
-  print('Read config values')
 
 def logTemp():
   global temp
@@ -44,7 +32,7 @@ def logTemp():
   midnight = time.mktime(midnight.timetuple())
   print('Current time: ' + str(curr_time))
   print('Midnight: ' + str(midnight))
-  if curr_time > midnight and curr_time < midnight + (delay * 1.5):
+  if curr_time > midnight and curr_time < midnight + (config.delay * 1.5):
     print('Time is ' + str(datetime.datetime.now()) + ' (Midnight), resetting record values')
     max_temp = -100.0
     min_temp = 999.9
@@ -99,11 +87,13 @@ def logTemp():
     writer = csv.writer(f, lineterminator="\n")
     writer.writerows(changes)
 
-while str(os.path.isfile('data/config.csv')) == 'False':
+#Load config
+while os.path.isfile('data/config.py') == False:
   time.sleep(1)
+sys.path.insert(1, 'data/')
+import config
+print("Loaded config")
 
-#Load the config
-updateConfig()
 #Wait for correct time to resume logging
 if str(os.path.isfile('temps.log')) == 'True':
   FORMAT  = '%Y-%m-%d %H:%M:%S'
@@ -113,7 +103,7 @@ if str(os.path.isfile('temps.log')) == 'True':
     print('\nLast log entry: ' + data[0])
     data = re.split("\[(.*?)\]", data[0])
     last_time = time.mktime(datetime.datetime.strptime(data[1], FORMAT).timetuple())
-  if curr_time > last_time + delay:
+  if curr_time > last_time + config.delay:
     print()
   else:
     print('Waiting for correct time to resume logging...')
@@ -121,15 +111,13 @@ if str(os.path.isfile('temps.log')) == 'True':
       data = f.readlines() [-1:]
       data = re.split("\[(.*?)\]", data[0])
       last_time = time.mktime(datetime.datetime.strptime(data[1], FORMAT).timetuple())
-    while curr_time < last_time + delay:
+    while curr_time < last_time + config.delay:
         curr_time = time.mktime(datetime.datetime.now().timetuple())
         time.sleep(1)
 
 while True:
-  #Load the config
-  updateConfig()
   #Measure the temperature
   temp = tempreport.measureTemp()
   logTemp()
   print('--------------------------------\n')
-  time.sleep(delay)
+  time.sleep(config.delay)

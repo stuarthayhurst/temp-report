@@ -48,8 +48,8 @@ else
     echo "OneWire is now enabled"
 fi
 
-#Setup program files
-python3 temp.py -cs
+#Generate config
+python3 temp.py -c
 
 #Add user credentials and tell them how to add addresses
 echo "Use 'python3 temp.py -s' to set a sender email address"

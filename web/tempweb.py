@@ -15,18 +15,21 @@ parDir = os.path.dirname(currDir)
 sys.path.insert(0,parDir)
 import graph, tempreport
 
-while str(os.path.isfile(parDir + '/data/config.csv')) == 'False':
+#Load config
+while os.path.isfile('../data/config.py') == False:
   time.sleep(1)
+sys.path.insert(1, '../data/')
+import config
+print("Loaded config")
 
+#Generate / prepare some website assets
 shutil.copy2(parDir + '/temps.log', currDir + '/temps.log')
-graphPointCount = tempreport.readCSVLine(parDir + '/data/config.csv', 2, 'keyword', 'graph_point_count', var_type = 'int')
-area_name = tempreport.readCSVLine(parDir + '/data/config.csv', 2, 'keyword', 'area_name', var_type = 'str')
-graph.generateGraph(graphPointCount, area_name)
+graph.generateGraph(config.graph_point_count, config.area_name)
 shutil.move(currDir + '/temps.log', currDir + '/static/temps.log')
 shutil.move(currDir + '/graph.png', currDir + '/static/graph.png')
 
 @app.route('/', methods = ['POST','GET'])
-def main(flaskVer=flask.__version__, pointCount=graphPointCount, cpu=cpu):
+def main(flaskVer=flask.__version__, pointCount=config.graph_point_count, cpu=cpu):
     def measureTemp(mode):
         if mode == 'temp':
             value = str(tempreport.measureTemp()) + '°C'
@@ -64,13 +67,12 @@ def main(flaskVer=flask.__version__, pointCount=graphPointCount, cpu=cpu):
         lineCount = len(f.readlines())
         print('Found ' + str(lineCount) + ' lines')
 
-    if request.method =='POST':
+    if request.method == 'POST':
         result = request.form
         pointCount = result['pointsrequested']
 
     shutil.copy2(parDir + '/temps.log', currDir + '/temps.log')
-    graphPointCount = tempreport.readCSVLine(parDir + '/data/config.csv', 2, 'keyword', 'graph_point_count', var_type = 'int')
-    graph.generateGraph(int(pointCount), area_name)
+    graph.generateGraph(int(pointCount), config.area_name)
     print(f"Drew graph with {pointCount} points")
     shutil.move(currDir + '/temps.log', currDir + '/static/temps.log')
     try:
