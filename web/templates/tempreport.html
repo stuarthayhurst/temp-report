@@ -2,18 +2,15 @@
 <html>
   <head>
     <title>Temperature Panel</title>
-    <link rel="shortcut icon" href="{{ url_for('static', filename='icon.png') }}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='icon.svg') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/stylesheet.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='vendor/bootstrap/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/simple-sidebar.css') }}">
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Expires" content="0">  </head>
   <body>
     <div class="topbar">
-    <img href="#inner-menu-toggle" onclick="reset_animation()" id="inner-menu-toggle" class="lines"  src="{{ url_for('static', filename='lines.png') }}"/>
-    <img id="banner" src="{{ url_for('static', filename='icon.png') }}" class="bannerImage"/>
-    <img id="banner" src="{{ url_for('static', filename='banner.png') }}" class="bannerImage"/>
+    <img href="#inner-menu-toggle" onclick="reset_animation()" id="inner-menu-toggle" class="lines"  src="{{ url_for('static', filename='lines.svg') }}"/>
+    <img id="banner" src="{{ url_for('static', filename='icon.svg') }}" class="bannerImage"/>
+    <img id="banner" src="{{ url_for('static', filename='banner.svg') }}" class="bannerImage"/>
     </div>
     <div id="wrapper" style="background-color: #38373a; color: white;">
         <div id="sidebar-wrapper">
@@ -76,7 +73,7 @@
 		</form>
               <br>
               <div style="display: inline-block;">
-                <img id="graphArrow" onclick="toggleDropdown('arrow', 'graph')" height="35" width="35" src="{{ url_for('static', filename='collapse.png') }}">
+                <img id="graphArrow" onclick="toggleDropdown('arrow', 'graph')" height="35" width="35" src="{{ url_for('static', filename='collapsed.svg') }}">
                 <input id="graphCheck" class="inputGraph" type="checkbox" name="Graph" />
 		<label class="button" onclick="toggleDropdown('checkbox', 'graph')" for="graphCheck">Graph</label><p class="titleGraph">  &nbsp<span style="background-color: #4ace4f"> </span>Graph: | {{ pointCount }} points</p>
                 <ul class="subGraph">
@@ -84,7 +81,7 @@
                 </ul>
               </div>
               <div style="display: inline-block;">
-                <img id="logArrow" onclick="toggleDropdown('arrow', 'log')" height="35" width="35" src="{{ url_for('static', filename='collapse.png') }}">
+                <img id="logArrow" onclick="toggleDropdown('arrow', 'log')" height="35" width="35" src="{{ url_for('static', filename='collapsed.svg') }}">
                 <input id="logCheck" class="inputLog" type="checkbox" name="Log" />
                 <label class="button" onclick="toggleDropdown('checkbox', 'log')" for="logCheck">Log</label>
                 <p class="titleLog">  &nbsp<span style="background-color: #4ace4f"> </span>Log: | {{ lineCount }} lines</p>
