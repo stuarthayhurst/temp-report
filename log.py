@@ -2,88 +2,58 @@ import datetime, time, csv, os, re, sys
 from tzlocal import get_localzone
 import tempreport
 
-max_temp = -100.0
-min_temp = 999.9
-
 def logTemp():
   global temp
-  global max_temp
-  global min_temp
-  global max_temp_time
-  global min_temp_time
-
-  if str(os.path.isfile('data/temp-records.csv')) == 'False':
-    print('No report file found, creating one:')
-    changes = [
-      ['Temp-report report file:'],
-      ['max', '0', '0'],
-      ['min', '0', '0'],
-      ]
-    f = open('data/temp-records.csv','w+')
-    f.close()
-    with open('data/temp-records.csv', 'a') as f:
-      writer = csv.writer(f, lineterminator="\n")
-      writer.writerows(changes)
-    print('Report file created\n')
+  global logDateTimeFormat
+  global midnight
 
   curr_time = time.mktime(datetime.datetime.now().timetuple())
-  tz = get_localzone() 
-  midnight = datetime.datetime.combine(datetime.date.today() + datetime.timedelta(days=1), datetime.time())
-  midnight = time.mktime(midnight.timetuple())
-  print('Current time: ' + str(curr_time))
-  print('Midnight: ' + str(midnight))
-  if curr_time > midnight and curr_time < midnight + (config.delay * 1.5):
+  tz = get_localzone()
+  print('Current time: ' + str(datetime.datetime.now()) + '\n')
+  if curr_time > midnight and curr_time < midnight + (config.log_interval * 1.5):
+    midnight = datetime.datetime.combine(datetime.date.today() + datetime.timedelta(days=1), datetime.time())
+    midnight = time.mktime(midnight.timetuple())
     print('Time is ' + str(datetime.datetime.now()) + ' (Midnight), resetting record values')
-    max_temp = -100.0
-    min_temp = 999.9
+    temp.max.value = -100.0
+    temp.min.value = 999.9
     print('Records reset\n')
 
-  if float(temp) > float(max_temp):
+  #Work out if current temperature is the highest recently, and set variables accordingly
+  if float(temp.current.value) > float(temp.max.value):
     print('Set new max temperature\n')
-    max_temp = temp
-    max_temp_time = datetime.datetime.now().strftime("%H:%M:%S")
+    temp.max.value = temp.current.value
+    temp.max.time = datetime.datetime.now().strftime("%H:%M:%S")
   else:
-    max_temp = tempreport.readCSVLine('data/temp-records.csv', 2, 'keyword', 'max', var_type = 'float')
-    max_temp_time = tempreport.readCSVLine('data/temp-records.csv', 3, 'keyword', 'max')
+    temp.max.value = tempreport.readCSVLine('data/temp-records.csv', 2, 'keyword', 'max', var_type = 'float')
+    temp.max.value = tempreport.readCSVLine('data/temp-records.csv', 3, 'keyword', 'max')
 
-  if float(temp) < float(min_temp):
+  #Work out if current temperature is the lowest recently, and set variables accordingly
+  if float(temp.current.value) < float(temp.min.value):
     print('Set new min temperature\n')
-    min_temp = temp
-    min_temp_time = datetime.datetime.now().strftime("%H:%M:%S")
+    temp.min.value = temp.current.value
+    temp.min.time = datetime.datetime.now().strftime("%H:%M:%S")
   else:
-    min_temp = tempreport.readCSVLine('data/temp-records.csv', 2, 'keyword', 'min', var_type = 'float')
-    min_temp_time = tempreport.readCSVLine('data/temp-records.csv', 3, 'keyword', 'min')
+    temp.min.value = tempreport.readCSVLine('data/temp-records.csv', 2, 'keyword', 'min', var_type = 'float')
+    temp.min.time = tempreport.readCSVLine('data/temp-records.csv', 3, 'keyword', 'min')
 
+  #Format records for writing
   changes = [
-    ['Temp-report report file:'],
-    ['max', max_temp, max_temp_time],
-    ['min', min_temp, min_temp_time],
-    ]
+    ['max', temp.max.value, temp.max.time],
+    ['min', temp.min.value, temp.min.time],
+  ]
 
+  #Write records to a file
   with open('data/temp-records.csv', 'w') as f:
       writer = csv.writer(f, lineterminator="\n")
       writer.writerows(changes)
 
-  if str(os.path.isfile('./temps.log')) == 'False':
-    print('No log found, creating one:')
-    changes = [
-      ['Temp-report logfile:'],
-      ]
-    f = open('temps.log','w+')
-    f.close()
-    with open('temps.log', 'a') as f:                                    
-      writer = csv.writer(f, lineterminator="\n")
-      writer.writerows(changes)
-    print('Log created\n')
-  
-  #logLine = '[' + str(datetime.datetime.now().strftime("%c")) + '] Temperature: ' + str(temp) + '°C'
-  LOG_DT_FORMAT = '%Y-%m-%d %H:%M:%S'
-  date = datetime.datetime.now().strftime(LOG_DT_FORMAT)
-  logline = f'[{date}] {temp}'
+  #Format and write a new logline
+  date = datetime.datetime.now().strftime(logDateTimeFormat)
+  logline = f'[{date}] {temp.current.value}'
   changes = [
-    [logline],                                      
-    ]
-  with open('temps.log', 'a') as f:                                    
+    [logline],
+  ]
+  with open('temps.log', 'a') as f:
     writer = csv.writer(f, lineterminator="\n")
     writer.writerows(changes)
 
@@ -95,14 +65,14 @@ import config
 print("Loaded config")
 
 #Wait for correct time to resume logging
-if str(os.path.isfile('temps.log')) == 'True':
-  FORMAT  = '%Y-%m-%d %H:%M:%S'
+if os.path.isfile('temps.log') == True:
+  logDateTimeFormat  = '%Y-%m-%d %H:%M:%S'
   curr_time = time.mktime(datetime.datetime.now().timetuple())
   with open('temps.log', 'r') as f:
     data = f.readlines() [-1:]
     print('\nLast log entry: ' + data[0])
     data = re.split("\[(.*?)\]", data[0])
-    last_time = time.mktime(datetime.datetime.strptime(data[1], FORMAT).timetuple())
+    last_time = time.mktime(datetime.datetime.strptime(data[1], logDateTimeFormat).timetuple())
   if curr_time > last_time + config.log_interval:
     print()
   else:
@@ -110,14 +80,36 @@ if str(os.path.isfile('temps.log')) == 'True':
     with open('temps.log', 'r') as f:
       data = f.readlines() [-1:]
       data = re.split("\[(.*?)\]", data[0])
-      last_time = time.mktime(datetime.datetime.strptime(data[1], FORMAT).timetuple())
+      last_time = time.mktime(datetime.datetime.strptime(data[1], logDateTimeFormat).timetuple())
     while curr_time < last_time + config.log_interval:
         curr_time = time.mktime(datetime.datetime.now().timetuple())
         time.sleep(1)
 
+class temp:
+  class template(object):
+    value=0.0
+    time=0
+  class current(template):
+    pass
+  class max(template):
+    pass
+  class min(template):
+    pass
+
+#Set extreme opposite values to trigger a refresh
+temp.max.value = -100.0
+temp.min.value = 999.9
+
+#Datetime format for temps.log
+logDateTimeFormat = '%Y-%m-%d %H:%M:%S'
+
+#Calculate time of next midnight
+midnight = datetime.datetime.combine(datetime.date.today() + datetime.timedelta(days=1), datetime.time())
+midnight = time.mktime(midnight.timetuple())
+
 while True:
   #Measure the temperature
-  temp = tempreport.measureTemp()
+  temp.current.value = tempreport.measureTemp()
   logTemp()
   print('--------------------------------\n')
   time.sleep(config.log_interval)
