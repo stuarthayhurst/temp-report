@@ -33,45 +33,6 @@ def checkLineCount(filePath, lineCount):
   else:
     return False
 
-def readLine(filename, mode, line, **kwargs):
-  char = ''
-  var_type = ''
-  value = None
-  for key, value in kwargs.items():
-    if key == 'char':
-      char = str(value)
-    elif key == 'var_type' or key == 'data_type' or key == 'type':
-      var_type = str(value)
-  if str(os.path.isfile(filename)) == 'False':
-    return
-  if mode == 'numbered':
-    with open(filename, 'r') as f:
-      reader = f.readlines()
-      value = reader[line - 1]
-  elif mode == 'keyword':
-    with open(filename, 'r') as f:
-      reader = f.readlines()
-      for row in range(len(reader)):
-        if reader[row].find(str(line)) == 0:
-          value = reader[row]
-  else:
-    return
-  if char != '':
-    value = value.strip()
-    value = re.split(str(char), value)
-    value = value[len(value) - 1]
-  if value != None:
-    if var_type == 'str':
-      return str(value)
-    elif var_type == 'int':
-      return int(value)
-    elif var_type == 'float':
-      return float(value)
-    else:
-      return value
-  else:
-    return None 
-
 def readCSVLine(filename, position, mode, line, **kwargs):
   var_type = ''
   value = None
