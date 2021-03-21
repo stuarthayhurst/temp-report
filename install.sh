@@ -19,7 +19,7 @@ installJobs() {
 
 installDeps() {
   sudo apt install htop libopenblas-dev libopenblas-base gcc g++ gfortran build-essential tk-dev libncurses5-dev libncursesw5-dev libreadline6-dev libdb5.3-dev libgdbm-dev libsqlite3-dev libssl-dev libbz2-dev libexpat1-dev liblzma-dev libffi-dev libatlas-base-dev -y
-  sudo pip3 install --upgrade cython setuptools numpy w1thermsensor matplotlib flask gpiozero RPIO pigpio pytz tzlocal
+  sudo pip3 install -r requirements.txt
 }
 
 sudo apt-get install tmux -y
