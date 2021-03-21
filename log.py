@@ -7,9 +7,11 @@ def logTemp():
   global logDateTimeFormat
   global midnight
 
+  #Get current time
   curr_time = time.mktime(datetime.datetime.now().timetuple())
   tz = get_localzone()
   print('Current time: ' + str(datetime.datetime.now()) + '\n')
+  #Decide if it's within (config.log_intervel * 1.5) past midnight, and trigger record reset
   if curr_time > midnight and curr_time < midnight + (config.log_interval * 1.5):
     midnight = datetime.datetime.combine(datetime.date.today() + datetime.timedelta(days=1), datetime.time())
     midnight = time.mktime(midnight.timetuple())
