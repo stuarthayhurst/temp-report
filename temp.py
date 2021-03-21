@@ -187,7 +187,7 @@ try:
       #Send the message
       trySendMessage()
     print('--------------------------------\n')
-    time.sleep(config.delay)
+    time.sleep(config.loop_delay)
 except KeyboardInterrupt:
   print(" Ctrl+C detected, logging out")
   server.quit()

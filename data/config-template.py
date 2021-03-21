@@ -1,6 +1,8 @@
-#Delay, in seconds, between each temperature measurement
-#Also used to determine time between each loop of temp.py
-delay=300 #Default: 300
+#Time between each loop of temp.py, in seconds (Delay between each attempt at sending an email)
+loop_delay=300 #Default: 300
+
+#Delay, in seconds, between each logged temperature measurement
+log_interval=300 #Default: 300
 
 #Minimum delay between each email sent, in seconds
 gap=3600 #Default: 3600

@@ -73,21 +73,21 @@ def checkKeywords(email_subject, email_recipient):
       requested_units = re.findall(r'\d+', email_subject)
       if len(requested_units) == 0:
         requested_units = ['1']
-      config.graph_point_count = int((int(requested_units[0]) * 60) / (config.delay / 60))
+      config.graph_point_count = int((int(requested_units[0]) * 60) / (config.log_interval / 60))
       print(str(requested_units[0]) + ' Hours, ' + str(config.graph_point_count) + ' points')
     if any(searchstr in email_subject.lower() for searchstr in ('days', 'day')):
       print('Found request for specific time')
       requested_units = re.findall(r'\d+', email_subject)
       if len(requested_units) == 0:
         requested_units = ['1']
-      config.graph_point_count = int((int(requested_units[0]) * 60) / (config.delay / 60) * 24)
+      config.graph_point_count = int((int(requested_units[0]) * 60) / (config.log_interval / 60) * 24)
       print(str(requested_units[0]) + ' Days, ' + str(config.graph_point_count) + ' points')
     if any(searchstr in email_subject.lower() for searchstr in ('weeks', 'week')):
       print('Found request for specific time')
       requested_units = re.findall(r'\d+', email_subject)
       if len(requested_units) == 0:
         requested_units = ['1']
-      config.graph_point_count = int((int(requested_units[0]) * 60) / (config.delay / 60) * 168)
+      config.graph_point_count = int((int(requested_units[0]) * 60) / (config.log_interval / 60) * 168)
       print(str(requested_units[0]) + ' Weeks, ' + str(config.graph_point_count) + ' points')
     graph.generateGraph(config.graph_point_count, config.area_name)
     updateMessage(email_recipient)

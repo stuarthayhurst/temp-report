@@ -103,7 +103,7 @@ if str(os.path.isfile('temps.log')) == 'True':
     print('\nLast log entry: ' + data[0])
     data = re.split("\[(.*?)\]", data[0])
     last_time = time.mktime(datetime.datetime.strptime(data[1], FORMAT).timetuple())
-  if curr_time > last_time + config.delay:
+  if curr_time > last_time + config.log_interval:
     print()
   else:
     print('Waiting for correct time to resume logging...')
@@ -111,7 +111,7 @@ if str(os.path.isfile('temps.log')) == 'True':
       data = f.readlines() [-1:]
       data = re.split("\[(.*?)\]", data[0])
       last_time = time.mktime(datetime.datetime.strptime(data[1], FORMAT).timetuple())
-    while curr_time < last_time + config.delay:
+    while curr_time < last_time + config.log_interval:
         curr_time = time.mktime(datetime.datetime.now().timetuple())
         time.sleep(1)
 
@@ -120,4 +120,4 @@ while True:
   temp = tempreport.measureTemp()
   logTemp()
   print('--------------------------------\n')
-  time.sleep(config.delay)
+  time.sleep(config.log_interval)
