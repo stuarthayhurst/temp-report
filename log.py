@@ -76,7 +76,7 @@ if os.path.isfile('temps.log') == True:
     data = re.split("\[(.*?)\]", data[0])
     last_time = time.mktime(datetime.datetime.strptime(data[1], logDateTimeFormat).timetuple())
   if curr_time > last_time + config.log_interval:
-    print()
+    pass
   else:
     print('Waiting for correct time to resume logging...')
     with open('temps.log', 'r') as f:
