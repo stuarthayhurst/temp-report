@@ -11,7 +11,7 @@ lastEmailTime = datetime.datetime(1970, 1, 1, 0, 0)
 
 def updateRecipients():
   global email_recipients
-  if str(os.path.isfile('data/addresses.csv')) == 'False':
+  if os.path.isfile('data/addresses.csv') == False:
     print('\nNo address file found, starting address editor: \n')
     tempreport.dataEdit()
   print('Addresses:')
@@ -29,7 +29,7 @@ def updateSender():
   global email_sender_name
   global email_sender
   global password
-  if str(os.path.isfile('data/sender.csv')) == 'False':
+  if os.path.isfile('data/sender.csv') == False:
     tempreport.changeSender('e')
   email_sender      = tempreport.readCSVLine('data/sender.csv', 1, 'numbered', 2, var_type = 'str')
   password          = tempreport.readCSVLine('data/sender.csv', 1, 'numbered', 3, var_type = 'str')
@@ -158,7 +158,7 @@ print("Loaded config")
 #Wait for records file
 if os.path.isfile('data/temp-records.csv') == False:
   print('Waiting for record file...', end="", flush="True")
-  while os.path.isfile('data/temp-records.csv') == 'False':
+  while os.path.isfile('data/temp-records.csv') == False:
     time.sleep(1)
   print(" done\n")
 

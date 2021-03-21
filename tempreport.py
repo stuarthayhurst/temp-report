@@ -19,14 +19,14 @@ def getLineCount(filePath, output = False, title = 'Output:'):
       print(f'  [{i}] - {line_output}')
     print()
 
-  if str(os.path.isfile(filePath)) == 'False':
+  if os.path.isfile(filePath) == False:
     return False
   else:
     lineCount = len(open(filePath).readlines(  ))
     return lineCount
 
 def checkLineCount(filePath, lineCount):
-  if str(os.path.isfile(filePath)) == 'False':
+  if os.path.isfile(filePath) == False:
     return False
   if lineCount >= len(open(filePath).readlines(  )):
     return True
@@ -39,7 +39,7 @@ def readCSVLine(filename, position, mode, line, **kwargs):
   for key, value in kwargs.items():
     if key == 'var_type' or key == 'data_type' or key == 'type':
       var_type = str(value)
-  if str(os.path.isfile(filename)) == 'False':
+  if os.path.isfile(filename) == False:
     return
   if position == 0:
     return
@@ -78,7 +78,7 @@ def readCSVLine(filename, position, mode, line, **kwargs):
     return
 
 def changeSender(mode):
-  if str(os.path.isfile('data/sender.csv')) == 'False':
+  if os.path.isfile('data/sender.csv') == False:
     print("We didn't find a sender credentials file, creating on for you")
     changes = [
       ['details'],
@@ -139,14 +139,14 @@ def measureTemp(mode = 'V'):
   return temp
 
 def checkAddresses():
-  if str(os.path.isfile('data/addresses.csv')) == 'False':
+  if os.path.isfile('data/addresses.csv') == False:
     newFile('data/addresses.csv', 'addresses')
 
 def appendLine(filePath, data):
   changes = [
     [data],
     ]
-  if str(os.path.isfile(filePath)) == 'False':
+  if os.path.isfile(filePath) == False:
     with open(filePath, 'w+') as f:
       writer = csv.writer(f, lineterminator="\n")
       writer.writerow(changes[0])
@@ -200,7 +200,7 @@ def newFile(filePath, firstLine):
   changes = [
     [firstLine],
     ]
-  if str(os.path.isfile(filePath)) == 'True':
+  if os.path.isfile(filePath) == True:
     confirmDelete = str(input('Are you sure you want to erase the existing list and make a fresh one? (Y/N): '))
   else:
     confirmDelete = 'Y'
