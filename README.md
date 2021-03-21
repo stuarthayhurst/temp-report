@@ -25,6 +25,7 @@
   - `git clone https://github.com/Dragon8oy/temp-report.git`
   - Install scipy, Python and pip3
   - Install program and other dependencies: `./install.sh`
+  - Change config values to your liking, in `data/config.py`
 
 ## Commands and notes:
 - Use `python3 temp.py -h` to view help
