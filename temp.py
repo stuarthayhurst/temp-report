@@ -31,9 +31,9 @@ def updateSender():
   global password
   if os.path.isfile('data/sender.csv') == False:
     tempreport.changeSender('e')
-  email_sender      = tempreport.readCSVLine('data/sender.csv', 1, 'numbered', 2, var_type = 'str')
-  password          = tempreport.readCSVLine('data/sender.csv', 1, 'numbered', 3, var_type = 'str')
-  email_sender_name = tempreport.readCSVLine('data/sender.csv', 1, 'numbered', 4, var_type = 'str')
+  email_sender      = tempreport.readCSVLine('data/sender.csv', 1, 'numbered', 1, var_type = 'str')
+  password          = tempreport.readCSVLine('data/sender.csv', 1, 'numbered', 2, var_type = 'str')
+  email_sender_name = tempreport.readCSVLine('data/sender.csv', 1, 'numbered', 3, var_type = 'str')
 
 def updateMessage():
   #Reads the image
