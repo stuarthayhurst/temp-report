@@ -27,7 +27,7 @@ def logTemp():
     temp.max.time = datetime.datetime.now().strftime("%H:%M:%S")
   else:
     temp.max.value = tempreport.readCSVLine('data/temp-records.csv', 2, 'keyword', 'max', var_type = 'float')
-    temp.max.value = tempreport.readCSVLine('data/temp-records.csv', 3, 'keyword', 'max')
+    temp.max.time = tempreport.readCSVLine('data/temp-records.csv', 3, 'keyword', 'max')
 
   #Work out if current temperature is the lowest recently, and set variables accordingly
   if float(temp.current.value) < float(temp.min.value):
