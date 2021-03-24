@@ -1,5 +1,6 @@
 import smtplib, datetime, time, csv, sys, os, shutil
 import tempreport
+import csveditor
 import graph
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
@@ -13,17 +14,17 @@ def updateRecipients():
   global email_recipients
   if os.path.isfile('data/addresses.csv') == False:
     print('\nNo address file found, starting address editor: \n')
-    tempreport.dataEdit()
+    csveditor.dataEdit()
   print('Addresses:')
   line_count = tempreport.getLineCount('data/addresses.csv')
   email_recipients = ['']
-  for line in range(2, line_count + 1):
+  for line in range(1, line_count):
     if line == 2:
       email_recipients[0] = (tempreport.readCSVLine('data/addresses.csv', 1, 'numbered', line, var_type = 'str'))
       print(email_recipients[0])
     else:
       email_recipients.append(tempreport.readCSVLine('data/addresses.csv', 1, 'numbered', line, var_type = 'str'))
-      print(email_recipients[line - 2])
+      print(email_recipients[line - 1])
 
 def updateSender():
   global email_sender_name
@@ -117,7 +118,7 @@ if sys.argv[1] == '-h' or sys.argv[1] == '--help':
   print('	-c  | --config         : Generate a new config file')
   exit()
 elif sys.argv[1] == '-a' or sys.argv[1] == '--address':
-  tempreport.dataEdit()
+  csveditor.dataEdit()
   exit()
 elif sys.argv[1] == '-p' or sys.argv[1] == '--password':
   tempreport.changeSender('p')
