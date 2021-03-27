@@ -1,6 +1,8 @@
 # temp-report
  - A project to report the temperature of an area to a mailing list when it falls out of a threshold, from a Raspberry Pi
  - Handles logging, graphing, mailing a list, replying to requests for data and displaying a webpage
+ - I'm mostly done with this project, future updates will mostly be bug fixes
+ - For all intents and purposes, consider it archived
 
 ## Dependencies:
  - All required and recommended packages are automatically installed when running the installer, except `scipy`, which needs to be installed manually
