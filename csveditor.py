@@ -15,7 +15,7 @@ def newFile(filePath):
 def displayFile(filePath):
   print('Addresses:')
   for i in range(1, len(open(filePath).readlines()) + 1):
-    lineOutput = tempreport.readCSVLine(filePath, 1, 'numbered', i, var_type = 'str')
+    lineOutput = str(tempreport.readCSVLine(filePath, 1, 'numbered', i))
     print(f'  [{i}] - {lineOutput}')
   print('')
 
