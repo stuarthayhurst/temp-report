@@ -115,14 +115,14 @@ def measureTemp(mode = 'V'):
 
 def updateRecords(temp):
   temp.max.value = float(readCSVLine('data/temp-records.csv', 2, 'keyword', 'max'))
-  temp.max.time = float(readCSVLine('data/temp-records.csv', 3, 'keyword', 'max'))
+  temp.max.time = str(readCSVLine('data/temp-records.csv', 3, 'keyword', 'max'))
   if float(temp.current.value) > float(temp.max.value):
     print('Current temp was higher than recorded max temp, updating locally\n')
     temp.max.value = temp.current.value
     temp.max.time = datetime.datetime.now().strftime("%H:%M:%S")
 
   temp.min.value = float(readCSVLine('data/temp-records.csv', 2, 'keyword', 'min'))
-  temp.min.time = float(readCSVLine('data/temp-records.csv', 3, 'keyword', 'min'))
+  temp.min.time = str(readCSVLine('data/temp-records.csv', 3, 'keyword', 'min'))
   if float(temp.current.value) < float(temp.min.value):
     print('Current temp was lower than recorded min temp, updating locally\n')
     temp.min.value = temp.current.value
