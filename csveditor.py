@@ -102,3 +102,44 @@ def dataEdit():
       exit()
     else:
       input('Invalid choice')
+
+def changeSender(mode):
+  #Prompt creation of new file if missing
+  if os.path.isfile('data/sender.csv') == False and mode != "create":
+    print("We didn't find a sender credentials file, creating one for you...")
+    changeSender('create')
+    exit()
+
+  #Create file with lines for data to fill, if missing
+  if os.path.isfile('data/sender.csv') == False:
+    placeholder = ['address', 'password', 'name']
+    with open('data/sender.csv', 'w') as f:
+      for line in placeholder:
+        f.write(line + "\n")
+
+  #Input information to write to file
+  if mode == 'sender':
+    credential = input(str('Please enter the new email address: '))
+    editLineNumber = 0
+  elif mode == 'password':
+    credential = input(str('Please enter the new password: '))
+    editLineNumber = 1
+  elif mode == 'name':
+    credential = input(str('Please enter the new sender name: '))
+    editLineNumber = 2
+  elif mode == 'create':
+    print('\nPlease enter the sender details:')
+    changeSender('sender')
+    changeSender('password')
+    changeSender('name')
+    return
+
+  #Write entered data to file
+  with open('data/sender.csv','r') as f:
+    lines = f.readlines()
+  with open('data/sender.csv','w') as f:
+    for lineNum in range(0, len(lines)):
+      if editLineNumber == lineNum:
+        f.write(credential + "\n")
+      else:
+        f.write(lines[lineNum])

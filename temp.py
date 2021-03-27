@@ -31,7 +31,7 @@ def updateSender():
   global email_sender
   global password
   if os.path.isfile('data/sender.csv') == False:
-    tempreport.changeSender('e')
+    csveditor.changeSender('create')
   email_sender      = str(tempreport.readCSVLine('data/sender.csv', 1, 'numbered', 1))
   password          = str(tempreport.readCSVLine('data/sender.csv', 1, 'numbered', 2))
   email_sender_name = str(tempreport.readCSVLine('data/sender.csv', 1, 'numbered', 3))
@@ -121,13 +121,13 @@ elif sys.argv[1] == '-a' or sys.argv[1] == '--address':
   csveditor.dataEdit()
   exit()
 elif sys.argv[1] == '-p' or sys.argv[1] == '--password':
-  tempreport.changeSender('p')
+  csveditor.changeSender('password')
   exit()
 elif sys.argv[1] == '-s' or sys.argv[1] == '--sender':
-  tempreport.changeSender('s')
+  csveditor.changeSender('sender')
   exit()
 elif sys.argv[1] == '-n' or sys.argv[1] == '--name':
-  tempreport.changeSender('n')
+  csveditor.changeSender('name')
   exit()
 elif sys.argv[1] == '-c' or sys.argv[1] == '--config':
   shutil.copy2('data/config-template.py', 'data/config.py')
