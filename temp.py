@@ -20,10 +20,10 @@ def updateRecipients():
   email_recipients = ['']
   for line in range(1, line_count):
     if line == 2:
-      email_recipients[0] = (tempreport.readCSVLine('data/addresses.csv', 1, 'numbered', line, var_type = 'str'))
+      email_recipients[0] = str(tempreport.readCSVLine('data/addresses.csv', 1, 'numbered', line))
       print(email_recipients[0])
     else:
-      email_recipients.append(tempreport.readCSVLine('data/addresses.csv', 1, 'numbered', line, var_type = 'str'))
+      email_recipients.append(str(tempreport.readCSVLine('data/addresses.csv', 1, 'numbered', line)))
       print(email_recipients[line - 1])
 
 def updateSender():
@@ -32,9 +32,9 @@ def updateSender():
   global password
   if os.path.isfile('data/sender.csv') == False:
     tempreport.changeSender('e')
-  email_sender      = tempreport.readCSVLine('data/sender.csv', 1, 'numbered', 1, var_type = 'str')
-  password          = tempreport.readCSVLine('data/sender.csv', 1, 'numbered', 2, var_type = 'str')
-  email_sender_name = tempreport.readCSVLine('data/sender.csv', 1, 'numbered', 3, var_type = 'str')
+  email_sender      = str(tempreport.readCSVLine('data/sender.csv', 1, 'numbered', 1))
+  password          = str(tempreport.readCSVLine('data/sender.csv', 1, 'numbered', 2))
+  email_sender_name = str(tempreport.readCSVLine('data/sender.csv', 1, 'numbered', 3))
 
 def updateMessage():
   #Reads the image

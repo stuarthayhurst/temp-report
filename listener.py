@@ -14,9 +14,9 @@ def updateSender():
   global password
   if os.path.isfile('data/sender.csv') == False:
     tempreport.changeSender('e')
-  email_sender      = tempreport.readCSVLine('data/sender.csv', 1, 'numbered', 1, var_type = 'str')
-  password          = tempreport.readCSVLine('data/sender.csv', 1, 'numbered', 2, var_type = 'str')
-  email_sender_name = tempreport.readCSVLine('data/sender.csv', 1, 'numbered', 3, var_type = 'str')
+  email_sender      = str(tempreport.readCSVLine('data/sender.csv', 1, 'numbered', 1, var_type = 'str'))
+  password          = str(tempreport.readCSVLine('data/sender.csv', 1, 'numbered', 2, var_type = 'str'))
+  email_sender_name = str(tempreport.readCSVLine('data/sender.csv', 1, 'numbered', 3, var_type = 'str'))
 
 def connectToServer():
   global servers

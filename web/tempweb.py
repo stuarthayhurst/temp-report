@@ -41,19 +41,19 @@ def main(flaskVer=flask.__version__, pointCount=config.graph_point_count, cpu=cp
 
     def maxTemp(mode):
         if mode == 'temp':
-            value = str(tempreport.readCSVLine(parDir + '/data/temp-records.csv', 2, 'keyword', 'max', val_type = 'str')) + '°C'
+            value = str(tempreport.readCSVLine(parDir + '/data/temp-records.csv', 2, 'keyword', 'max')) + '°C'
             print('Updated Max Temperature')
         elif mode == 'time':
-            value = tempreport.readCSVLine(parDir + '/data/temp-records.csv', 3, 'keyword', 'max', val_type = 'str')
+            value = str(tempreport.readCSVLine(parDir + '/data/temp-records.csv', 3, 'keyword', 'max'))
             print('Updated Max Temperature Time')
         return value
 
     def minTemp(mode):
         if mode == 'temp':
-            value = str(tempreport.readCSVLine(parDir + '/data/temp-records.csv', 2, 'keyword', 'min', val_type = 'str')) + '°C'
+            value = str(tempreport.readCSVLine(parDir + '/data/temp-records.csv', 2, 'keyword', 'min')) + '°C'
             print('Updated Max Temperature')
         elif mode == 'time':
-            value = tempreport.readCSVLine(parDir + '/data/temp-records.csv', 3, 'keyword', 'min', val_type = 'str')
+            value = str(tempreport.readCSVLine(parDir + '/data/temp-records.csv', 3, 'keyword', 'min'))
             print('Updated Max Temperature Time')
         return value
 
@@ -78,7 +78,7 @@ def main(flaskVer=flask.__version__, pointCount=config.graph_point_count, cpu=cp
     try:
         with open(currDir + '/graph.png', 'rb') as ImageData:
             graphImageData = base64.b64encode(ImageData.read())
-            graphImageData = graphImageData.decode('utf-8')  
+            graphImageData = graphImageData.decode('utf-8')
     except FileNotFoundError:
         graphImageData = ""
         print("File Not found")

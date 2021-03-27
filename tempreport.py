@@ -12,61 +12,58 @@ except:
     def get_temperature():
       return 0
 
-def readCSVLine(filename, position, mode, line, **kwargs):
-  var_type = ''
-  value = None
-  for key, value in kwargs.items():
-    if key == 'var_type' or key == 'data_type' or key == 'type':
-      var_type = str(value)
+def readCSVLine(filename, position, mode, line):
+  #Check the file exists
   if os.path.isfile(filename) == False:
-    return
+    return None
+
+  #Check the position isn't 0
   if position == 0:
-    return
+    return None
+
+  #Attempt to find the requested line
   try:
+    #Find the specified line number
     if mode == 'numbered':
       with open(filename, 'r') as f:
         reader = csv.reader(f)
+        #Loop until the given line is next
         for i in range(int(line) - 1):
             next(reader)
+        #Save the contents of the correct position of the line
         row = next(reader)
         value = row[position - 1]
+    #Return the first line where the first position matches the keyword
     elif mode == 'keyword':
       with open(filename) as f:
         reader = csv.reader(f, delimiter=',')
+        #Loop through each line, and check first element against search string
         for row in reader:
           if row[0] == line:
             value = row[position - 1]
     else:
-      return
-    if value != None:
-      if var_type == 'str':
-        return str(value)
-      elif var_type == 'int':
-        return int(value)
-      elif var_type == 'float':
-        return float(value)
-      else:
-        return value
-    else:
-      return None 
+      #Return nothing if no mode was given
+      return None
+    return value
+  #Error handling for missing lines and positions
   except StopIteration:
     print("That line doesn't exist")
-    return
+    return None
   except IndexError:
     print("That position doesn't exist")
-    return
+    return None
 
 def changeSender(mode):
   if os.path.isfile('data/sender.csv') == False:
     print("We didn't find a sender credentials file, creating on for you")
     changes = [
       ['address'],
-      ['password'],  
-      ['name'], 
+      ['password'],
+      ['name'],
       ]
     f = open('data/sender.csv','w+')
     f.close()
-    with open('data/sender.csv', 'a') as f:                                    
+    with open('data/sender.csv', 'a') as f:
       writer = csv.writer(f, lineterminator="\n")
       writer.writerows(changes)
     print('Done')
