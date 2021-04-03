@@ -24,7 +24,7 @@
 
 ## Installation:
   - Make sure the wiring for the sensor is complete first
-  - `git clone https://github.com/Dragon8oy/temp-report.git`
+  - `git clone https://github.com/stuarthayhurst/temp-report.git`
   - Install scipy, Python and pip3
   - Install program and other dependencies: `./install.sh`
   - Change config values to your liking, in `data/config.py`
