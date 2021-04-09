@@ -15,23 +15,11 @@
     <div id="wrapper" style="background-color: #38373a; color: white;">
         <div id="sidebar-wrapper">
             <ul class="sidebar-nav">
-                <li class="sidebar-brand">
-                    <a href="/">
-                        Home
-                    </a>
-                </li>
-                <li>
-                    <a href="https://github.com/stuarthayhurst/temp-report" target="_blank">Source</a>
-                </li>
-                <li>
-                    <a href="https://github.com/stuarthayhurst/temp-report/wiki" target="_blank">Wiki</a>
-                </li>
-		<li>
-                    <a href="https://github.com/stuarthayhurst/temp-report/releases" target="_blank">Releases</a>
-                </li>
-                <li>
-                    <a href="https://github.com/stuarthayhurst/temp-report/issues" target="_blank">Issues</a>
-                </li>
+                <li class="sidebar-brand"><a href="/">Home</a></li>
+                <li><a href="https://github.com/stuarthayhurst/temp-report" target="_blank">Source</a></li>
+                <li><a href="https://github.com/stuarthayhurst/temp-report/wiki" target="_blank">Wiki</a></li>
+		<li><a href="https://github.com/stuarthayhurst/temp-report/releases" target="_blank">Releases</a></li>
+                <li><a href="https://github.com/stuarthayhurst/temp-report/issues" target="_blank">Issues</a></li>
             </ul>
         </div>
         <!-- Page Content -->
@@ -51,15 +39,15 @@
                   </tr>
                   <tr>
                       <th class="tableborder">Current Temperature:</th>
-                      <td class="tableborder">{{ measureTemp('temp') }}</td><td class="tableborder">{{ measureTemp('time') }}</td>
+                      <td class="tableborder">{{ measureTemp('temp') }}°C</td><td class="tableborder">{{ measureTemp('time') }}</td>
                   </tr>
                   <tr>
                       <th class="tableborder">Highest Temperature:</th>
-                      <td class="tableborder">{{ maxTemp('temp') }}</td><td class="tableborder">{{ maxTemp('time') }}</td>
+                      <td class="tableborder">{{ getTemp('max', 'temp') }}°C</td><td class="tableborder">{{ getTemp('max', 'time') }}</td>
                   </tr>
                   <tr>
                       <th class="tableborder">Lowest Temperature:</th>
-                      <td class="tableborder">{{ minTemp('temp') }}</td><td class="tableborder">{{ minTemp('time') }}</td>
+                      <td class="tableborder">{{ getTemp('min', 'temp') }}°C</td><td class="tableborder">{{ getTemp('min', 'time') }}</td>
                   </tr>
                 </table>
               </div>
