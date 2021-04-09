@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, url_for
-import flask, os, sys, inspect, shutil, time, datetime, gpiozero, subprocess, re, base64
+import flask, os, sys, inspect, time, datetime, gpiozero, base64
 import PIL.Image
 app = Flask(__name__, static_url_path='/static')
 
