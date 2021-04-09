@@ -5,27 +5,51 @@ import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 from scipy.interpolate import make_interp_spline, BSpline
 import numpy as np
-import sys, argparse, re, datetime
+import base64
+import sys, argparse, re, datetime, io
 
 DT_FORMAT       = '%Y/%m/%d-%H:%M'
 LOG_DT_FORMAT   = '%Y-%m-%d %H:%M:%S'
 area_name = 'Room'
 
-def generateGraph(reading_count, area_name):
-    '''Wrapper for drawgraph called from '''
+def generateGraph(reading_count, area_name, **kwargs):
+    #Wrapper for drawGraph()
+    if kwargs.get('export_base64') != None:
+      export_base64 = True
+      graph_kwargs = {'export_base64' : True}
+    else:
+      export_base64 = False
+      graph_kwargs = {'export_base64' : False}
+
     kwargs = {'tailmode' : True}
     args   = {reading_count}
     if len(open('temps.log', encoding="utf-8").readlines(  )) < reading_count:
       print('Not enough lines in logfile, aborting\n')
       plt.figure()
-      plt.savefig('graph.png')
-      plt.clf()
-      plt.close('all')
-      return
-    x, y   = readValues(*args, **kwargs)
-    drawGraph(x,y, area_name)
+      if export_base64 == True:
+        pic_IObytes = io.BytesIO()
+        plt.savefig(pic_IObytes,  format='png')
+        pic_IObytes.seek(0)
+        return base64.b64encode(pic_IObytes.read())
+      else:
+        plt.savefig('graph.png')
+        plt.clf()
+        plt.close('all')
+        return
 
-def drawGraph(x,y, area_name):
+    x, y = readValues(*args, **kwargs)
+    graphReturn = drawGraph(x, y, area_name, export_base64=export_base64)
+
+    if graphReturn != None:
+        return graphReturn
+
+def drawGraph(x,y, area_name, **kwargs):
+
+    if kwargs.get('export_base64') != None:
+      export_base64 = kwargs.get('export_base64')
+    else:
+      export_base64 = False
+
     x2 = mdates.date2num(x)
     x_sm = np.array(x2)
     x_smooth = np.linspace(x_sm.min(), x_sm.max(), 200)
@@ -42,10 +66,22 @@ def drawGraph(x,y, area_name):
     plt.xlabel('Time (Month-Day - Hour: Minutes)')
     plt.ylabel('Temperature \u2103')
     plt.title(str(area_name) + ' Temperature logged by Pi')
-    plt.savefig('graph.png')
+
+    if export_base64 == True:
+        pic_IObytes = io.BytesIO()
+        plt.savefig(pic_IObytes,  format='png')
+        pic_IObytes.seek(0)
+        graph_base64 = base64.b64encode(pic_IObytes.read())
+    else:
+        plt.savefig('graph.png')
+        graph_base64 = None
+
     print('Created graph\n')
     plt.clf()
     plt.close('all')
+
+    if graph_base64 != None:
+      return graph_base64
 
 def readValues(*args, **kwargs):
     '''for key, value in kwargs.items():     #Debug

@@ -60,7 +60,7 @@ def main(flaskVer=flask.__version__, pointCount=config.graph_point_count, cpu=cp
         result = request.form
         pointCount = result['pointsrequested']
 
-    graph.generateGraph(int(pointCount), config.area_name)
+    graph.generateGraph(int(pointCount), config.area_name, export_base64 = True)
     print(f"Drew graph with {pointCount} points")
 
     try:
