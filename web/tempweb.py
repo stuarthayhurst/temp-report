@@ -62,16 +62,8 @@ def main(flaskVer=flask.__version__, pointCount=config.graph_point_count, cpu=cp
         result = request.form
         pointCount = result['pointsrequested']
 
-    graph.generateGraph(int(pointCount), config.area_name, export_base64 = True)
+    graphImageData = graph.generateGraph(int(pointCount), config.area_name, export_base64 = True)
     print(f"Drew graph with {pointCount} points")
-
-    try:
-        with open(currDir + '/graph.png', 'rb') as ImageData:
-            graphImageData = base64.b64encode(ImageData.read())
-            graphImageData = graphImageData.decode('utf-8')
-    except FileNotFoundError:
-        graphImageData = ""
-        print("File not found")
 
     print('Updated Files')
 

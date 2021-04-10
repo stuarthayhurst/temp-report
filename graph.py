@@ -30,7 +30,7 @@ def generateGraph(reading_count, area_name, **kwargs):
         pic_IObytes = io.BytesIO()
         plt.savefig(pic_IObytes,  format='png')
         pic_IObytes.seek(0)
-        return base64.b64encode(pic_IObytes.read())
+        return base64.b64encode(pic_IObytes.read()).decode('utf-8')
       else:
         plt.savefig('graph.png')
         plt.clf()
@@ -71,7 +71,7 @@ def drawGraph(x,y, area_name, **kwargs):
         pic_IObytes = io.BytesIO()
         plt.savefig(pic_IObytes,  format='png')
         pic_IObytes.seek(0)
-        graph_base64 = base64.b64encode(pic_IObytes.read())
+        graph_base64 = base64.b64encode(pic_IObytes.read()).decode('utf-8')
     else:
         plt.savefig('graph.png')
         graph_base64 = None
@@ -105,7 +105,7 @@ def readValues(*args, **kwargs):
         tailmode = True
     if not tailmode:
         print("From: ",kwargs.get('from_date'))
-        print("To: ",kwargs.get('to_date')) 
+        print("To: ",kwargs.get('to_date'))
         from_dt = date_to_dt(kwargs.get('from_date'),DT_FORMAT)
         to_dt = date_to_dt(kwargs.get('to_date'),DT_FORMAT)
 
@@ -162,7 +162,7 @@ def parse_duration(duration):
         duration_td = duration * weeks
     else:
         raise ValueError
-    
+
     return duration_td
 
 def date_to_dt(datestring, FORMAT):
@@ -184,7 +184,7 @@ def main(args=None):
         opt.end_dt = date_to_dt(opt.start, DT_FORMAT)+duration
         opt.end = opt.end_dt.strftime(DT_FORMAT)
 
-    if opt.dur and opt.start and not opt.end: #Start and range 
+    if opt.dur and opt.start and not opt.end: #Start and range
         print("Start date and duration") #Debug
         print("Duration",opt.dur)
         duration = parse_duration(opt.dur)
@@ -196,7 +196,7 @@ def main(args=None):
         duration = parse_duration(opt.dur)
         opt.start_dt = date_to_dt(opt.end, DT_FORMAT)-duration
         opt.start = opt.start_dt.strftime(DT_FORMAT)
-        
+
     if opt.dur and not opt.start and not opt.end: #tailmode with range
         print("End of log back by duratiion") #Debug
         duration = parse_duration(opt.dur)
