@@ -1,8 +1,81 @@
+/*CSS rules for the structure of the page*/
+
+/*Default theme rules*/
 html, body {
   font-family: "Lato", sans-serif;
   background-color: #38373a;
   color: white;
 }
+
+/*Page container rules*/
+.page-content {
+  text-align: center;
+  margin-right: 12.5%;
+  margin-left: 12.5%;
+  margin-top: 5.5%;
+  width: 75%;
+}
+
+/*Topbar rules*/
+.watermark {
+  position: fixed;
+  height: 5%;
+  left: 1%;
+  top: 0;
+  z-index: 100;
+}
+.bannerImage {
+  height: 100%;
+  display: inline-block;
+  position: relative;
+}
+.topbar {
+  background-color: black;
+  text-align: center;
+  position: fixed;
+  display: table;
+  color: white;
+  width: 100%;
+  height: 5%;
+  left: 0;
+  top: 0;
+  z-index: 100;
+}
+.topbar-tab {
+  font-size: 110%;
+  vertical-align: middle;
+  display: table-cell;
+  text-align: center;
+  padding-left: 5%;
+  padding-right: 5%;
+  width: 5%;
+}
+/*Separate from topbar-tab, to avoid logo being highlighted*/
+.topbar-tab-hover:hover {
+  background-color: white;
+  border-radius: 5px;
+  color: grey;
+}
+/*Special handling to move logo to the left*/
+.special-tab {
+  padding-left: 0px;
+  padding-right: 0px;
+}
+
+/*Bottom bar rules*/
+.footer {
+  background-color: #262728;
+  color: white;
+  overflow: hidden;
+  position: fixed;
+  z-index: 0;
+  bottom: 0;
+  right: 0;
+  height: 25px;
+  width: 100%;
+}
+
+/*Page tweaks*/
 ::-webkit-scrollbar {
   width: 10px;
 }
@@ -16,8 +89,6 @@ html, body {
   -webkit-border-radius: 10px;
   border-radius: 10px;
   background: #dd4919;
-  /*background: #4ace4f;*/
-
 }
 ::-webkit-scrollbar-thumb:hover {
   background: #ff6938;
@@ -28,135 +99,3 @@ html, body {
 ::-moz-selection {
   background: #4ace4f;
 }
-.tableborder {
-  border: 1px solid black;
-  border-collapse: collapse;
-}
-th, td {
-  padding: 10px;
-}
-input {
-  display: none;
-}
-ul {
-  list-style-type: none;
-}
-ul.subGraph {
-  max-height: 360px;
-  height: 360px;
-  overflow: hidden;
-  opacity: 0;
-}
-ul.subLog {
-  max-height: 360px;
-  height: 360px;
-  overflow: hidden;
-  visibility: hidden;
-}
-.titleGraph {
-  opacity: 0;
-}
-.titleLog {
-  visibility: hidden;
-}
-.searchLog {
-  display: inline-block;
-}
-.searchButton {
-  display: inline-block;
-  border-radius: 10px;
-  background: black;
-  padding: 3px;
-  padding-right: 10px;
-  padding-left: 10px;
-  user-select: none;
-}
-.searchButton:hover {
-  background-color: #1b1a1c;
-}
-label {
-  position: relative;
-  display: block;
-  cursor: pointer;
-}
-input.inputGraphForm {
-  display: inline-block;
-}
-input.inputGraph:checked~ul.subGraph {
-  opacity: 1;
-  transition: opacity 1s linear;
-}
-input.inputLog:checked~ul.subLog {
-  visibility: visible;
-}
-input.inputGraph:checked~.titleGraph {
-  opacity: 1;
-  transition: opacity 1s linear;
-}
-input.inputLog:checked~.titleLog {
-  visibility: visible;
-}
-.button {
-  background-color: #0e0e0f;
-  user-select: none;
-  border-radius: 10px;
-  border: none;
-  color: white;
-  padding: 10px 20px;
-  text-align: center;
-  font-size: 16px;
-}
-.button:hover {
-  background-color: #1b1a1c;
-}
-.bannerImage {
-    margin-left: 1%;
-    height: 100%;
-}
-.footer {
-  background-color: #262728;
-  color: white;
-  overflow: hidden;
-  position: fixed;
-  z-index: 0;
-  bottom: 0;
-  right: 0;
-  height: 25px;
-  width: 100%;
-}
-.logBox {
-  white-space: pre-wrap;
-  font-size: 14px;
-  color: black;
-  width: 600px;
-  height: 360px;
-}
-.expand {
-  content:url("../expand.png");
-}
-.collapse {
-  content:url("../collapse.png");
-}
-.topbar {
-  position: fixed;
-  z-index: 1;
-  width: 100%;
-  background-color: #000;
-  overflow: hidden;
-  height: 5.5%;
-}
-.lines {
-  margin-left: 1%;
-  padding: 5px;
-  width: 2.5%;
-  -webkit-animation:spin 0.25s linear;
-  -moz-animation:spin 0.25s linear;
-  animation:spin 0.25s linear;
-}
-@-moz-keyframes spin { 100% { -moz-transform: rotate(180deg); } }
-@-webkit-keyframes spin { 100% { -webkit-transform: rotate(180deg); } }
-@keyframes spin { 100% { -webkit-transform: rotate(180deg); transform:rotate(180deg); } }
-
-@-moz-keyframes ball { 100% { -moz-transform: rotate(360deg); } }
-@-webkit-keyframes ball { 100% { -webkit-transform: rotate(360deg); } }
-@keyframes ball { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } }

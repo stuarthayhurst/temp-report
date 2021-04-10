@@ -31,6 +31,7 @@ if os.path.isfile(currDir + '/static/temps.log') == True:
 os.symlink(parDir + '/temps.log', currDir + '/temps.log')
 os.symlink(parDir + '/temps.log', currDir + '/static/temps.log')
 
+#Define the main route
 @app.route('/', methods = ['POST','GET'])
 def main(flaskVer=flask.__version__, pointCount=config.graph_point_count, cpu=cpu):
     def measureTemp(mode):
@@ -45,6 +46,8 @@ def main(flaskVer=flask.__version__, pointCount=config.graph_point_count, cpu=cp
         else:
             targetPosition = 3
         return str(tempreport.readCSVLine(parDir + '/data/temp-records.csv', targetPosition, 'keyword', maxOrMin))
+
+    print("\n--------------------\n")
 
     with open(currDir + '/static/temps.log', "r", encoding='utf-8') as f:
         #Save log contents
@@ -64,8 +67,8 @@ def main(flaskVer=flask.__version__, pointCount=config.graph_point_count, cpu=cp
 
     graphImageData = graph.generateGraph(int(pointCount), config.area_name, export_base64 = True)
     print(f"Drew graph with {pointCount} points")
-
     print('Updated Files')
+    print("\n--------------------\n")
 
     return render_template('tempreport.html', graphImageData=graphImageData, measureTemp=measureTemp, getTemp=getTemp, logContent=logContent, lineCount=lineCount, pointCount=pointCount, cpuTemp=str(cpu.temperature) + '°C')
 

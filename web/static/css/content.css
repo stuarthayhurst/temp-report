@@ -1,0 +1,117 @@
+/*CSS rules for the content of the page*/
+
+/*Center text*/
+div {
+  text-align: center;
+}
+
+/*Table rules*/
+.temperature-table {
+  margin-left: auto;
+  margin-right: auto;
+}
+.table-border {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+th, td {
+  padding: 10px;
+}
+
+/*Button rules*/
+.button {
+  background-color: #0e0e0f;
+  user-select: none;
+  border-radius: 10px;
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  text-align: center;
+  font-size: 16px;
+}
+.button:hover {
+  background-color: #1b1a1c;
+}
+
+/*Graph and log controls rules*/
+label {
+  position: relative;
+  cursor: pointer;
+}
+.align-dropdown-vertical { /*REMOVE*/
+  display: inline-grid;
+  grid-auto-flow: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/*Dropdown rules*/
+input {
+  display: none;
+}
+ul {
+  list-style-type: none;
+}
+ul.subGraph {
+  max-height: 360px;
+  height: 360px;
+  overflow: hidden;
+  opacity: 0;
+}
+ul.subLog {
+  max-height: 360px;
+  height: 360px;
+  overflow: hidden;
+  visibility: hidden;
+}
+.titleGraph {
+  opacity: 0;
+}
+.titleLog {
+  visibility: hidden;
+}
+.searchLog {
+  display: inline-block;
+}
+.searchButton {
+  display: inline-block;
+  border-radius: 10px;
+  background: black;
+  padding: 3px;
+  padding-right: 10px;
+  padding-left: 10px;
+  user-select: none;
+}
+.searchButton:hover {
+  background-color: #1b1a1c;
+}
+input.inputGraphForm {
+  display: inline-block;
+}
+input.inputGraph:checked~ul.subGraph {
+  opacity: 1;
+  transition: opacity 1s linear;
+}
+input.inputLog:checked~ul.subLog {
+  visibility: visible;
+}
+input.inputGraph:checked~.titleGraph {
+  opacity: 1;
+  transition: opacity 1s linear;
+}
+input.inputLog:checked~.titleLog {
+  visibility: visible;
+}
+.logBox {
+  white-space: pre-wrap;
+  font-size: 14px;
+  color: black;
+  width: 600px;
+  height: 360px;
+}
+.expand {
+  content:url("../expand.png");
+}
+.collapse {
+  content:url("../collapse.png");
+}

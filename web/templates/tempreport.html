@@ -4,90 +4,93 @@
     <title>Temperature Panel</title>
     <link rel="shortcut icon" href="{{ url_for('static', filename='icon.svg') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/stylesheet.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='vendor/bootstrap/css/bootstrap.min.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/simple-sidebar.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/content.css') }}">
   <body>
     <div class="topbar">
-    <img href="#inner-menu-toggle" onclick="reset_animation()" id="inner-menu-toggle" class="lines"  src="{{ url_for('static', filename='lines.svg') }}"/>
-    <img id="banner" src="{{ url_for('static', filename='icon.svg') }}" class="bannerImage"/>
-    <img id="banner" src="{{ url_for('static', filename='banner.svg') }}" class="bannerImage"/>
+      <!--Add logo as another tab, but without a hover highlight-->
+      <a class="topbar-tab special-tab">
+        <div class="watermark">
+          <img src="{{ url_for('static', filename='icon.svg') }}" class="bannerImage"/>
+          <p class="bannerImage">&nbsp</p>
+          <img src="{{ url_for('static', filename='banner.svg') }}" class="bannerImage"/>
+        </div>
+      </a>
+      <a class="topbar-tab topbar-tab-hover" onclick="openLink('https://github.com/stuarthayhurst/temp-report')">Source code</a>
+      <a class="topbar-tab topbar-tab-hover" onclick="openLink('https://github.com/stuarthayhurst/temp-report/wiki')">Wiki</a>
+      <a class="topbar-tab topbar-tab-hover" onclick="openLink('https://github.com/stuarthayhurst/temp-report/releases')">Releases</a>
+      <a class="topbar-tab topbar-tab-hover" onclick="openLink('https://github.com/stuarthayhurst/temp-report/issues')">Issues</a>
     </div>
-    <div id="wrapper" style="background-color: #38373a; color: white;">
-        <div id="sidebar-wrapper">
-            <ul class="sidebar-nav">
-                <li class="sidebar-brand"><a href="/">Home</a></li>
-                <li><a href="https://github.com/stuarthayhurst/temp-report" target="_blank">Source</a></li>
-                <li><a href="https://github.com/stuarthayhurst/temp-report/wiki" target="_blank">Wiki</a></li>
-		<li><a href="https://github.com/stuarthayhurst/temp-report/releases" target="_blank">Releases</a></li>
-                <li><a href="https://github.com/stuarthayhurst/temp-report/issues" target="_blank">Issues</a></li>
-            </ul>
+    <div class="page-content">
+      <div>
+          <h2>Temperature display panel</h2>
+          <p>A temperature display panel frontend for temp-report</p>
+          <p>Temp-report is a small project to create a system that can handle the output from a Pi temperature logger</p>
+          <p>This display panel contains a dropdown graph, dropdown logs, a tool to regenerate the graph and links to the project</p>
+      </div>
+      <div>
+        <table class="temperature-table" style="width: 400px; empty-cells: hide;">
+          <tr>
+            <th></th>
+            <th class="table-border">Temp:</th>
+            <th class="table-border">Time:</th>
+          </tr>
+          <tr>
+            <th class="table-border">Current Temperature:</th>
+            <td class="table-border">{{ measureTemp('temp') }}°C</td><td class="table-border">{{ measureTemp('time') }}</td>
+          </tr>
+          <tr>
+            <th class="table-border">Highest Temperature:</th>
+            <td class="table-border">{{ getTemp('max', 'temp') }}°C</td><td class="table-border">{{ getTemp('max', 'time') }}</td>
+          </tr>
+          <tr>
+            <th class="table-border">Lowest Temperature:</th>
+            <td class="table-border">{{ getTemp('min', 'temp') }}°C</td><td class="table-border">{{ getTemp('min', 'time') }}</td>
+          </tr>
+        </table>
+      </div>
+	    </br>
+		  <form action="./" method="POST">
+			  <input class="inputGraphForm" type="radio" name="pointsrequested" value="24" checked> 2 Hour
+			  <input class="inputGraphForm" type="radio" name="pointsrequested" value="48"> 4 Hour
+			  <input class="inputGraphForm" type="radio" name="pointsrequested" value="144"> 12 Hour
+			  <input class="inputGraphForm" type="radio" name="pointsrequested" value="288"> 24 Hour </br></br>
+			  <input class="inputGraphForm button" type="submit" name="submit" value="Redraw">
+		  </form>
+      <br>
+      <div class="dropdown-area">
+        <div style="display: inline-block;">
+          <!--div class="align-dropdown-vertical"-->
+            <img id="graphArrow" onclick="toggleDropdown('arrow', 'graph')" height="35" width="35" src="{{ url_for('static', filename='collapsed.svg') }}">
+            <!--p>&nbsp</p-->
+            <input id="graphCheck" class="inputGraph" type="checkbox" name="Graph"/>
+		        <label class="button" onclick="toggleDropdown('checkbox', 'graph')" for="graphCheck">Graph</label>
+          <!--/div-->
+          <p class="titleGraph">  &nbsp<span style="background-color: #4ace4f"> </span>Graph: | {{ pointCount }} points</p>
+          <ul class="subGraph">
+			      <li><img src="data:image/png;base64, {{ graphImageData }}" alt="Temperature Graph" height="360" width="600"></li>
+          </ul>
         </div>
-        <!-- Page Content -->
-        <div id="page-content-wrapper" class="container-fluid">
-            <div class="container-fluid" style="margin-top: 4.7%;">
-              <div>
-                <h2>Temperature display panel</h2>&nbsp
-                <p>A temperature display panel frontend for temp-report</p>
-                <p>Temp-report is a small project to create a system that can handle the output from a Pi temperature logger.</p>
-              </div>
-              <div>
-                <table id="temp-table" style="width: 400px; empty-cells: hide;">
-                  <tr>
-                      <th></th>
-                      <th class="tableborder">Temp:</th>
-                      <th class="tableborder">Time:</th>
-                  </tr>
-                  <tr>
-                      <th class="tableborder">Current Temperature:</th>
-                      <td class="tableborder">{{ measureTemp('temp') }}°C</td><td class="tableborder">{{ measureTemp('time') }}</td>
-                  </tr>
-                  <tr>
-                      <th class="tableborder">Highest Temperature:</th>
-                      <td class="tableborder">{{ getTemp('max', 'temp') }}°C</td><td class="tableborder">{{ getTemp('max', 'time') }}</td>
-                  </tr>
-                  <tr>
-                      <th class="tableborder">Lowest Temperature:</th>
-                      <td class="tableborder">{{ getTemp('min', 'temp') }}°C</td><td class="tableborder">{{ getTemp('min', 'time') }}</td>
-                  </tr>
-                </table>
-              </div>
-	      </br>
-		<form action="./" method="POST">
-			<input class="inputGraphForm" type="radio" name="pointsrequested" value="24" checked> 2 Hour 
-			<input class="inputGraphForm" type="radio" name="pointsrequested" value="48"> 4 Hour 
-			<input class="inputGraphForm" type="radio" name="pointsrequested" value="144"> 12 Hour
-			<input class="inputGraphForm" type="radio" name="pointsrequested" value="288"> 24 Hour </br></br>
-			<input class="inputGraphForm button" type="submit" name="submit" value="Redraw">
-		</form>
-              <br>
-              <div style="display: inline-block;">
-                <img id="graphArrow" onclick="toggleDropdown('arrow', 'graph')" height="35" width="35" src="{{ url_for('static', filename='collapsed.svg') }}">
-                <input id="graphCheck" class="inputGraph" type="checkbox" name="Graph" />
-		<label class="button" onclick="toggleDropdown('checkbox', 'graph')" for="graphCheck">Graph</label><p class="titleGraph">  &nbsp<span style="background-color: #4ace4f"> </span>Graph: | {{ pointCount }} points</p>
-                <ul class="subGraph">
-			<li><img src="data:image/png;base64, {{ graphImageData }}" alt="Temperature Graph" height="360" width="600"></li>
-                </ul>
-              </div>
-              <div style="display: inline-block;">
-                <img id="logArrow" onclick="toggleDropdown('arrow', 'log')" height="35" width="35" src="{{ url_for('static', filename='collapsed.svg') }}">
-                <input id="logCheck" class="inputLog" type="checkbox" name="Log" />
-                <label class="button" onclick="toggleDropdown('checkbox', 'log')" for="logCheck">Log</label>
-                <p class="titleLog">  &nbsp<span style="background-color: #4ace4f"> </span>Log: | {{ lineCount }} lines</p>
-                <ul class="subLog">
-                  <li><textarea class="logBox" id="logBox" readonly>{{ logContent }}</textarea></li>
-                </ul>
-              </div>
-              <br>
-              <div class="footer">
-                <p> </p>
-              </div>
-              <a style="position:fixed; z-index: 11; bottom: 0; right: 0; margin-right: 2px;">CPU Temperature: {{ cpuTemp }} </a>
+        <div style="display: inline-block;">
+          <!--div class="align-dropdown-vertical"-->
+            <img id="logArrow" onclick="toggleDropdown('arrow', 'log')" height="35" width="35" src="{{ url_for('static', filename='collapsed.svg') }}">
+            <!--p>&nbsp</p-->
+            <input id="logCheck" class="inputLog" type="checkbox" name="Log"/>
+            <label class="button" onclick="toggleDropdown('checkbox', 'log')" for="logCheck">Log</label>
+          <!--/div-->
+          <p class="titleLog">  &nbsp<span style="background-color: #4ace4f"> </span>Log: | {{ lineCount }} lines</p>
+          <ul class="subLog">
+            <li><textarea class="logBox" id="logBox" readonly>{{ logContent }}</textarea></li>
+          </ul>
         </div>
+      </div>
+    </div>
+    <br>
+    <div class="footer">
+      <p> </p>
+      <a style="position:fixed; z-index: 11; bottom: 0; right: 0; margin-right: 2px;">CPU Temperature: {{ cpuTemp }} </a>
     </div>
     <script>urlRoot = {{ url_for('static', filename='') }};</script>
-    <script src="{{ url_for('static', filename='vendor/jquery/jquery.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/dropDownSetup.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/bootstrapToggles.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/pageFunctions.js') }}"></script>
   </body>
 </html>
