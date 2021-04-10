@@ -4,9 +4,11 @@ graph.png
 
 temp-records.csv
 addresses.csv
+addresses.list
 config.csv
 config.py
 sender.csv
+sender.info
 import.zip
 
 file.txt

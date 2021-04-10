@@ -3,8 +3,8 @@ import tempreport
 
 #Make a new address list if missing
 def checkAddressFile():
-  if os.path.isfile('data/addresses.csv') == False:
-    newFile('data/addresses.csv')
+  if os.path.isfile('data/addresses.list') == False:
+    newFile('data/addresses.list')
 
 #Create a blank file at the specified path
 def newFile(filePath):
@@ -71,30 +71,30 @@ def dataEdit():
 
     if choice == '1': #Display contents of the address list file
       print('Reading file:\n')
-      displayFile('data/addresses.csv')
+      displayFile('data/addresses.list')
       input()
     elif choice == '2': #Add a new line to the file
-      displayFile('data/addresses.csv')
+      displayFile('data/addresses.list')
       newAddress = str(input('Please enter the new address: '))
-      appendLine('data/addresses.csv', newAddress)
+      appendLine('data/addresses.list', newAddress)
       print("\n--------------------------------\n")
       print('New line added')
       print("\n--------------------------------\n")
     elif choice == '3': #Remove a line from the file
-      displayFile('data/addresses.csv')
+      displayFile('data/addresses.list')
       selectedLine = str(input('Please enter a line number or address to remove: '))
-      removeLine('data/addresses.csv', selectedLine)
+      removeLine('data/addresses.list', selectedLine)
       print("\n--------------------------------\n")
       print('Line removed')
       print("\n--------------------------------\n")
     elif choice == '4': #Edit a line from the file
-      displayFile('data/addresses.csv')
+      displayFile('data/addresses.list')
       selectedLine = str(input('Please enter a line number or address to edit: '))
-      editLine('data/addresses.csv', selectedLine)
+      editLine('data/addresses.list', selectedLine)
     elif choice == '5': #Reset the file
       confirmReset = str(input('Are you sure you want to erase the address list and start again? (Y/n) '))
       if confirmReset.lower() == "y":
-        newFile('data/addresses.csv')
+        newFile('data/addresses.list')
       else:
         print('Aborted')
       print("\n--------------------------------\n")
@@ -105,15 +105,15 @@ def dataEdit():
 
 def changeSender(mode):
   #Prompt creation of new file if missing
-  if os.path.isfile('data/sender.csv') == False and mode != "create":
+  if os.path.isfile('data/sender.info') == False and mode != "create":
     print("We didn't find a sender credentials file, creating one for you...")
     changeSender('create')
     exit()
 
   #Create file with lines for data to fill, if missing
-  if os.path.isfile('data/sender.csv') == False:
+  if os.path.isfile('data/sender.info') == False:
     placeholder = ['address', 'password', 'name']
-    with open('data/sender.csv', 'w') as f:
+    with open('data/sender.info', 'w') as f:
       for line in placeholder:
         f.write(line + "\n")
 
@@ -135,9 +135,9 @@ def changeSender(mode):
     return
 
   #Write entered data to file
-  with open('data/sender.csv','r') as f:
+  with open('data/sender.info','r') as f:
     lines = f.readlines()
-  with open('data/sender.csv','w') as f:
+  with open('data/sender.info','w') as f:
     for lineNum in range(0, len(lines)):
       if editLineNumber == lineNum:
         f.write(credential + "\n")

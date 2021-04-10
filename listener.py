@@ -12,11 +12,11 @@ def updateSender():
   global email_sender_name
   global email_sender
   global password
-  if os.path.isfile('data/sender.csv') == False:
+  if os.path.isfile('data/sender.info') == False:
     csveditor.changeSender('create')
-  email_sender      = str(tempreport.readCSVLine('data/sender.csv', 1, 'numbered', 1))
-  password          = str(tempreport.readCSVLine('data/sender.csv', 1, 'numbered', 2))
-  email_sender_name = str(tempreport.readCSVLine('data/sender.csv', 1, 'numbered', 3))
+  email_sender      = str(tempreport.readCSVLine('data/sender.info', 1, 'numbered', 1))
+  password          = str(tempreport.readCSVLine('data/sender.info', 1, 'numbered', 2))
+  email_sender_name = str(tempreport.readCSVLine('data/sender.info', 1, 'numbered', 3))
 
 def connectToServer():
   global servers
