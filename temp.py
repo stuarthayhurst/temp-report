@@ -1,4 +1,4 @@
-import smtplib, datetime, time, csv, sys, os, shutil
+import smtplib, datetime, time, sys, os, shutil
 import tempreport
 import csveditor
 import graph

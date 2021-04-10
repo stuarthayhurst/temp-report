@@ -1,4 +1,4 @@
-import imaplib, smtplib, datetime, time, sys, os, csv, re
+import imaplib, smtplib, datetime, time, sys, os
 import tempreport
 import graph
 from email.parser import HeaderParser
