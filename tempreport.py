@@ -52,6 +52,9 @@ def readCSVLine(filename, position, mode, line):
   except IndexError:
     print("That position doesn't exist")
     return None
+  except UnboundLocalError:
+    print("That keyword doesn't exist")
+    return None
 
 def measureTemp(mode = 'V'):
   print('Reading temperature:')
