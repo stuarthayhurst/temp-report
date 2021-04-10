@@ -24,8 +24,10 @@ import config
 print("Loaded config")
 
 #Recreate symlinks for access to the log for webpage and graph.py
-os.remove(currDir + '/temps.log')
-os.remove(currDir + '/static/temps.log')
+if os.path.isfile(currDir + '/temps.log') == True:
+  os.remove(currDir + '/temps.log')
+if os.path.isfile(currDir + '/static/temps.log') == True:
+  os.remove(currDir + '/static/temps.log')
 os.symlink(parDir + '/temps.log', currDir + '/temps.log')
 os.symlink(parDir + '/temps.log', currDir + '/static/temps.log')
 
