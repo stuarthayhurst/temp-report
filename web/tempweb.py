@@ -44,7 +44,7 @@ def main(flaskVer=flask.__version__, pointCount=config.graph_point_count, cpu=cp
             targetPosition = 2
         else:
             targetPosition = 3
-        return str(tempreport.readCSVLine(parDir + '/data/temp-records.csv', targetPosition, 'keyword', info))
+        return str(tempreport.readCSVLine(parDir + '/data/temp-records.csv', targetPosition, 'keyword', maxOrMin))
 
     with open(currDir + '/static/temps.log', "r", encoding='utf-8') as f:
         #Save log contents
