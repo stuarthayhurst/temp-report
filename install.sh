@@ -49,13 +49,13 @@ else
 fi
 
 #Generate config
-python3 temp.py -c
+python3 tempreport.py -c
 
 #Add user credentials and tell them how to add addresses
-echo "Use 'python3 temp.py -s' to set a sender email address"
-echo "Use 'python3 temp.py -n' to set a sender name"
-echo "Use 'python3 temp.py -p' to update the password for the sender address"
-echo "Use 'python3 temp.py -a' to add or edit addresses on the mailing list"
+echo "Use 'python3 tempreport.py -s' to set a sender email address"
+echo "Use 'python3 tempreport.py -n' to set a sender name"
+echo "Use 'python3 tempreport.py -p' to update the password for the sender address"
+echo "Use 'python3 tempreport.py -a' to add or edit addresses on the mailing list"
 echo "Add in the information and then reboot for the program to begin working"
 
 echo "Installation complete"

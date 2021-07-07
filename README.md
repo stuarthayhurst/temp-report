@@ -32,7 +32,7 @@
   - Change config values to your liking, in `data/config.py`
 
 ## Commands and notes:
-  - Use `python3 temp.py -h` to view help
+  - Use `python3 tempreport.py -h` to view help
   - Use `tmux att -t temp_report` to view the program
   - Use `tmux att -t temp_listener` to view the email reply bot
   - Use `tmux att -t temp_log` to view the automatic temperature log
