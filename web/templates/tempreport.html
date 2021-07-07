@@ -50,10 +50,10 @@
       </div>
 	    </br>
 		  <form action="./" method="POST">
-			  <input class="inputGraphForm" type="radio" name="pointsrequested" value="24" checked> 2 Hour
-			  <input class="inputGraphForm" type="radio" name="pointsrequested" value="48"> 4 Hour
-			  <input class="inputGraphForm" type="radio" name="pointsrequested" value="144"> 12 Hour
-			  <input class="inputGraphForm" type="radio" name="pointsrequested" value="288"> 24 Hour </br></br>
+			  <input class="inputGraphForm" type="radio" name="pointsrequested" value="{{ hourPointCount * 2 }}" checked> 2 Hour
+			  <input class="inputGraphForm" type="radio" name="pointsrequested" value="{{ hourPointCount * 4 }}"> 4 Hour
+			  <input class="inputGraphForm" type="radio" name="pointsrequested" value="{{ hourPointCount * 12 }}"> 12 Hour
+			  <input class="inputGraphForm" type="radio" name="pointsrequested" value="{{ hourPointCount * 24 }}"> 24 Hour </br></br>
 			  <input class="inputGraphForm button" type="submit" name="submit" value="Redraw">
 		  </form>
       <br>

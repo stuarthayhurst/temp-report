@@ -33,7 +33,7 @@ os.symlink(parDir + '/temps.log', currDir + '/static/temps.log')
 
 #Define the main route
 @app.route('/', methods = ['POST','GET'])
-def main(flaskVer=flask.__version__, pointCount=config.graph_point_count, cpu=cpu):
+def main(flaskVer=flask.__version__, pointCount=config.graph_point_count, cpu=cpu, hourPointCount=config.log_interval):
     def measureTemp(mode):
         if mode == 'temp':
             return str(tempreport.measureTemp())
@@ -70,7 +70,7 @@ def main(flaskVer=flask.__version__, pointCount=config.graph_point_count, cpu=cp
     print('Updated Files')
     print("\n--------------------\n")
 
-    return render_template('tempreport.html', graphImageData=graphImageData, measureTemp=measureTemp, getTemp=getTemp, logContent=logContent, lineCount=lineCount, pointCount=pointCount, cpuTemp=str(cpu.temperature) + '°C')
+    return render_template('tempreport.html', graphImageData=graphImageData, measureTemp=measureTemp, getTemp=getTemp, logContent=logContent, lineCount=lineCount, pointCount=pointCount, hourPointCount=int(3600 / hourPointCount), cpuTemp=str(cpu.temperature) + '°C')
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=80)
