@@ -79,3 +79,16 @@ def updateRecords(temp):
     temp.min.time = datetime.datetime.now().strftime("%H:%M:%S")
 
   return temp
+
+def returnNewTemp():
+  class temp:
+    class template(object):
+      value=0.0
+      time=0
+    class current(template):
+      pass
+    class max(template):
+      pass
+    class min(template):
+      pass
+  return temp

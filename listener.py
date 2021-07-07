@@ -126,16 +126,8 @@ def sendMessage(email_recipient):
   except:
     print('There was an error while sending the message')
 
-class temp:
-  class template(object):
-    value=0.0
-    time=0
-  class current(template):
-    pass
-  class max(template):
-    pass
-  class min(template):
-    pass
+#Create temp class to store temperatures and times
+temp = tempreport.returnNewTemp()
 
 #Load config
 while os.path.isfile('data/config.py') == False:

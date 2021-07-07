@@ -88,16 +88,8 @@ if os.path.isfile('temps.log') == True:
         curr_time = time.mktime(datetime.datetime.now().timetuple())
         time.sleep(1)
 
-class temp:
-  class template(object):
-    value=0.0
-    time=0
-  class current(template):
-    pass
-  class max(template):
-    pass
-  class min(template):
-    pass
+#Create temp class to store temperatures and times
+temp = tempreport.returnNewTemp()
 
 #Set extreme opposite values to trigger a refresh
 temp.max.value = -100.0

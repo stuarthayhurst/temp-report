@@ -135,17 +135,6 @@ elif sys.argv[1] == '-c' or sys.argv[1] == '--config':
 
 print('--------------------------------')
 
-class temp:
-  class template(object):
-    value=0.0
-    time=0
-  class current(template):
-    pass
-  class max(template):
-    pass
-  class min(template):
-    pass
-
 #Create config if missing
 if os.path.isfile('data/config.py') == False:
   shutil.copy2('data/config-template.py', 'data/config.py')
@@ -171,6 +160,9 @@ except Exception as err:
   print('There was an error while connecting to the email server:')
   print(err)
   exit(1)
+
+#Create temp class to store temperatures and times
+temp = tempreport.returnNewTemp()
 
 try:
   while True:
