@@ -1,6 +1,6 @@
 import datetime, time, csv, os, re, sys
 from tzlocal import get_localzone
-import tempreport
+import commonfuncs as tempreport
 
 def logTemp():
   global temp

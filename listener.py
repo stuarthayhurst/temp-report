@@ -1,5 +1,5 @@
 import imaplib, smtplib, datetime, time, sys, os
-import tempreport
+import commonfuncs as tempreport
 import graph
 from email.parser import HeaderParser
 from email.mime.multipart import MIMEMultipart

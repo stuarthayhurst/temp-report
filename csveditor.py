@@ -1,5 +1,5 @@
 import os
-import tempreport
+import commonfuncs as tempreport
 
 #Make a new address list if missing
 def checkAddressFile():

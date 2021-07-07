@@ -1,5 +1,5 @@
 import smtplib, datetime, time, sys, os, shutil
-import tempreport
+import commonfuncs as tempreport
 import csveditor
 import graph
 from email.mime.multipart import MIMEMultipart

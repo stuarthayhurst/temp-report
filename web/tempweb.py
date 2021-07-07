@@ -13,7 +13,8 @@ except:
 currDir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parDir = os.path.dirname(currDir)
 sys.path.insert(0,parDir)
-import graph, tempreport
+import graph
+import commonfuncs as tempreport
 
 #Load config
 print('Waiting for config...')
