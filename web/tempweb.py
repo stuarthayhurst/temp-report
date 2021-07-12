@@ -70,8 +70,19 @@ def main(flaskVer=flask.__version__, pointCount=config.graph_point_count, cpu=cp
     print(f"Drew graph with {pointCount} points")
     print('Updated Files')
     print("\n--------------------\n")
-
-    return render_template('tempreport.html', graphImageData=graphImageData, measureTemp=measureTemp, getTemp=getTemp, logContent=logContent, lineCount=lineCount, pointCount=pointCount, hourPointCount=int(3600 / hourPointCount), cpuTemp=str(cpu.temperature) + '°C')
+    hourPointCount = int(3600 / hourPointCount)
+    cpuTemp = f"{str(cpu.temperature)} °C"
+    templateDate = {
+        "graphImageData": graphImageData,
+        "measureTemp": measureTemp,
+        "getTemp": getTemp,
+        "logContent": logContent,
+        "lineCount": lineCount,
+        "pointCount": pointCount,
+        "hourPointCount": hourPointCount,
+        "cpuTemp": cpuTemp,
+    }
+    return render_template('tempreport.html', **templateDate)
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=80)
