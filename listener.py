@@ -1,4 +1,4 @@
-import imaplib, smtplib, datetime, time, sys, os
+import imaplib, smtplib, datetime, time, sys, os, re
 import commonfuncs as tempreport
 import graph
 from email.parser import HeaderParser
@@ -66,32 +66,38 @@ def checkMail():
       print('No emails')
 
 def checkKeywords(email_subject, email_recipient):
-  if any(searchstr in email_subject.lower() for searchstr in (keywords)):
+  email_subject = email_subject.lower()
+
+  if any(searchstr in email_subject for searchstr in (keywords)):
     print('Keyword found\n')
-    if any(searchstr in email_subject.lower() for searchstr in ('hours', 'hour')):
+  else:
+    return
+
+  timeKeywordSets = [['hours', 'hour'],
+                 ['days', 'day'],
+                 ['weeks', 'week']]
+
+  for timeKeywords in timeKeywordSets:
+    if any(searchstr in email_subject for searchstr in timeKeywords):
       print('Found request for specific time')
+
       requested_units = re.findall(r'\d+', email_subject)
       if len(requested_units) == 0:
         requested_units = ['1']
-      config.graph_point_count = int((int(requested_units[0]) * 60) / (config.log_interval / 60))
-      print(str(requested_units[0]) + ' Hours, ' + str(config.graph_point_count) + ' points')
-    if any(searchstr in email_subject.lower() for searchstr in ('days', 'day')):
-      print('Found request for specific time')
-      requested_units = re.findall(r'\d+', email_subject)
-      if len(requested_units) == 0:
-        requested_units = ['1']
-      config.graph_point_count = int((int(requested_units[0]) * 60) / (config.log_interval / 60) * 24)
-      print(str(requested_units[0]) + ' Days, ' + str(config.graph_point_count) + ' points')
-    if any(searchstr in email_subject.lower() for searchstr in ('weeks', 'week')):
-      print('Found request for specific time')
-      requested_units = re.findall(r'\d+', email_subject)
-      if len(requested_units) == 0:
-        requested_units = ['1']
-      config.graph_point_count = int((int(requested_units[0]) * 60) / (config.log_interval / 60) * 168)
-      print(str(requested_units[0]) + ' Weeks, ' + str(config.graph_point_count) + ' points')
-    graph.generateGraph(config.graph_point_count, config.area_name)
-    updateMessage(email_recipient)
-    sendMessage(email_recipient)
+
+      if timeKeywords[0] == 'hours':
+        hoursPerUnit = 1
+      elif timeKeywords[0] == 'days':
+        hoursPerUnit = 24
+      elif timeKeywords[0] == 'weeks':
+        hoursPerUnit = 168
+
+      config.graph_point_count = int((int(requested_units[0]) * 60) / (config.log_interval / 60) * hoursPerUnit)
+      print(f"{requested_units[0]} {timeKeywords[0].capitalize()}, {config.graph_point_count} points")
+
+  graph.generateGraph(config.graph_point_count, config.area_name)
+  updateMessage(email_recipient)
+  sendMessage(email_recipient)
 
 def updateMessage(email_recipient):
   #Reads the image
