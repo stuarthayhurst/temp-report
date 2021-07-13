@@ -16,5 +16,5 @@ installJobs() {
   echo "Done"
 }
 
-cd "$workDir"
+cd "$workDir" || exit 1
 installJobs #Generate and install systemd jobs
