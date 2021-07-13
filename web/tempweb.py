@@ -72,7 +72,7 @@ def main(flaskVer=flask.__version__, pointCount=config.graph_point_count, cpu=cp
     print("\n--------------------\n")
     hourPointCount = int(3600 / hourPointCount)
     cpuTemp = f"{str(cpu.temperature)} °C"
-    templateDate = {
+    templateData = {
         "graphImageData": graphImageData,
         "measureTemp": measureTemp,
         "getTemp": getTemp,
@@ -82,7 +82,7 @@ def main(flaskVer=flask.__version__, pointCount=config.graph_point_count, cpu=cp
         "hourPointCount": hourPointCount,
         "cpuTemp": cpuTemp,
     }
-    return render_template('tempreport.html', **templateDate)
+    return render_template('tempreport.html', **templateData)
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=80)
