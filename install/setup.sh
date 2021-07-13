@@ -1,8 +1,8 @@
 #!/bin/bash
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+workDir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
 generateJob() {
-  sed "s|.*ExecStart=.*|ExecStart=/bin/bash $DIR/autostart.sh $2|" "$1" > "${1}.temp"
+  sed "s|.*ExecStart=.*|ExecStart=/bin/bash $workDir/autostart.sh $2|" "$1" > "${1}.temp"
   sudo mv "${1}.temp" "/etc/systemd/system/$1"
   sudo systemctl enable "${1/'.service'}"
 }
@@ -16,4 +16,5 @@ installJobs() {
   echo "Done"
 }
 
+cd "$workDir"
 installJobs #Generate and install systemd jobs
