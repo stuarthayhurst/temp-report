@@ -7,6 +7,14 @@ logState = {
   state: 'collapsed'
 }
 
+//Sync with current state
+if (document.getElementById('graphCheck').checked == true) {
+  graphState.state = 'expanded'
+}
+if (document.getElementById('logCheck').checked == true) {
+  logState.state = 'expanded'
+}
+
 function toggleDropdown(sender, target) {
   if (window[target + 'State'].state == 'collapsed') {
     if (sender == "arrow") { document.getElementById(target + 'Check').checked = true }
