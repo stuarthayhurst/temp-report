@@ -5,6 +5,7 @@
     <link rel="shortcut icon" href="{{ url_for('static', filename='icon.svg') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/stylesheet.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/content.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/themeSlider.css') }}">
   <body>
     <div class="topbar">
       <!--Add logo as another tab, but without a hover highlight-->
@@ -19,6 +20,13 @@
       <a class="topbar-tab topbar-tab-hover" onclick="openLink('https://github.com/stuarthayhurst/temp-report/wiki')">Wiki</a>
       <a class="topbar-tab topbar-tab-hover" onclick="openLink('https://github.com/stuarthayhurst/temp-report/releases')">Releases</a>
       <a class="topbar-tab topbar-tab-hover" onclick="openLink('https://github.com/stuarthayhurst/temp-report/issues')">Issues</a>
+    </div>
+    <div class="themeToggle">
+      <h3>Dark theme: </h3>
+      <label class="switch">
+        <input type="checkbox" id="themeSlider" onclick="toggleTheme()">
+        <span class="slider round"></span>
+      </label>
     </div>
     <div class="page-content">
       <div>
@@ -59,7 +67,7 @@
       <br>
       <div class="dropdown-area">
         <div style="display: inline-block;">
-            <img id="graphArrow" class="align-vertical" onclick="toggleDropdown('arrow', 'graph')" height="35" width="35" src="{{ url_for('static', filename='collapsed.svg') }}">
+            <img id="graphArrow" class="align-vertical" onclick="toggleDropdown('arrow', 'graph')" height="35" width="35" src="{{ url_for('static', filename='collapsed-dark.svg') }}">
             <input id="graphCheck" class="inputGraph" type="checkbox" name="Graph"/>
 		        <label class="button align-vertical" onclick="toggleDropdown('checkbox', 'graph')" for="graphCheck">Graph</label>
           <p class="titleGraph">  &nbsp<span style="background-color: #4ace4f"> </span>Graph: | {{ pointCount }} points</p>
@@ -68,7 +76,7 @@
           </ul>
         </div>
         <div style="display: inline-block;">
-          <img id="logArrow" class="align-vertical" onclick="toggleDropdown('arrow', 'log')" height="35" width="35" src="{{ url_for('static', filename='collapsed.svg') }}">
+          <img id="logArrow" class="align-vertical" onclick="toggleDropdown('arrow', 'log')" height="35" width="35" src="{{ url_for('static', filename='collapsed-dark.svg') }}">
           <input id="logCheck" class="inputLog" type="checkbox" name="Log"/>
           <label class="button align-vertical" onclick="toggleDropdown('checkbox', 'log')" for="logCheck">Log</label>
           <p class="titleLog">  &nbsp<span style="background-color: #4ace4f"> </span>Log: | {{ lineCount }} lines</p>
@@ -84,7 +92,9 @@
       <a style="position:fixed; z-index: 11; bottom: 0; right: 0; margin-right: 2px;">CPU Temperature: {{ cpuTemp }} </a>
     </div>
     <script>urlRoot = {{ url_for('static', filename='') }};</script>
+    <script src="{{ url_for('static', filename='js/defaultSettings.js') }}"></script>
     <script src="{{ url_for('static', filename='js/dropDownSetup.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/loadTheme.js') }}"></script>
     <script src="{{ url_for('static', filename='js/pageFunctions.js') }}"></script>
   </body>
 </html>

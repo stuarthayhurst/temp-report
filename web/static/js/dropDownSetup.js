@@ -18,11 +18,20 @@ if (document.getElementById('logCheck').checked == true) {
 function toggleDropdown(sender, target) {
   if (window[target + 'State'].state == 'collapsed') {
     if (sender == "arrow") { document.getElementById(target + 'Check').checked = true }
-    document.getElementById(target + "Arrow").src=urlRoot + "expanded.svg";
+    document.getElementById(target + "Arrow").src=urlRoot + themeSettings.selectedTheme.dropdownExpandedFile;
     window[target + 'State'].state = 'expanded'
   } else {
     if (sender == "arrow") { document.getElementById(target + 'Check').checked = false }
-    document.getElementById(target + "Arrow").src=urlRoot + "collapsed.svg";
+    document.getElementById(target + "Arrow").src=urlRoot + themeSettings.selectedTheme.dropdownCollapsedFile;
     window[target + 'State'].state = 'collapsed'
+  }
+}
+
+//Used by loadTheme.js
+function applyTheme(target) {
+  if (document.getElementById(target + 'Check').checked == true) {
+    document.getElementById(target + "Arrow").src=urlRoot + themeSettings.selectedTheme.dropdownExpandedFile;
+  } else {
+    document.getElementById(target + "Arrow").src=urlRoot + themeSettings.selectedTheme.dropdownCollapsedFile;
   }
 }

@@ -1,7 +1,7 @@
 /*CSS rules for the structure of the page*/
 
 /*Default theme rules*/
-html, body {
+body {
   font-family: "Lato", sans-serif;
   background-color: #38373a;
   color: white;
@@ -30,7 +30,7 @@ html, body {
   position: relative;
 }
 .topbar {
-  background-color: black;
+  background-color: #1a1a1a;
   text-align: center;
   position: fixed;
   display: table;
@@ -52,9 +52,9 @@ html, body {
 }
 /*Separate from topbar-tab, to avoid logo being highlighted*/
 .topbar-tab-hover:hover {
-  background-color: white;
+  background-color: #e8e8e8;
   border-radius: 5px;
-  color: grey;
+  color: #474747;
 }
 /*Special handling to move logo to the left*/
 .special-tab {
@@ -82,8 +82,6 @@ html, body {
 ::-webkit-scrollbar-track {
   background: #3a3a3a;
   -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
-  -webkit-border-radius: 10px;
-  border-radius: 10px;
 }
 ::-webkit-scrollbar-thumb {
   -webkit-border-radius: 10px;
