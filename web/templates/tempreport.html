@@ -59,18 +59,18 @@
       <br>
       <div class="dropdown-area">
         <div style="display: inline-block;">
-            <img id="graphArrow" onclick="toggleDropdown('arrow', 'graph')" height="35" width="35" src="{{ url_for('static', filename='collapsed.svg') }}">
-            <input id="graphCheck" class="inputGraph" type="checkbox" name="Graph"/>
-		        <label class="button" onclick="toggleDropdown('checkbox', 'graph')" for="graphCheck">Graph</label>
+          <img id="graphArrow" onclick="toggleDropdown('arrow', 'graph')" height="35" width="35" src="{{ url_for('static', filename='collapsed.svg') }}">
+          <input id="graphCheck" class="inputGraph" type="checkbox" name="Graph"/>
+		      <label class="button" onclick="toggleDropdown('checkbox', 'graph')" for="graphCheck">Graph</label>
           <p class="titleGraph">  &nbsp<span style="background-color: #4ace4f"> </span>Graph: | {{ pointCount }} points</p>
           <ul class="subGraph">
 			      <li><img src="data:image/png;base64, {{ graphImageData }}" alt="Temperature Graph" height="360" width="600"></li>
           </ul>
         </div>
         <div style="display: inline-block;">
-            <img id="logArrow" onclick="toggleDropdown('arrow', 'log')" height="35" width="35" src="{{ url_for('static', filename='collapsed.svg') }}">
-            <input id="logCheck" class="inputLog" type="checkbox" name="Log"/>
-            <label class="button" onclick="toggleDropdown('checkbox', 'log')" for="logCheck">Log</label>
+          <img id="logArrow" onclick="toggleDropdown('arrow', 'log')" height="35" width="35" src="{{ url_for('static', filename='collapsed.svg') }}">
+          <input id="logCheck" class="inputLog" type="checkbox" name="Log"/>
+          <label class="button" onclick="toggleDropdown('checkbox', 'log')" for="logCheck">Log</label>
           <p class="titleLog">  &nbsp<span style="background-color: #4ace4f"> </span>Log: | {{ lineCount }} lines</p>
           <ul class="subLog">
             <li><textarea class="logBox" id="logBox" readonly>{{ logContent }}</textarea></li>
