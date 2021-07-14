@@ -33,6 +33,10 @@ th, td {
   background-color: #1b1a1c;
 }
 
+.align-vertical {
+  vertical-align: middle;
+}
+
 /*Graph and log controls rules*/
 label {
   position: relative;
