@@ -1,14 +1,18 @@
 # -*- coding: utf-8 -*-
+import sys
+import argparse
+import datetime
+import base64
+import io
+from re import split
+
 import matplotlib as mpl
-mpl.use('Agg')
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
-#from scipy.interpolate import make_interp_spline, BSpline
-from scipy.interpolate import UnivariateSpline
 import numpy as np
-import base64
-import sys, argparse, re, datetime, io
+from scipy.interpolate import UnivariateSpline
 
+mpl.use('Agg')
 DT_FORMAT       = '%Y/%m/%d-%H:%M'
 LOG_DT_FORMAT   = '%Y-%m-%d %H:%M:%S'
 area_name = 'Room'
@@ -113,15 +117,15 @@ def readValues(*args, **kwargs):
 
     with open('temps.log', 'r', encoding="utf-8") as f:
         if tailmode:
-            taildata = f.readlines() [-reading_count:]
+            taildata = f.readlines()[-reading_count:]
         else:
             taildata = f.readlines()
         for line in taildata:
-            data = re.split("\[(.*?)\]", line)
-            if len(data) !=3: continue #ignore lines that don't have 3 elements
-            temp = re.findall("[-]?\d+\.\d+", data[2])
-            temp = float(temp[0])
-            dt = date_to_dt(data[1], LOG_DT_FORMAT)
+            line = line.translate({ord(i): None for i in "[]"})
+            data = split(" ", line)
+            temp = float(data[2])
+            dt = f"{data[0]} {data[1]}"
+            dt = date_to_dt(dt, LOG_DT_FORMAT)
             if tailmode:
                 x.append(dt)
                 y.append(temp)
