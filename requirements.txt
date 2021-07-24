@@ -7,7 +7,7 @@ pigpio==1.78
 Pillow==8.2.0
 pytz==2021.1
 RPIO==0.10.0
-scipy==1.6.1
+scipy==1.7.0
 setuptools==54.1.2
 tzlocal==2.1
 w1thermsensor==2.0.0

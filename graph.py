@@ -3,7 +3,8 @@ import matplotlib as mpl
 mpl.use('Agg')
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
-from scipy.interpolate import make_interp_spline, BSpline
+#from scipy.interpolate import make_interp_spline, BSpline
+from scipy.interpolate import UnivariateSpline
 import numpy as np
 import base64
 import sys, argparse, re, datetime, io
@@ -53,7 +54,8 @@ def drawGraph(x,y, area_name, **kwargs):
     x2 = mdates.date2num(x)
     x_sm = np.array(x2)
     x_smooth = np.linspace(x_sm.min(), x_sm.max(), 200)
-    spl = make_interp_spline(x2, y, k=3)
+    #spl = make_interp_spline(x2, y, k=3)
+    spl = UnivariateSpline(x2, y, k=3)
     y_smooth = spl(x_smooth)
     fig, ax = plt.subplots(figsize=(10, 6))
     ax.xaxis.set_major_formatter(mdates.DateFormatter('%b-%d %H:%M'))
